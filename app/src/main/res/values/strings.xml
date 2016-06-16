@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Nuevo Encuentro</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="auth_type">nofuemagia.nuevoencuentro</string>
+    <string name="provider">nofuemagia.nuevoencuentro.provider</string>
+
+    <string name="actividades">Actividades</string>
+    <string name="talleres">Talleres</string>
+    <string name="compras_comunitarias">Compras Comunitarias</string>
+    <string name="contacto">Contacto</string>
+    <string name="comunicacion">Comunicacion</string>
+    <string name="compartir">Compartir</string>
+    <string name="salir">Salir</string>
+
+    <string translatable="false" name="facebook_app_id">1123189841047805</string>
+
+
+    <string name="iniciar_sesion">Se debe iniciar sesion para utilizar el sistema</string>
+    <string name="bienvenida">Hola %1$s!</string>
+    <string name="gcm_senderid">548299616185</string>
+    <string name="mi_comuna">Mi Comuna</string>
+    <string name="registro_bien">Se registro la aplicacion, ya puede recibir notificaciones!</string>
+    <string name="registro_mal">Hubo un error al registrar la aplicacion\nSe seguira intentando!</string>
+    <string name="compartir_asunto">Que estas esperando?? Bajate nuestra aplicación!</string>
+    <string name="compartir_titulo">Compartir via</string>
+    <string name="direccion">Veni a conocer nuestro local\nCalderón de la Barca 1674</string>
+    <string name="seguinos_twitter">Seguinos {fa-twitter}</string>
+    <string name="escribinos_envelope">Escribinos {fa-envelope}</string>
+    <string name="fa_zoom">{fa-search}</string>
+    <string name="fa_facebook">{fa-facebook}</string>
+</resources>

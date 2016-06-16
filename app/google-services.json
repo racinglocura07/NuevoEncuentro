@@ -1,0 +1,58 @@
+{
+  "project_info": {
+    "project_number": "548299616185",
+    "firebase_url": "https://nuevoencuentro-10.firebaseio.com",
+    "project_id": "nuevoencuentro-10",
+    "storage_bucket": "nuevoencuentro-10.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548299616185:android:3bbb692f67f17a29",
+        "android_client_info": {
+          "package_name": "nofuemagia.nuevoencuentro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548299616185-o1cnkedvq88g4npltp6ktuuaa047smk3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nofuemagia.nuevoencuentro",
+            "certificate_hash": "9CE1A162CBCB9FC25DB6C7CB2F11A4F879E2328A"
+          }
+        },
+        {
+          "client_id": "548299616185-siu3l9jbc6e3uju28giqncpf46v452ah.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nofuemagia.nuevoencuentro",
+            "certificate_hash": "9DB497907ACD90EAE0CB344D1ABCECD06466C0D9"
+          }
+        },
+        {
+          "client_id": "548299616185-8dpmcbti39i8np9ko7t4r7nk3srrgbhl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2jw_erZ3YS7uMHzxLY3HJo7jig5ZGSXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

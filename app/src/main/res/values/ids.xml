@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="main_container" type="id" />
+    <item name="nav_actividades" type="id" />
+    <item name="nav_talleres" type="id" />
+    <item name="nav_compras_comunitarias" type="id" />
+    <item name="nav_contacto" type="id" />
+    <item name="nav_compartir" type="id" />
+    <item name="nav_salir" type="id" />
+    <item name="list_actividades" type="id" />
+    <item name="tv_titulo_item_actividades" type="id" />
+    <item name="tv_descripcion_item_actividades" type="id" />
+    <item name="iv_item_actividad" type="id" />
+    <item name="iv_full" type="id" />
+    <item name="tv_nav_nombre" type="id" />
+    <item name="nav_ubicacion" type="id" />
+    <item name="fb_megusta_encuentro10" type="id" />
+    <item name="tw_button" type="id" />
+    <item name="fb_button" type="id" />
+    <item name="mail_button" type="id" />
+    <item name="blur_actividad" type="id" />
+    <item name="ver_actividad" type="id" />
+    <item name="fb_actividad" type="id" />
+</resources>

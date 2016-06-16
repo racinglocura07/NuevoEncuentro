@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blanco"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/app_name"
+        android:src="@mipmap/banner" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="15dp"
+        android:text="@string/direccion"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <com.facebook.share.widget.LikeView
+        android:id="@id/fb_megusta_encuentro10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <!--<ImageView-->
+    <!--android:id="@id/tw_button"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="35dp"-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:scaleType="fitCenter"-->
+    <!--android:src="@mipmap/tw"-->
+    <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.joanzapata.iconify.widget.IconButton
+            android:id="@id/tw_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/seguinos_twitter"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/blanco" />
+
+        <com.joanzapata.iconify.widget.IconButton
+            android:id="@id/mail_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/escribinos_envelope"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/blanco" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

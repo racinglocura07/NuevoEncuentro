@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@id/tv_titulo_item_actividades"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:paddingBottom="@dimen/padding_actividades"
+            android:paddingTop="@dimen/padding_actividades"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/blanco" />
+
+        <com.daimajia.androidviewhover.BlurLayout
+            android:id="@id/blur_actividad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@id/iv_item_actividad"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal" />
+
+        </com.daimajia.androidviewhover.BlurLayout>
+
+
+        <TextView
+            android:id="@id/tv_descripcion_item_actividades"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="@color/gris_trasparente"
+            android:gravity="center"
+            android:paddingBottom="@dimen/padding_actividades"
+            android:paddingTop="@dimen/padding_actividades"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/blanco" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

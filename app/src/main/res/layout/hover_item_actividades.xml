@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="bottom|center"
+    android:orientation="horizontal">
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@id/ver_actividad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/fa_zoom"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/colorAccent"
+        android:padding="30dp"
+        android:textSize="40sp" />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@id/fb_actividad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="30dp"
+        android:text="@string/fa_facebook"
+        android:textColor="@color/colorAccent"
+        android:textSize="40sp" />
+
+</LinearLayout>

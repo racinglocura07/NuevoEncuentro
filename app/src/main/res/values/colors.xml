@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#068ac8</color>
+    <color name="colorPrimaryDark">#0579af</color>
+    <color name="colorAccent">#c84406</color>
+    <color name="gris_trasparente">#8ac80600</color>
+    <color name="blanco">#ffffff</color>
+    <color name="negro">#000</color>
+
+    <color name="partido">#068ac8</color>
+    <color name="partido_oscuro">#022e43</color>
+    <color name="partido_medio">#033b56</color>
+    <color name="colorPrimaryTrans">#40068ac8</color>
+    <color name="colorPrimaryDarkTrans">#400579af</color>
+
+    <color name="tw">#53CBFF</color>
+
+
+</resources>
