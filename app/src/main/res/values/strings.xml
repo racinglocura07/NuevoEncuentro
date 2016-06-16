@@ -33,4 +33,5 @@
     <string name="escribinos_envelope">Escribinos {fa-envelope}</string>
     <string name="fa_zoom">{fa-search}</string>
     <string name="fa_facebook">{fa-facebook}</string>
+    <string name="tener_instalado">Para compartir es necesario tener instalado el Facebook</string>
 </resources>

@@ -6,15 +6,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidviewhover.BlurLayout;
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
@@ -24,6 +28,7 @@ import java.util.ArrayList;
 
 import nofuemagia.nuevoencuentro.activities.FullscreenActivity;
 import nofuemagia.nuevoencuentro.activities.PantallaPrincipal;
+import nofuemagia.nuevoencuentro.helper.Common;
 import nofuemagia.nuevoencuentro.model.Actividad;
 import nofuemagia.nuevoencuentro.R;
 
@@ -119,14 +124,25 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                             .setBitmap(image)
                             .build();
 
+
                     if (ShareDialog.canShow(SharePhotoContent.class)) {
+
+                        ShareHashtag hash = new ShareHashtag.Builder()
+                                .setHashtag("#NuevoEncuentro")
+                                .build();
+
                         SharePhotoContent content = new SharePhotoContent.Builder()
                                 .addPhoto(photo)
+                                .setShareHashtag(hash)
                                 .build();
 
 
-                        ShareDialog.show((PantallaPrincipal) mContext, content);
-                    }
+                        ShareDialog shareDialog = new ShareDialog((PantallaPrincipal) mContext);
+                        shareDialog.show(content);
+                        //shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
+                        //ShareDialog.show((PantallaPrincipal) mContext, content);
+                    } else
+                        Common.ShowOkMessage(v, R.string.tener_instalado);
 
 
                 }

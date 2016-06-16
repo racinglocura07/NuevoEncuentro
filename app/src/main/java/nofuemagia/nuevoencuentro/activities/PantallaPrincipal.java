@@ -122,49 +122,29 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
         SharedPreferences preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
         if (!preferences.getBoolean(Util.YA_REGISTRADO, false))
-            sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken(), profile.getId());
+            sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken(), profile.getId(), profile.getName());
 
     }
 
-    private byte[] GenerateJson(String registrationId, String facebookId) {
-        try {
-            JSONObject datos = new JSONObject();
-            datos.put("registrationId", registrationId);
-            datos.put("facebookId", facebookId);
-
-            return datos.toString().getBytes("UTF-8");
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    private void sendRegistrationToServer(String token, String fid) {
+    private void sendRegistrationToServer(String token, String fid, String nombre) {
         RequestParams params = new RequestParams();
         params.put("registrationId",token);
         params.put("facebookId",fid);
+        params.put("nombreApellido",nombre);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.setConnectTimeout(25000 * 10);
         client.setTimeout(25000 * 10);
         client.post(Util.REGISTRAR_URL, params, new TextHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBytes) {
-                System.out.println("onSuccess! " + new String(responseBytes));
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBytes, Throwable throwable) {
-                System.out.println("onFailure! uno " + statusCode + throwable.getLocalizedMessage());
-            }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                System.out.println("onFailure! dos " + responseString);
+                System.out.println(statusCode);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                System.out.println("onSuccess! " + responseString);
+                System.out.println(statusCode);
             }
         });
     }
