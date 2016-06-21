@@ -33,10 +33,13 @@ import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
@@ -114,38 +117,45 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         }
 
         Profile profile = Profile.getCurrentProfile();
+        SendRegToken(profile);
 
         View headerView = navigationView.getHeaderView(0);
 
         TextView tvNombre = (TextView) headerView.findViewById(R.id.tv_nav_nombre);
         tvNombre.setText(getString(R.string.bienvenida, profile.getFirstName()));
-
-        SharedPreferences preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
-        if (!preferences.getBoolean(Util.YA_REGISTRADO, false))
-            sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken(), profile.getId(), profile.getName());
-
     }
 
     private void sendRegistrationToServer(String token, String fid, String nombre) {
         RequestParams params = new RequestParams();
-        params.put("registrationId",token);
-        params.put("facebookId",fid);
-        params.put("nombreApellido",nombre);
+        params.put("registrationId", token);
+        params.put("facebookId", fid);
+        params.put("nombreApellido", nombre);
+
+        SharedPreferences preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
+        params.put("email", preferences.getString(Util.EMAIL, null));
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.setConnectTimeout(25000 * 10);
         client.setTimeout(25000 * 10);
-        client.post(Util.REGISTRAR_URL, params, new TextHttpResponseHandler() {
+        client.post(Util.REGISTRAR_URL, params, new JsonHttpResponseHandler() {
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                System.out.println(statusCode);
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                System.out.println("dos");
+                try {
+                    if (response.getInt("status") == 1) {
+                        SharedPreferences preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean(Util.YA_REGISTRADO, true);
+                        editor.apply();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                System.out.println(statusCode);
-            }
         });
     }
 
@@ -155,8 +165,18 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         if (requestCode == REQUEST_LOGIN_CODE && !isLoggedIn()) {
             Toast.makeText(this, R.string.iniciar_sesion, Toast.LENGTH_LONG).show();
             finish();
+        } else {
+            Profile profile = Profile.getCurrentProfile();
+            SendRegToken(profile);
         }
     }
+
+    private void SendRegToken(Profile profile) {
+        SharedPreferences preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
+        if (!preferences.getBoolean(Util.YA_REGISTRADO, false))
+            sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken(), profile.getId(), profile.getName());
+    }
+
 
     public boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();

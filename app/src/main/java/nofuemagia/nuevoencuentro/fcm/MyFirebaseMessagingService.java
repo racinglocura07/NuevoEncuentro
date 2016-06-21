@@ -1,15 +1,20 @@
 package nofuemagia.nuevoencuentro.fcm;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.sql.Date;
+import java.util.Map;
 
 import nofuemagia.nuevoencuentro.R;
 import nofuemagia.nuevoencuentro.activities.PantallaPrincipal;
@@ -23,28 +28,38 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // TODO(developer): Handle FCM messages here.
         System.out.println("Mensaje" + " From: " + remoteMessage.getFrom());
-        System.out.println("Mensaje" + "Notification Message Body: " + remoteMessage.getNotification().getBody());
 
-        sendNotification(remoteMessage.getNotification().getBody());
+        sendNotification(remoteMessage.getData());
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(Map<String, String> messageBody) {
         Intent intent = new Intent(this, PantallaPrincipal.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        String titulo = messageBody.get("title");
+        String msg = messageBody.get("body");
+
+        if (titulo == "" && msg == "" ){
+            titulo = "SyncAdaptaer";
+            msg = "SyncAdaptaer";
+        }
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Firebase Push Notification")
-                .setContentText(messageBody)
+                .setSmallIcon(R.drawable.ic_notif)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                .setContentTitle(titulo)
+                .setTicker(titulo)
+                .setContentText(msg)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(msg))
+                .setPriority(Notification.PRIORITY_HIGH)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
     }
 }

@@ -9,8 +9,8 @@ android {
         applicationId "nofuemagia.nuevoencuentro"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 2
-        versionName "0.1.1"
+        versionCode 3
+        versionName "0.1.2"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled  true
     }
