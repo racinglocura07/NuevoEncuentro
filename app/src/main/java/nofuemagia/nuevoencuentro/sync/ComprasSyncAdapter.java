@@ -8,6 +8,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,12 +24,15 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import nofuemagia.nuevoencuentro.helper.DatabaseHelper;
+import nofuemagia.nuevoencuentro.model.Actividades;
 import nofuemagia.nuevoencuentro.model.Caracteristica;
 
 /**
  * Created by jlionti on 06/06/2016. No Fue Magia
  */
 public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
+
+    String urlActividades = "http://nofuemagia.site88.net/backend/actividades/listActividades.php?fid=-1";
 
 
     private DatabaseHelper dbHelper;
@@ -41,9 +45,56 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         System.out.println("Sincronizando, Con errores? " + syncResult.hasError());
 
+
         SyncHttpClient client = new SyncHttpClient();
 
-        SincronizarCaracteristicas("http://magyp-iis-desa.magyp.ar:8027/Home/GetCaracteristicas", client);
+        String que = extras.getString("QUE");
+        if (que != null && que.equals("Actividades")) {
+            SincronizarActividades(urlActividades, client);
+        }
+
+        //SincronizarCaracteristicas("http://magyp-iis-desa.magyp.ar:8027/Home/GetCaracteristicas", client);
+    }
+
+    private void SincronizarActividades(String url, SyncHttpClient client) {
+        client.get(url, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+
+                android.os.Debug.waitForDebugger();
+                android.os.Debug.waitingForDebugger();
+                ActiveAndroid.beginTransaction();
+                try {
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<List<Actividades>>() {
+                    }.getType();
+
+                    for (Actividades local : Actividades.GetAll()){
+                        new Delete().from(Actividades.class).where("idActividad = ?", local.getId()).execute();
+                    }
+
+
+                    List<Actividades> remoto = gson.fromJson(response.toString(), listType);
+                    for (Actividades carRemoto : remoto) {
+                        Actividades nueva = carRemoto;
+                        nueva.save();
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    ActiveAndroid.endTransaction();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
     }
 
     private void SincronizarCaracteristicas(String url, SyncHttpClient client) {

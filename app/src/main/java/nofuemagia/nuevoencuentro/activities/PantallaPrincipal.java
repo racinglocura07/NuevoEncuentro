@@ -52,6 +52,7 @@ import nofuemagia.nuevoencuentro.fragments.ContactoFragment;
 import nofuemagia.nuevoencuentro.fragments.TalleresFragment;
 import nofuemagia.nuevoencuentro.fragments.UbicacionFragment;
 import nofuemagia.nuevoencuentro.model.Usuarios;
+import nofuemagia.nuevoencuentro.sync.SyncUtils;
 
 
 public class PantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -107,7 +108,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         menu.findItem(R.id.nav_compartir).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_hand_peace_o).colorRes(R.color.partido));
         menu.findItem(R.id.nav_salir).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_close).colorRes(R.color.partido));
 
-        //SyncUtils.CreateSyncAccount(this);
+        SyncUtils.CreateSyncAccount(this);
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_container, new ActividadesFragment()).commit();
 
@@ -126,6 +127,9 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     }
 
     private void sendRegistrationToServer(String token, String fid, String nombre) {
+        if ( token == null || token.equals("") || fid == null || fid.equals("") || nombre == null || nombre.equals(""))
+            return;
+
         RequestParams params = new RequestParams();
         params.put("registrationId", token);
         params.put("facebookId", fid);
@@ -156,6 +160,11 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
             }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                System.out.println(responseString);
+            }
         });
     }
 

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import nofuemagia.nuevoencuentro.R;
 import nofuemagia.nuevoencuentro.adapters.ActividadesAdapter;
-import nofuemagia.nuevoencuentro.model.Actividad;
+import nofuemagia.nuevoencuentro.model.Actividades;
 
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia
@@ -34,17 +34,19 @@ public class ActividadesFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        ArrayList<Actividad> actividades = new ArrayList<>();
-        actividades.add(new Actividad("Apoyo Escolar\nMartes 17.30hs", "Clases de apoyo libres y gratuitas para todos y todas!", R.mipmap.apoyo));
-        actividades.add(new Actividad("Reunion\nJueves 19hs", "¡Traé ropa cómoda y, si tenés, colchoneta!", R.mipmap.yoga));
-        actividades.add(new Actividad("Plenario\nSabado por medio 15hs", "Clases de apoyo libres y gratuitas para todos y todas!", R.mipmap.apoyo));
-        actividades.add(new Actividad("Compras Comunitarias\nSabado por medio", "Fiedos, salsa de tomate, tapas de empanadas, aceite, yerba, azucar y arroz!", R.mipmap.compras_comunitarias));
-        actividades.add(new Actividad("Bolsones\nSabado por medio", "Bolson de verdura orgánica, fruta y tierra!", R.mipmap.bolsones));
-        /*actividades.add(new Actividad("Yoga - Lunes 19hs", "¡Traé ropa cómoda y, si tenés, colchoneta!", R.mipmap.yoga));
-        actividades.add(new Actividad("Apoyo Escolar - Martes 17.30hs", "Clases de apoyo libres y gratuitas para todos y todas!", R.mipmap.apoyo));
-        actividades.add(new Actividad("Salsa - Martes 19hs", "Cupos limitados", R.mipmap.salsa));*/
+//        ArrayList<Actividades> actividades = new ArrayList<>();
+//        actividades.add(new Actividades("Apoyo Escolar\nMartes 17.30hs", "Clases de apoyo libres y gratuitas para todos y todas!", R.mipmap.apoyo));
+//        actividades.add(new Actividades("Reunion\nJueves 19hs", "¡Traé ropa cómoda y, si tenés, colchoneta!", R.mipmap.yoga));
+//        actividades.add(new Actividades("Plenario\nSabado por medio 15hs", "Clases de apoyo libres y gratuitas para todos y todas!", R.mipmap.apoyo));
+//        actividades.add(new Actividades("Compras Comunitarias\nSabado por medio", "Fiedos, salsa de tomate, tapas de empanadas, aceite, yerba, azucar y arroz!", R.mipmap.compras_comunitarias));
+//        actividades.add(new Actividades("Bolsones\nSabado por medio", "Bolson de verdura orgánica, fruta y tierra!", R.mipmap.bolsones));
 
-        ActividadesAdapter adapter = new ActividadesAdapter(getContext(), actividades);
+//        actividades.add(new Actividades("Yoga - Lunes 19hs", "¡Traé ropa cómoda y, si tenés, colchoneta!", R.mipmap.yoga));
+//        actividades.add(new Actividades("Apoyo Escolar - Martes 17.30hs", "Clases de apoyo libres y gratuitas para todos y todas!", R.mipmap.apoyo));
+//        actividades.add(new Actividades("Salsa - Martes 19hs", "Cupos limitados", R.mipmap.salsa));
+
+
+        ActividadesAdapter adapter = new ActividadesAdapter(getContext(), Actividades.GetAll());
         recList.setAdapter(adapter);
 
         return v;

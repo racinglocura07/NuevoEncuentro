@@ -6,30 +6,29 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidviewhover.BlurLayout;
 import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.joanzapata.iconify.widget.IconTextView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import nofuemagia.nuevoencuentro.activities.FullscreenActivity;
 import nofuemagia.nuevoencuentro.activities.PantallaPrincipal;
 import nofuemagia.nuevoencuentro.helper.Common;
-import nofuemagia.nuevoencuentro.model.Actividad;
+import nofuemagia.nuevoencuentro.model.Actividades;
 import nofuemagia.nuevoencuentro.R;
 
 /**
@@ -38,11 +37,11 @@ import nofuemagia.nuevoencuentro.R;
 public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.ActividadesViewHolder> {
 
 
-    private final ArrayList<Actividad> mDataset;
+    private final List<Actividades> mDataset;
     private final PantallaPrincipal mPP;
     private Context mContext;
 
-    public ActividadesAdapter(Context _c, ArrayList<Actividad> actividades) {
+    public ActividadesAdapter(Context _c, List<Actividades> actividades) {
         mDataset = actividades;
         mContext = _c;
         mPP = (PantallaPrincipal) _c;
@@ -56,13 +55,27 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
 
     @Override
     public void onBindViewHolder(ActividadesViewHolder holder, int position) {
-        Actividad item = mDataset.get(position);
+        Actividades item = mDataset.get(position);
 
-        holder.tvTitulo.setText(item.Titulo);
-        holder.tvDescripcion.setText(item.Descripcion);
+        holder.tvTitulo.setText(item.nombre);
+        holder.tvDescripcion.setText(item.descripcion);
         holder.ivImagen.setTag(item);
 
-        mPP.getInstancePicasso().load(item.Imagen).into(holder.ivImagen);
+        String imagenUrl = "http://nofuemagia.site88.net/backend/mostrar.php?idActividad=1";
+        System.out.println(imagenUrl);
+        //mPP.getInstancePicasso().load(imagenUrl).into(holder.ivImagen);
+
+        Picasso.Builder builder = new Picasso.Builder(mContext);
+        builder.listener(new Picasso.Listener()
+        {
+            @Override
+            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
+            {
+                System.out.println(exception.getMessage());
+                exception.printStackTrace();
+            }
+        });
+        builder.build().load(imagenUrl).into(holder.ivImagen);
 
     }
 
@@ -101,14 +114,14 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
             verActividad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Actividad usada = (Actividad) ivImagen.getTag();
+                    Actividades usada = (Actividades) ivImagen.getTag();
 
                     Bundle args = new Bundle();
-                    args.putInt(FullscreenActivity.IMAGEN_FULL, usada.Imagen);
+                    /*args.putInt(FullscreenActivity.IMAGEN_FULL, usada.imagen);
 
                     Intent full = new Intent(mContext, FullscreenActivity.class);
                     full.putExtras(args);
-                    mContext.startActivity(full);
+                    mContext.startActivity(full);*/
 
                 }
             });
@@ -117,9 +130,9 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
             publicar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Actividad usada = (Actividad) ivImagen.getTag();
-
-                    Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), usada.Imagen);
+                    Actividades usada = (Actividades) ivImagen.getTag();
+/*
+                    Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), usada.imagen);
                     SharePhoto photo = new SharePhoto.Builder()
                             .setBitmap(image)
                             .build();
@@ -139,12 +152,11 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
 
                         ShareDialog shareDialog = new ShareDialog((PantallaPrincipal) mContext);
                         shareDialog.show(content);
-                        //shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
-                        //ShareDialog.show((PantallaPrincipal) mContext, content);
+
                     } else
                         Common.ShowOkMessage(v, R.string.tener_instalado);
 
-
+*/
                 }
             });
         }

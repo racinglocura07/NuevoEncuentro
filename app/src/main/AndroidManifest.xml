@@ -30,32 +30,32 @@
             </intent-filter>
         </activity>
 
-        <!-- <service android:name=".ComprasAuthService"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.accounts.AccountAuthenticator" /> -->
-        <!-- </intent-filter> -->
-        <!-- <meta-data -->
-        <!-- android:name="android.accounts.AccountAuthenticator" -->
-        <!-- android:resource="@xml/authenticator" /> -->
-        <!-- </service> -->
+        <service android:name=".sync.ComprasAuthService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
 
 
-        <!-- <service -->
-        <!-- android:name=".ComprasSyncService" -->
-        <!-- android:exported="true"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.content.SyncAdapter" /> -->
-        <!-- </intent-filter> -->
-        <!-- <meta-data -->
-        <!-- android:name="android.content.SyncAdapter" -->
-        <!-- android:resource="@xml/syncadapter" /> -->
-        <!-- </service> -->
+        <service
+            android:name=".sync.ComprasSyncService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
 
 
-        <!-- <provider -->
-        <!-- android:name=".provider.ComprasProvider" -->
-        <!-- android:authorities="@string/provider" -->
-        <!-- android:exported="true" /> -->
+        <provider
+            android:name=".provider.ComprasProvider"
+            android:authorities="@string/provider"
+            android:exported="true" />
 
 
         <!-- <meta-data -->
@@ -67,6 +67,13 @@
         <!-- <meta-data -->
         <!-- android:name="AA_MODELS" -->
         <!-- android:value="nofuemagia.nuevoencuentro.model.Caracteristica, nofuemagia.nuevoencuentro.model.EstadoPedido, nofuemagia.nuevoencuentro.model.Pedido, nofuemagia.nuevoencuentro.model.Producto, nofuemagia.nuevoencuentro.model.ProductoCaracteristica, nofuemagia.nuevoencuentro.model.Usuarioss" /> -->
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="nuevoencuentro.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
 
         <activity
             android:name="com.facebook.FacebookActivity"

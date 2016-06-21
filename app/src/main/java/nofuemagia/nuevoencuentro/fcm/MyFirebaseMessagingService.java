@@ -3,11 +3,13 @@ package nofuemagia.nuevoencuentro.fcm;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 import nofuemagia.nuevoencuentro.R;
 import nofuemagia.nuevoencuentro.activities.PantallaPrincipal;
+import nofuemagia.nuevoencuentro.sync.SyncUtils;
 
 /**
  * Created by jlionti on 14/06/2016. No Fue Magia
@@ -40,9 +43,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String titulo = messageBody.get("title");
         String msg = messageBody.get("body");
 
-        if (titulo == "" && msg == "" ){
-            titulo = "SyncAdaptaer";
-            msg = "SyncAdaptaer";
+        if (titulo == null || titulo.equals("")){
+            //msg = "SyncAdaptaer";
+
+
+            Bundle params = new Bundle();
+            params.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            params.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            params.putString("QUE", msg);
+            ContentResolver.requestSync(SyncUtils.getAccount(this), getString(R.string.provider), params);
+
+            return;
         }
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
