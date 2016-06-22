@@ -23,9 +23,6 @@ public class Actividades extends Model {
     @Column(name = "descripcion")
     public String descripcion;
 
-    @Column(name = "imagen")
-    public String imagen;
-
     @Column(name = "cuando")
     public int cuando;
 
@@ -36,11 +33,10 @@ public class Actividades extends Model {
         super();
     }
 
-    public Actividades(int idActividad, String nombre, String descripcion, String imagen, int cuando, int repeticion) {
+    public Actividades(int idActividad, String nombre, String descripcion, int cuando, int repeticion) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.imagen = imagen;
         this.cuando = cuando;
         this.repeticion = repeticion;
     }

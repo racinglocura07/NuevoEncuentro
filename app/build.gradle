@@ -3,14 +3,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    buildToolsVersion "24.0.0"
 
-    defaultConfig {
+    defaultConfig {3
         applicationId "nofuemagia.nuevoencuentro"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 3
-        versionName "0.1.2"
+        versionCode 6
+        versionName "0.1.5"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled  true
     }

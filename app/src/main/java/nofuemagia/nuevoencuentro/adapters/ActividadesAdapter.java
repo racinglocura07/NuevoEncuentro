@@ -61,21 +61,19 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         holder.tvDescripcion.setText(item.descripcion);
         holder.ivImagen.setTag(item);
 
-        String imagenUrl = "http://nofuemagia.site88.net/backend/mostrar.php?idActividad=1";
+        String imagenUrl = Common.imagenURL + "actividad-" + item.idActividad + ".jpg";
+        mPP.getInstancePicasso().load(imagenUrl).into(holder.ivImagen);
         System.out.println(imagenUrl);
-        //mPP.getInstancePicasso().load(imagenUrl).into(holder.ivImagen);
-
-        Picasso.Builder builder = new Picasso.Builder(mContext);
-        builder.listener(new Picasso.Listener()
-        {
-            @Override
-            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception)
-            {
-                System.out.println(exception.getMessage());
-                exception.printStackTrace();
-            }
-        });
-        builder.build().load(imagenUrl).into(holder.ivImagen);
+//
+//        Picasso.Builder builder = new Picasso.Builder(mContext);
+//        builder.listener(new Picasso.Listener() {
+//            @Override
+//            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+//                System.out.println(exception.getMessage());
+//                exception.printStackTrace();
+//            }
+//        });
+//        builder.build().load(Common.imagenURL + "Actividad-" + item.idActividad + ".jpg").into(holder.ivImagen);
 
     }
 

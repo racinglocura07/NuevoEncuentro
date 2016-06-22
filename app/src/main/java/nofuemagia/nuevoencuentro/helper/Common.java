@@ -8,6 +8,8 @@ import android.view.View;
  */
 public class Common {
 
+    public static String imagenURL = "http://nofuemagia.site88.net/imagenes/";
+
     public static void ShowOkMessage(View v, int mensaje) {
         final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_INDEFINITE);
         snackBar.setAction(android.R.string.ok, new View.OnClickListener() {

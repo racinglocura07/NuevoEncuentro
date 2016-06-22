@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.List;
 
+
 import cz.msebera.android.httpclient.Header;
 import nofuemagia.nuevoencuentro.helper.DatabaseHelper;
 import nofuemagia.nuevoencuentro.model.Actividades;
@@ -58,33 +59,35 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void SincronizarActividades(String url, SyncHttpClient client) {
         client.get(url, new JsonHttpResponseHandler() {
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
+                //super.onSuccess(statusCode, headers, response);
 
-                android.os.Debug.waitForDebugger();
-                android.os.Debug.waitingForDebugger();
                 ActiveAndroid.beginTransaction();
                 try {
+
                     Gson gson = new Gson();
                     Type listType = new TypeToken<List<Actividades>>() {
                     }.getType();
+
 
                     for (Actividades local : Actividades.GetAll()){
                         new Delete().from(Actividades.class).where("idActividad = ?", local.getId()).execute();
                     }
 
-
                     List<Actividades> remoto = gson.fromJson(response.toString(), listType);
                     for (Actividades carRemoto : remoto) {
-                        Actividades nueva = carRemoto;
+                        Actividades nueva = new Actividades(carRemoto.idActividad, carRemoto.nombre, carRemoto.descripcion, carRemoto.cuando, carRemoto.repeticion);
                         nueva.save();
-
                     }
 
+                    ActiveAndroid.setTransactionSuccessful();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println(e.getMessage());
                 } finally {
+                    System.out.println("Tres2");
                     ActiveAndroid.endTransaction();
                 }
 
