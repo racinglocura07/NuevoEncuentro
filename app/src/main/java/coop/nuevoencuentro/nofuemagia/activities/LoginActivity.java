@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.fcm.Util;
+import coop.nuevoencuentro.nofuemagia.helper.Common;
 
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia
@@ -43,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
-        SharedPreferences preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
         preferences.edit().clear().apply();
 
 //        PackageInfo info;
@@ -103,13 +104,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-                            SharedPreferences preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
+                            SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
-                            editor.putBoolean(Util.FB_REG, true);
-                            editor.putString(Util.EMAIL, email);
-                            editor.putString(Util.NOMBRE, name);
-                            editor.putString(Util.PRIMER_NOMBRE, primerNombre);
-                            editor.putString(Util.FBID, id);
+                            editor.putBoolean(Common.FB_REG, true);
+                            editor.putString(Common.EMAIL, email);
+                            editor.putString(Common.NOMBRE, name);
+                            editor.putString(Common.PRIMER_NOMBRE, primerNombre);
+                            editor.putString(Common.FBID, id);
                             editor.apply();
 
                             loginButton.setEnabled(true);

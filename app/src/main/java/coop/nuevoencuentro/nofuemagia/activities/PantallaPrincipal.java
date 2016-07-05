@@ -34,6 +34,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import coop.nuevoencuentro.nofuemagia.helper.Common;
 import cz.msebera.android.httpclient.Header;
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.fcm.Util;
@@ -60,7 +61,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
+        preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -95,13 +96,13 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
         SyncUtils.CreateSyncAccount(this);
 
-        if (preferences.getBoolean(Util.FB_REG, false)) {
-            String nombre = preferences.getString(Util.NOMBRE, null);
-            String email = preferences.getString(Util.EMAIL, null);
-            String id = preferences.getString(Util.FBID, null);
-            String primer = preferences.getString(Util.PRIMER_NOMBRE, null);
+        if (preferences.getBoolean(Common.FB_REG, false)) {
+            String nombre = preferences.getString(Common.NOMBRE, null);
+            String email = preferences.getString(Common.EMAIL, null);
+            String id = preferences.getString(Common.FBID, null);
+            String primer = preferences.getString(Common.PRIMER_NOMBRE, null);
 
-            if (!preferences.getBoolean(Util.YA_REGISTRADO, false))
+            if (!preferences.getBoolean(Common.YA_REGISTRADO, false))
                 sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken(), id, nombre, email);
 
             View headerView = navigationView.getHeaderView(0);
@@ -137,16 +138,16 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         AsyncHttpClient client = new AsyncHttpClient();
         client.setConnectTimeout(25000 * 10);
         client.setTimeout(25000 * 10);
-        client.post(Util.REGISTRAR_URL, params, new JsonHttpResponseHandler() {
+        client.post(Common.REGISTRAR_URL, params, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
                     if (response.getInt("status") == 1) {
-                        SharedPreferences preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
+                        SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putBoolean(Util.YA_REGISTRADO, true);
+                        editor.putBoolean(Common.YA_REGISTRADO, true);
                         editor.apply();
                     }
                 } catch (JSONException e) {
@@ -231,7 +232,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         sharingIntent.setType("text/plain");
 
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.compartir_asunto));
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Util.PLAY_URL);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Common.PLAY_URL);
 
         startActivity(Intent.createChooser(sharingIntent, getString(R.string.compartir_titulo)));
     }

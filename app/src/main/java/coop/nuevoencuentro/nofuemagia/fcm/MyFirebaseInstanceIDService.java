@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import coop.nuevoencuentro.nofuemagia.helper.Common;
+
 /**
  * Created by jlionti on 14/06/2016. No Fue Magia
  */
@@ -13,9 +15,9 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         super.onTokenRefresh();
 
-        SharedPreferences preferences = getSharedPreferences(Util.PREFERENCES, MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Util.YA_REGISTRADO, false);
+        editor.putBoolean(Common.YA_REGISTRADO, false);
         editor.apply();
     }
 }
