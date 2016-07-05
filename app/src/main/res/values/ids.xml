@@ -21,4 +21,5 @@
     <item name="blur_actividad" type="id" />
     <item name="ver_actividad" type="id" />
     <item name="fb_actividad" type="id" />
+    <item name="progress_fb" type="id" />
 </resources>

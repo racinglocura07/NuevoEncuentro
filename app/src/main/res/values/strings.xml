@@ -6,8 +6,8 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="auth_type">nofuemagia.nuevoencuentro</string>
-    <string name="provider">nofuemagia.nuevoencuentro.provider</string>
+    <string name="auth_type">coop.nuevoencuentro</string>
+    <string name="provider">coop.nuevoencuentro.provider</string>
 
     <string name="actividades">Actividades</string>
     <string name="talleres">Talleres</string>

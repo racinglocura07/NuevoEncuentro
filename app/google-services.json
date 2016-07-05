@@ -52,6 +52,50 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548299616185:android:c49d0742ab8e4dcf",
+        "android_client_info": {
+          "package_name": "coop.nuevoencuentro.nofuemagia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548299616185-tf6v9svge9s1rmjhg19o61ddmb5r5gqm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "coop.nuevoencuentro.nofuemagia",
+            "certificate_hash": "9DB497907ACD90EAE0CB344D1ABCECD06466C0D9"
+          }
+        },
+        {
+          "client_id": "548299616185-8dpmcbti39i8np9ko7t4r7nk3srrgbhl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2jw_erZ3YS7uMHzxLY3HJo7jig5ZGSXw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548299616185-8dpmcbti39i8np9ko7t4r7nk3srrgbhl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"
