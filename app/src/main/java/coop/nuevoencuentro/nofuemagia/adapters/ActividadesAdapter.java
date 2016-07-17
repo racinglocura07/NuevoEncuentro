@@ -2,6 +2,9 @@ package coop.nuevoencuentro.nofuemagia.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,8 +15,13 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidviewhover.BlurLayout;
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -93,7 +101,6 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                 @Override
                 public void onClick(View v) {
                     Actividades usada = (Actividades) ivImagen.getTag();
-
                     String imagenUrl = Common.imagenURL + "actividad-" + usada.idActividad + ".jpg";
 
                     Bundle args = new Bundle();
@@ -109,34 +116,49 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
             IconTextView publicar = (IconTextView) hover.findViewById(R.id.fb_actividad);
             publicar.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
                     Actividades usada = (Actividades) ivImagen.getTag();
-/*
-                    Bitmap image = BitmapFactory.decodeResource(mContext.getResources(), usada.imagen);
-                    SharePhoto photo = new SharePhoto.Builder()
-                            .setBitmap(image)
-                            .build();
+                    String imagenUrl = Common.imagenURL + "actividad-" + usada.idActividad + ".jpg";
+
+                    Picasso.with(mContext)
+                            .load(imagenUrl)
+                            .into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    SharePhoto photo = new SharePhoto.Builder()
+                                            .setBitmap(bitmap)
+                                            .build();
 
 
-                    if (ShareDialog.canShow(SharePhotoContent.class)) {
+                                    if (ShareDialog.canShow(SharePhotoContent.class)) {
 
-                        ShareHashtag hash = new ShareHashtag.Builder()
-                                .setHashtag("#NuevoEncuentro")
-                                .build();
+                                        ShareHashtag hash = new ShareHashtag.Builder()
+                                                .setHashtag("#NuevoEncuentro")
+                                                .build();
 
-                        SharePhotoContent content = new SharePhotoContent.Builder()
-                                .addPhoto(photo)
-                                .setShareHashtag(hash)
-                                .build();
+                                        SharePhotoContent content = new SharePhotoContent.Builder()
+                                                .addPhoto(photo)
+                                                .setShareHashtag(hash)
+                                                .build();
 
 
-                        ShareDialog shareDialog = new ShareDialog((PantallaPrincipal) mContext);
-                        shareDialog.show(content);
+                                        ShareDialog shareDialog = new ShareDialog((PantallaPrincipal) mContext);
+                                        shareDialog.show(content);
 
-                    } else
-                        Common.ShowOkMessage(v, R.string.tener_instalado);
+                                    } else
+                                        Common.ShowOkMessage(v, R.string.tener_instalado);
+                                }
 
-*/
+                                @Override
+                                public void onBitmapFailed(Drawable errorDrawable) {
+                                    Common.ShowOkMessage(v, R.string.error_flyer);
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                    Common.ShowMessage(v, R.string.obteniendo_flyer);
+                                }
+                            });
                 }
             });
         }

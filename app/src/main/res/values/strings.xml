@@ -34,4 +34,6 @@
     <string name="fa_zoom">{fa-search}</string>
     <string name="fa_facebook">{fa-facebook}</string>
     <string name="tener_instalado">Para compartir es necesario tener instalado el Facebook</string>
+    <string name="error_flyer">Error al obtener el flyer</string>
+    <string name="obteniendo_flyer">Cargando...</string>
 </resources>

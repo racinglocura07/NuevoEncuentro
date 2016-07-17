@@ -31,4 +31,9 @@ public class Common {
         });
         snackBar.show();
     }
+
+    public static void ShowMessage(View v, int mensaje) {
+        final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_SHORT);
+        snackBar.show();
+    }
 }
