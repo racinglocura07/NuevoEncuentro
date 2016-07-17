@@ -28,21 +28,26 @@ public class Actividades extends Model {
     @Column(name = "repeticion")
     public int repeticion;
 
+    @Column(name = "esTaller")
+    public boolean esTaller;
+
     public Actividades() {
         super();
     }
 
-    public Actividades(int idActividad, String nombre, String descripcion, int cuando, int repeticion) {
+    public Actividades(int idActividad, String nombre, String descripcion, int cuando, int repeticion, boolean esTaller) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.cuando = cuando;
         this.repeticion = repeticion;
+        this.esTaller = esTaller;
     }
 
-    public static List<Actividades> GetAll() {
+    public static List<Actividades> GetAll(boolean esTaller) {
         return new Select()
                 .from(Actividades.class)
+                .where("esTaller = ?", esTaller)
                 .execute();
     }
 }

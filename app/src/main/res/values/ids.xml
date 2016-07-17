@@ -22,4 +22,7 @@
     <item name="ver_actividad" type="id" />
     <item name="fb_actividad" type="id" />
     <item name="progress_fb" type="id" />
+    <item name="wv_compras" type="id" />
+    <item name="pb_compras" type="id" />
+    <item name="list_talleres" type="id" />
 </resources>

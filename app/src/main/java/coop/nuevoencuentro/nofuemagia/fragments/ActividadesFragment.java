@@ -44,7 +44,7 @@ public class ActividadesFragment extends Fragment {
 //        actividades.add(new Actividades("Salsa - Martes 19hs", "Cupos limitados", R.mipmap.salsa));
 
 
-        ActividadesAdapter adapter = new ActividadesAdapter(getContext(), Actividades.GetAll());
+        ActividadesAdapter adapter = new ActividadesAdapter(getContext(), false);
         recList.setAdapter(adapter);
 
         return v;

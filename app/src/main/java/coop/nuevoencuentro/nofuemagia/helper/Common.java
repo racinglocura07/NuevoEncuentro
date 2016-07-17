@@ -21,6 +21,8 @@ public class Common {
 
     public static String imagenURL = "http://nofuemagia.ueuo.com/Nuevo/imagenes/";
 
+    public static String urlActividades = "http://nofuemagia.ueuo.com/Nuevo/backend/actividades/listActividades.php?fid=-2";
+
     public static void ShowOkMessage(View v, int mensaje) {
         final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_INDEFINITE);
         snackBar.setAction(android.R.string.ok, new View.OnClickListener() {

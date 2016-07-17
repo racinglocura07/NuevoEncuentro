@@ -1,0 +1,1 @@
+ALTER TABLE Actividades ADD esTaller INTEGER;

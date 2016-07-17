@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 
+import coop.nuevoencuentro.nofuemagia.helper.Common;
 import cz.msebera.android.httpclient.Header;
 import coop.nuevoencuentro.nofuemagia.helper.DatabaseHelper;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
@@ -31,9 +32,6 @@ import coop.nuevoencuentro.nofuemagia.model.Caracteristica;
  * Created by jlionti on 06/06/2016. No Fue Magia
  */
 public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
-
-    String urlActividades = "http://nofuemagia.ueuo.com/Nuevo/backend/actividades/listActividades.php?fid=-1";
-
 
     private DatabaseHelper dbHelper;
 
@@ -50,7 +48,7 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
 
         String que = extras.getString("QUE");
         if (que != null && que.equals("Actividades")) {
-            SincronizarActividades(urlActividades, client);
+            SincronizarActividades(Common.urlActividades, client);
         }
 
         //syncResult.
@@ -72,13 +70,13 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
                     }.getType();
 
 
-                    for (Actividades local : Actividades.GetAll()){
+                    for (Actividades local : Actividades.GetAll(false)){
                         new Delete().from(Actividades.class).where("idActividad = ?", local.getId()).execute();
                     }
 
                     List<Actividades> remoto = gson.fromJson(response.toString(), listType);
                     for (Actividades carRemoto : remoto) {
-                        Actividades nueva = new Actividades(carRemoto.idActividad, carRemoto.nombre, carRemoto.descripcion, carRemoto.cuando, carRemoto.repeticion);
+                        Actividades nueva = new Actividades(carRemoto.idActividad, carRemoto.nombre, carRemoto.descripcion, carRemoto.cuando, carRemoto.repeticion, carRemoto.esTaller);
                         nueva.save();
                     }
 

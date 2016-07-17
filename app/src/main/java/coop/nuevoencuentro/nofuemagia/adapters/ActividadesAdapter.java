@@ -36,15 +36,22 @@ import coop.nuevoencuentro.nofuemagia.R;
  */
 public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.ActividadesViewHolder> {
 
-
+    private final boolean mEsTaller;
     private final List<Actividades> mDataset;
     private final PantallaPrincipal mPP;
     private Context mContext;
 
-    public ActividadesAdapter(Context _c, List<Actividades> actividades) {
-        mDataset = actividades;
+//    public ActividadesAdapter(Context _c, List<Actividades> actividades) {
+//        mDataset = actividades;
+//        mContext = _c;
+//        mPP = (PantallaPrincipal) _c;
+//    }
+
+    public ActividadesAdapter(Context _c, boolean esTaller) {
+        mDataset = Actividades.GetAll(esTaller);
         mContext = _c;
         mPP = (PantallaPrincipal) _c;
+        mEsTaller = esTaller;
     }
 
     @Override
@@ -61,7 +68,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         holder.tvDescripcion.setText(item.descripcion);
         holder.ivImagen.setTag(item);
 
-        String imagenUrl = Common.imagenURL + "actividad-" + item.idActividad + ".jpg";
+        String imagenUrl = Common.imagenURL + (mEsTaller ? "taller-" : "actividad-") + item.idActividad + ".jpg";
         Picasso.with(mContext).load(imagenUrl).into(holder.ivImagen);
     }
 
@@ -82,12 +89,13 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
 
             View hover = LayoutInflater.from(mContext).inflate(R.layout.hover_item_actividades, null);// (ViewGroup) itemView.getRootView());
             tvTitulo = (TextView) itemView.findViewById(R.id.tv_titulo_item_actividades);
+            tvTitulo.setBackgroundResource(mEsTaller ? R.color.talleres : R.color.actividades);
             tvDescripcion = (TextView) itemView.findViewById(R.id.tv_descripcion_item_actividades);
             ivImagen = (ImageView) itemView.findViewById(R.id.iv_item_actividad);
             blur = (BlurLayout) itemView.findViewById(R.id.blur_actividad);
 
             blur.setHoverView(hover);
-//            blur.enableZoomBackground(true);
+            blur.enableZoomBackground(true);
             blur.setBlurDuration(1000);
 
             blur.addChildAppearAnimator(hover, R.id.ver_actividad, Techniques.BounceInDown, 1200);
@@ -101,7 +109,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                 @Override
                 public void onClick(View v) {
                     Actividades usada = (Actividades) ivImagen.getTag();
-                    String imagenUrl = Common.imagenURL + "actividad-" + usada.idActividad + ".jpg";
+                    String imagenUrl = Common.imagenURL + (mEsTaller ? "taller-" : "actividad-") + usada.idActividad + ".jpg";
 
                     Bundle args = new Bundle();
                     args.putString(FullscreenActivity.IMAGEN_FULL, imagenUrl);
@@ -118,7 +126,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                 @Override
                 public void onClick(final View v) {
                     Actividades usada = (Actividades) ivImagen.getTag();
-                    String imagenUrl = Common.imagenURL + "actividad-" + usada.idActividad + ".jpg";
+                    String imagenUrl = Common.imagenURL + (mEsTaller ? "taller-" : "actividad-") + usada.idActividad + ".jpg";
 
                     Picasso.with(mContext)
                             .load(imagenUrl)

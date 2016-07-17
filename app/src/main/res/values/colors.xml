@@ -2,10 +2,14 @@
 <resources>
     <color name="colorPrimary">#068ac8</color>
     <color name="colorPrimaryDark">#0579af</color>
-    <color name="colorAccent">#c84406</color>
+    <color name="colorAccent">#C64306</color>
     <color name="gris_trasparente">#8ac80600</color>
     <color name="blanco">#ffffff</color>
     <color name="negro">#000</color>
+
+    <color name="actividades">#F9844D</color>
+    <color name="talleres">#E88F0C</color>
+
 
     <color name="partido">#068ac8</color>
     <color name="partido_oscuro">#022e43</color>
