@@ -9,9 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
+import com.loopj.android.http.AsyncHttpClient;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.adapters.ActividadesAdapter;
+import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
 
 /**
@@ -19,34 +23,36 @@ import coop.nuevoencuentro.nofuemagia.model.Actividades;
  */
 public class ActividadesFragment extends Fragment {
 
+    private ActividadesAdapter adapter;
+    private RecyclerView recList;
+    private ProgressBar pbLista;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_actividades, container, false);
 
-
-        RecyclerView recList = (RecyclerView) v.findViewById(R.id.list_actividades);
+        recList = (RecyclerView) v.findViewById(R.id.list_actividades);
         recList.setHasFixedSize(true);
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-//        ArrayList<Actividades> actividades = new ArrayList<>();
-//        actividades.add(new Actividades("Apoyo Escolar\nMartes 17.30hs", "Clases de apoyo libres y gratuitas para todos y todas!", R.mipmap.apoyo));
-//        actividades.add(new Actividades("Reunion\nJueves 19hs", "¡Traé ropa cómoda y, si tenés, colchoneta!", R.mipmap.yoga));
-//        actividades.add(new Actividades("Plenario\nSabado por medio 15hs", "Clases de apoyo libres y gratuitas para todos y todas!", R.mipmap.apoyo));
-//        actividades.add(new Actividades("Compras Comunitarias\nSabado por medio", "Fiedos, salsa de tomate, tapas de empanadas, aceite, yerba, azucar y arroz!", R.mipmap.compras_comunitarias));
-//        actividades.add(new Actividades("Bolsones\nSabado por medio", "Bolson de verdura orgánica, fruta y tierra!", R.mipmap.bolsones));
+        pbLista = (ProgressBar) v.findViewById(R.id.pb_actividades);
+        pbLista.setVisibility(View.VISIBLE);
 
-//        actividades.add(new Actividades("Yoga - Lunes 19hs", "¡Traé ropa cómoda y, si tenés, colchoneta!", R.mipmap.yoga));
-//        actividades.add(new Actividades("Apoyo Escolar - Martes 17.30hs", "Clases de apoyo libres y gratuitas para todos y todas!", R.mipmap.apoyo));
-//        actividades.add(new Actividades("Salsa - Martes 19hs", "Cupos limitados", R.mipmap.salsa));
-
-
-        ActividadesAdapter adapter = new ActividadesAdapter(getContext(), false);
-        recList.setAdapter(adapter);
+        adapter = new ActividadesAdapter(getContext(), false, pbLista);
+        if (adapter.haveUpdate()) {
+            Common.SincronizarActividades(new AsyncHttpClient(), this);
+        } else
+            recList.setAdapter(adapter);
 
         return v;
+    }
+
+    public void recargar() {
+        adapter = new ActividadesAdapter(getContext(), true, pbLista);
+        recList.setAdapter(adapter);
     }
 }

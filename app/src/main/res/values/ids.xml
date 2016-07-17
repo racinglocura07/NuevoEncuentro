@@ -25,4 +25,6 @@
     <item name="wv_compras" type="id" />
     <item name="pb_compras" type="id" />
     <item name="list_talleres" type="id" />
+    <item name="pb_talleres" type="id" />
+    <item name="pb_actividades" type="id" />
 </resources>

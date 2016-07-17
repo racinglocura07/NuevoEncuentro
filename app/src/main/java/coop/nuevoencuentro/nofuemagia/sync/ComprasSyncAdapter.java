@@ -49,9 +49,9 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
 
         String que = extras.getString("QUE");
         if (que != null && que.equals("Actividades")) {
-            Common.SincronizarActividades(Common.urlActividades, client);
+            Common.SincronizarActividades(client);
         } else if (que != null && que.equals("Bolson")) {
-            Common.SincronizarBolsones(Common.urlBolsones, client);
+            Common.SincronizarBolsones(client);
         }
 
         syncResult.stats.numEntries++;
@@ -60,7 +60,6 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
         //syncResult.
         //SincronizarCaracteristicas("http://magyp-iis-desa.magyp.ar:8027/Home/GetCaracteristicas", client);
     }
-
 
 
     private void SincronizarCaracteristicas(String url, SyncHttpClient client) {

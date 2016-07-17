@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -47,11 +48,16 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
 //        mPP = (PantallaPrincipal) _c;
 //    }
 
-    public ActividadesAdapter(Context _c, boolean esTaller) {
+    public ActividadesAdapter(Context _c, boolean esTaller, ProgressBar pb) {
         mDataset = Actividades.GetAll(esTaller);
         mContext = _c;
         mPP = (PantallaPrincipal) _c;
         mEsTaller = esTaller;
+        pb.setVisibility(View.GONE);
+    }
+
+    public boolean haveUpdate() {
+        return mDataset.size() == 0;
     }
 
     @Override

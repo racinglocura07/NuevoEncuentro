@@ -15,7 +15,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.loopj.android.http.AsyncHttpClient;
+
 import coop.nuevoencuentro.nofuemagia.R;
+import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Bolsones;
 
 /**
@@ -24,25 +27,30 @@ import coop.nuevoencuentro.nofuemagia.model.Bolsones;
 public class ComprasComunitariasFragment extends Fragment {
 
     private ProgressBar pbCompras;
+    private WebView wvCompras;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_compras_comunitarias, container, false);
 
-        Bolsones ultimo = Bolsones.getLast();
-        System.out.println("LINK = " + ultimo.getLink());
-
-        WebView wvCompras = (WebView) v.findViewById(R.id.wv_compras);
-        wvCompras.loadUrl(ultimo.getLink());
-        wvCompras.requestFocus(View.FOCUS_DOWN);
+        wvCompras = (WebView) v.findViewById(R.id.wv_compras);
         wvCompras.setWebViewClient(new MyWebViewClient());
+        wvCompras.requestFocus(View.FOCUS_DOWN);
 
         WebSettings webSettings = wvCompras.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
         pbCompras = (ProgressBar) v.findViewById(R.id.pb_compras);
 
+        Bolsones ultimo = Bolsones.getLast();
+        if (ultimo == null) {
+            AsyncHttpClient client = new AsyncHttpClient();
+            Common.SincronizarBolsones(client, this);
+            return v;
+        }
+
+        wvCompras.loadUrl(ultimo.getLink());
         return v;
     }
 
@@ -54,6 +62,11 @@ public class ComprasComunitariasFragment extends Fragment {
     private void hideProgress() {
         pbCompras.setProgress(100);
         pbCompras.setVisibility(View.GONE);
+    }
+
+    public void recargar() {
+        Bolsones ultimo = Bolsones.getLast();
+        wvCompras.loadUrl(ultimo.getLink());
     }
 
     private class MyWebViewClient extends WebViewClient {
