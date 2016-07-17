@@ -16,13 +16,13 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import coop.nuevoencuentro.nofuemagia.R;
+import coop.nuevoencuentro.nofuemagia.model.Bolsones;
 
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia
  */
 public class ComprasComunitariasFragment extends Fragment {
 
-    private static final String BOLSONES_FORM = "https://docs.google.com/forms/d/e/1FAIpQLScArsn7OuZ40uBh2I8_ucDtJaxOADfgUPCCZAOcpiY2KnGZdw/viewform?c=0&w=1";
     private ProgressBar pbCompras;
 
     @Nullable
@@ -30,10 +30,11 @@ public class ComprasComunitariasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_compras_comunitarias, container, false);
 
-
+        Bolsones ultimo = Bolsones.getLast();
+        System.out.println("LINK = " + ultimo.getLink());
 
         WebView wvCompras = (WebView) v.findViewById(R.id.wv_compras);
-        wvCompras.loadUrl(BOLSONES_FORM);
+        wvCompras.loadUrl(ultimo.getLink());
         wvCompras.requestFocus(View.FOCUS_DOWN);
         wvCompras.setWebViewClient(new MyWebViewClient());
 

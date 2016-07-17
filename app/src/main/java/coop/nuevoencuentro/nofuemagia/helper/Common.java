@@ -3,6 +3,23 @@ package coop.nuevoencuentro.nofuemagia.helper;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.SyncHttpClient;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.List;
+
+import coop.nuevoencuentro.nofuemagia.model.Actividades;
+import coop.nuevoencuentro.nofuemagia.model.Bolsones;
+import cz.msebera.android.httpclient.Header;
+
 /**
  * Created by Tano on 16/06/2016.
  */
@@ -22,6 +39,7 @@ public class Common {
     public static String imagenURL = "http://nofuemagia.ueuo.com/Nuevo/imagenes/";
 
     public static String urlActividades = "http://nofuemagia.ueuo.com/Nuevo/backend/actividades/listActividades.php?fid=-2";
+    public static String urlBolsones = "http://nofuemagia.ueuo.com/Nuevo/backend/bolsones/listBolsones.php?fid=-2";
 
     public static void ShowOkMessage(View v, int mensaje) {
         final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_INDEFINITE);
@@ -37,5 +55,81 @@ public class Common {
     public static void ShowMessage(View v, int mensaje) {
         final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_SHORT);
         snackBar.show();
+    }
+
+    public static void SincronizarBolsones(String url, SyncHttpClient client) {
+        client.get(url, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                //super.onSuccess(statusCode, headers, response);
+
+                ActiveAndroid.beginTransaction();
+                try {
+                    Bolsones bolson = new Bolsones();
+                    bolson.setIdBolson(response.getInt("idBolson"));
+                    bolson.setLink(response.getString("link"));
+                    bolson.setCreadoEl(response.getString("creadoEl"));
+                    bolson.save();
+
+                    ActiveAndroid.setTransactionSuccessful();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                } finally {
+                    System.out.println("Bien bolson");
+                    ActiveAndroid.endTransaction();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+    }
+
+    public static void SincronizarActividades(String url, SyncHttpClient client) {
+        client.get(url, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                //super.onSuccess(statusCode, headers, response);
+
+                ActiveAndroid.beginTransaction();
+                try {
+
+                    Gson gson = new Gson();
+                    Type listType = new TypeToken<List<Actividades>>() {
+                    }.getType();
+
+
+                    for (Actividades local : Actividades.GetAll(false)) {
+                        new Delete().from(Actividades.class).where("idActividad = ?", local.getId()).execute();
+                    }
+
+                    List<Actividades> remoto = gson.fromJson(response.toString(), listType);
+                    for (Actividades carRemoto : remoto) {
+                        Actividades nueva = new Actividades(carRemoto.idActividad, carRemoto.nombre, carRemoto.descripcion, carRemoto.cuando, carRemoto.repeticion, carRemoto.esTaller);
+                        nueva.save();
+                    }
+
+                    ActiveAndroid.setTransactionSuccessful();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                } finally {
+                    System.out.println("Bien actividad");
+                    ActiveAndroid.endTransaction();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
     }
 }

@@ -23,6 +23,7 @@ import java.util.List;
 
 
 import coop.nuevoencuentro.nofuemagia.helper.Common;
+import coop.nuevoencuentro.nofuemagia.model.Bolsones;
 import cz.msebera.android.httpclient.Header;
 import coop.nuevoencuentro.nofuemagia.helper.DatabaseHelper;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
@@ -48,55 +49,19 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
 
         String que = extras.getString("QUE");
         if (que != null && que.equals("Actividades")) {
-            SincronizarActividades(Common.urlActividades, client);
+            Common.SincronizarActividades(Common.urlActividades, client);
+        } else if (que != null && que.equals("Bolson")) {
+            Common.SincronizarBolsones(Common.urlBolsones, client);
         }
+
+        syncResult.stats.numEntries++;
+        syncResult.stats.numInserts++;
 
         //syncResult.
         //SincronizarCaracteristicas("http://magyp-iis-desa.magyp.ar:8027/Home/GetCaracteristicas", client);
     }
 
-    private void SincronizarActividades(String url, SyncHttpClient client) {
-        client.get(url, new JsonHttpResponseHandler() {
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                //super.onSuccess(statusCode, headers, response);
-
-                ActiveAndroid.beginTransaction();
-                try {
-
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<List<Actividades>>() {
-                    }.getType();
-
-
-                    for (Actividades local : Actividades.GetAll(false)){
-                        new Delete().from(Actividades.class).where("idActividad = ?", local.getId()).execute();
-                    }
-
-                    List<Actividades> remoto = gson.fromJson(response.toString(), listType);
-                    for (Actividades carRemoto : remoto) {
-                        Actividades nueva = new Actividades(carRemoto.idActividad, carRemoto.nombre, carRemoto.descripcion, carRemoto.cuando, carRemoto.repeticion, carRemoto.esTaller);
-                        nueva.save();
-                    }
-
-                    ActiveAndroid.setTransactionSuccessful();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println(e.getMessage());
-                } finally {
-                    System.out.println("Tres2");
-                    ActiveAndroid.endTransaction();
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
-    }
 
     private void SincronizarCaracteristicas(String url, SyncHttpClient client) {
         client.get(url, new JsonHttpResponseHandler() {
