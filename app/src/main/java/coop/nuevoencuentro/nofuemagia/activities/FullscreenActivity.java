@@ -27,7 +27,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         ImageViewTouch ivFull = (ImageViewTouch) findViewById(R.id.iv_full);
         ivFull.setDisplayType(ImageViewTouchBase.DisplayType.FIT_IF_BIGGER);
-        Picasso.with(this).load(args.getInt(IMAGEN_FULL)).into(ivFull);
+        Picasso.with(this).load(args.getString(IMAGEN_FULL)).into(ivFull);
     }
 
 

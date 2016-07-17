@@ -18,7 +18,9 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;
 
 import coop.nuevoencuentro.nofuemagia.R;
+import coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
+import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
 
 /**
@@ -37,12 +39,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNotification(Map<String, String> messageBody) {
         Intent intent = new Intent(this, PantallaPrincipal.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
 
         String titulo = messageBody.get("title");
         String msg = messageBody.get("body");
+        int idActividad = Integer.parseInt(messageBody.get("idActividad"));
 
-        if (titulo == null || titulo.equals("")){
+        if (idActividad != -1) {
+            String imagenUrl = Common.imagenURL + "actividad-" + idActividad + ".jpg";
+
+            Bundle args = new Bundle();
+            args.putString(FullscreenActivity.IMAGEN_FULL, imagenUrl);
+
+            intent = new Intent(this, FullscreenActivity.class);
+            intent.putExtras(args);
+        }
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (titulo == null || titulo.equals("")) {
             //msg = "SyncAdaptaer";
 
 

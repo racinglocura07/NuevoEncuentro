@@ -1,6 +1,7 @@
 package coop.nuevoencuentro.nofuemagia.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
@@ -92,12 +94,14 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                 public void onClick(View v) {
                     Actividades usada = (Actividades) ivImagen.getTag();
 
+                    String imagenUrl = Common.imagenURL + "actividad-" + usada.idActividad + ".jpg";
+
                     Bundle args = new Bundle();
-                    /*args.putInt(FullscreenActivity.IMAGEN_FULL, usada.imagen);
+                    args.putString(FullscreenActivity.IMAGEN_FULL, imagenUrl);
 
                     Intent full = new Intent(mContext, FullscreenActivity.class);
                     full.putExtras(args);
-                    mContext.startActivity(full);*/
+                    mContext.startActivity(full);
 
                 }
             });

@@ -3,10 +3,15 @@ package coop.nuevoencuentro.nofuemagia.activities;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -23,6 +28,8 @@ import com.facebook.login.widget.LoginButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import coop.nuevoencuentro.nofuemagia.R;
@@ -49,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
 //        PackageInfo info;
 //        try {
-//            info = getPackageManager().getPackageInfo("coop.nuevoencuentro", PackageManager.GET_SIGNATURES);
+//            info = getPackageManager().getPackageInfo("coop.nuevoencuentro.nofuemagia", PackageManager.GET_SIGNATURES);
 //            for (Signature signature : info.signatures) {
 //                MessageDigest md;
 //                md = MessageDigest.getInstance("SHA");

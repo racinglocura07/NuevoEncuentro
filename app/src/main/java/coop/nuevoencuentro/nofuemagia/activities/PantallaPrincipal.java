@@ -48,6 +48,7 @@ import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
 
 public class PantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String IDACTIVIDAD = "IDACTIVIDAD";
     private FragmentManager fragmentManager;
     private Picasso mPicasso;
     private SharedPreferences preferences;
@@ -142,9 +143,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
                 try {
-                    if (response.getInt("status") == 1) {
+                    if (!response.getBoolean("error")) {
                         SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putBoolean(Common.YA_REGISTRADO, true);
