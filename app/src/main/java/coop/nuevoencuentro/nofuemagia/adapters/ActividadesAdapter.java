@@ -72,14 +72,14 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         public ActividadesViewHolder(View itemView) {
             super(itemView);
 
-            View hover = LayoutInflater.from(mContext).inflate(R.layout.hover_item_actividades, (ViewGroup) itemView.getRootView());
+            View hover = LayoutInflater.from(mContext).inflate(R.layout.hover_item_actividades, null);// (ViewGroup) itemView.getRootView());
             tvTitulo = (TextView) itemView.findViewById(R.id.tv_titulo_item_actividades);
             tvDescripcion = (TextView) itemView.findViewById(R.id.tv_descripcion_item_actividades);
             ivImagen = (ImageView) itemView.findViewById(R.id.iv_item_actividad);
             blur = (BlurLayout) itemView.findViewById(R.id.blur_actividad);
 
             blur.setHoverView(hover);
-            blur.enableZoomBackground(true);
+//            blur.enableZoomBackground(true);
             blur.setBlurDuration(1000);
 
             blur.addChildAppearAnimator(hover, R.id.ver_actividad, Techniques.BounceInDown, 1200);
