@@ -3,15 +3,10 @@ package coop.nuevoencuentro.nofuemagia.activities;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
@@ -24,16 +19,16 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import coop.nuevoencuentro.nofuemagia.R;
-import coop.nuevoencuentro.nofuemagia.fcm.Util;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 
 /**
@@ -45,33 +40,25 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progress;
     private LoginButton loginButton;
 
+    private SharedPreferences preferences;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
-        SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
-        preferences.edit().clear().apply();
+        preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
+        preferences.edit()
+                .remove(Common.EMAIL)
+                .remove(Common.NOMBRE)
+                .remove(Common.FBID)
+                .remove(Common.FB_REG)
+                .remove(Common.PRIMER_NOMBRE).apply();
 
-//        PackageInfo info;
-//        try {
-//            info = getPackageManager().getPackageInfo("coop.nuevoencuentro.nofuemagia", PackageManager.GET_SIGNATURES);
-//            for (Signature signature : info.signatures) {
-//                MessageDigest md;
-//                md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                String something = new String(Base64.encode(md.digest(), 0));
-//                //String something = new String(Base64.encodeBytes(md.digest()));
-//                Log.e("hash key", something);
-//            }
-//        } catch (PackageManager.NameNotFoundException e1) {
-//            Log.e("name not found", e1.toString());
-//        } catch (NoSuchAlgorithmException e) {
-//            Log.e("no such an algorithm", e.toString());
-//        } catch (Exception e) {
-//            Log.e("exception", e.toString());
-//        }
+        if (preferences.getBoolean(Common.VER_TOUR_LOGIN, true)) {
+            MostrarTour();
+        }
 
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -109,9 +96,6 @@ public class LoginActivity extends AppCompatActivity {
                             String id = object.getString("id");
                             String primerNombre = object.getString("first_name");
 
-
-
-                            SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putBoolean(Common.FB_REG, true);
                             editor.putString(Common.EMAIL, email);
@@ -151,6 +135,16 @@ public class LoginActivity extends AppCompatActivity {
                 loginButton.setEnabled(true);
             }
         });
+    }
+
+    private void MostrarTour() {
+        ViewTarget target = new ViewTarget(R.id.login_button, this);
+        new ShowcaseView.Builder(this)
+                .setTarget(target)
+                .setContentTitle("ShowcaseView")
+                .setContentText("This is highlighting the Home button")
+                .hideOnTouchOutside()
+                .build();
     }
 
     @Override

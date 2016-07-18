@@ -40,8 +40,9 @@ public class Common {
     public static final String FBID = "FBID";
     public static final String FB_REG = "FB_REG";
     public static final String PRIMER_NOMBRE = "PRIMER_NOMBRE";
-    public static String REGISTRAR_URL = "http://nofuemagia.ueuo.com/Nuevo/backend/usuarios/crearUsuario.php";
+    public static final String VER_TOUR_LOGIN = "VER_TOUR_LOGIN";
 
+    public static String REGISTRAR_URL = "http://nofuemagia.ueuo.com/Nuevo/backend/usuarios/crearUsuario.php";
     public static String imagenURL = "http://nofuemagia.ueuo.com/Nuevo/imagenes/";
 
     public static String urlActividades = "http://nofuemagia.ueuo.com/Nuevo/backend/actividades/listActividades.php?fid=-2";

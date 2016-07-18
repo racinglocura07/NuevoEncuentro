@@ -10,8 +10,8 @@ android {
         applicationId "coop.nuevoencuentro.nofuemagia"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 13
-        versionName "0.2.4"
+        versionCode 14
+        versionName "0.2.5"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
     }
@@ -54,6 +54,8 @@ dependencies {
     compile 'com.daimajia.easing:library:1.0.0@aar'
     compile 'com.daimajia.androidanimations:library:1.1.2@aar'
     compile 'com.daimajia.androidviewhover:library:1.0.4@aar'
+
+    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
 }
 
 apply plugin: 'com.google.gms.google-services'
