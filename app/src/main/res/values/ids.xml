@@ -27,4 +27,11 @@
     <item name="list_talleres" type="id" />
     <item name="pb_talleres" type="id" />
     <item name="pb_actividades" type="id" />
+    <item name="nav_noticias" type="id" />
+    <item name="list_noticias" type="id" />
+    <item name="pb_noticias" type="id" />
+    <item name="iv_noticia" type="id" />
+    <item name="tv_titulo_noticia" type="id" />
+    <item name="tv_desc_noticia" type="id" />
+    <item name="instagram_button" type="id" />
 </resources>

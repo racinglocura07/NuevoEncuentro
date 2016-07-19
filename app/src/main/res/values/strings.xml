@@ -31,9 +31,11 @@
     <string name="direccion">Veni a conocer nuestro local\nCalderón de la Barca 1674</string>
     <string name="seguinos_twitter">Seguinos {fa-twitter}</string>
     <string name="escribinos_envelope">Escribinos {fa-envelope}</string>
+    <string name="seguinos_insta">Seguinos {fa-instagram}</string>
     <string name="fa_zoom">{fa-search}</string>
     <string name="fa_facebook">{fa-facebook}</string>
     <string name="tener_instalado">Para compartir es necesario tener instalado el Facebook</string>
     <string name="error_flyer">Error al obtener el flyer</string>
     <string name="obteniendo_flyer">Cargando...</string>
+    <string name="noticias">Noticias</string>
 </resources>

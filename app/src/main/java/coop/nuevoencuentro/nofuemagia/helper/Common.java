@@ -1,5 +1,6 @@
 package coop.nuevoencuentro.nofuemagia.helper;
 
+import android.content.SyncResult;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -20,9 +21,11 @@ import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
+import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
 import coop.nuevoencuentro.nofuemagia.model.Bolsones;
+import coop.nuevoencuentro.nofuemagia.model.Noticias;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.client.HttpClient;
 
@@ -47,6 +50,7 @@ public class Common {
 
     public static String urlActividades = "http://nofuemagia.ueuo.com/Nuevo/backend/actividades/listActividades.php?fid=-2";
     public static String urlBolsones = "http://nofuemagia.ueuo.com/Nuevo/backend/bolsones/listBolsones.php?fid=-2";
+    private static String urlNoticias = "http://nofuemagia.ueuo.com/Nuevo/backend/noticias/listNoticias.php?fid=-1";
 
     public static void ShowOkMessage(View v, int mensaje) {
         final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_INDEFINITE);
@@ -64,12 +68,12 @@ public class Common {
         snackBar.show();
     }
 
-    public static void SincronizarBolsones(SyncHttpClient client) {
+    public static void SincronizarBolsones(SyncHttpClient client, final SyncResult result) {
         client.get(urlBolsones, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                guadarBolsones(response);
+                guadarBolsones(response, result);
             }
 
             @Override
@@ -84,7 +88,7 @@ public class Common {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                guadarBolsones(response);
+                guadarBolsones(response, null);
                 frag.recargar();
             }
 
@@ -95,7 +99,7 @@ public class Common {
         });
     }
 
-    private static void guadarBolsones(JSONObject response) {
+    private static void guadarBolsones(JSONObject response, SyncResult result) {
         ActiveAndroid.beginTransaction();
         try {
             Bolsones bolson = new Bolsones();
@@ -107,6 +111,8 @@ public class Common {
             ActiveAndroid.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
+            if (result != null)
+                result.stats.numIoExceptions++;
             System.out.println(e.getMessage());
         } finally {
             System.out.println("Bien bolson");
@@ -114,12 +120,12 @@ public class Common {
         }
     }
 
-    public static void SincronizarActividades(SyncHttpClient client) {
+    public static void SincronizarActividades(SyncHttpClient client, final SyncResult result) {
         client.get(urlActividades, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                guardarActividades(response);
+                guardarActividades(response, result);
             }
 
             @Override
@@ -134,7 +140,7 @@ public class Common {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                guardarActividades(response);
+                guardarActividades(response, null);
                 if (frag instanceof ActividadesFragment)
                     ((ActividadesFragment) frag).recargar();
                 else if (frag instanceof TalleresFragment)
@@ -148,7 +154,7 @@ public class Common {
         });
     }
 
-    private static void guardarActividades(JSONArray response) {
+    private static void guardarActividades(JSONArray response, SyncResult result) {
         ActiveAndroid.beginTransaction();
         try {
 
@@ -170,6 +176,73 @@ public class Common {
             ActiveAndroid.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
+            if (result != null)
+                result.stats.numIoExceptions++;
+            System.out.println(e.getMessage());
+        } finally {
+            System.out.println("Bien actividad");
+            ActiveAndroid.endTransaction();
+        }
+    }
+
+    public static void SincronizarNoticias(SyncHttpClient client, final SyncResult result) {
+        client.get(urlNoticias, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                guardarNoticias(response, result);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+
+            }
+        });
+    }
+
+    public static void SincronizarNoticias(AsyncHttpClient client, final NoticiasFragment frag) {
+        client.get(urlNoticias, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                guardarNoticias(response, null);
+                frag.recargar();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+
+            }
+
+        });
+    }
+
+    private static void guardarNoticias(JSONArray response, SyncResult result) {
+        ActiveAndroid.beginTransaction();
+        try {
+
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<Noticias>>() {
+            }.getType();
+
+
+            for (Noticias local : Noticias.GetAll()) {
+                new Delete().from(Actividades.class).where("idNoticia = ?", local.getId()).execute();
+            }
+
+            List<Noticias> remoto = gson.fromJson(response.toString(), listType);
+            for (Noticias carRemoto : remoto) {
+                Noticias nueva = new Noticias(carRemoto.idNoticia, carRemoto.titulo, carRemoto.descripcion, carRemoto.link);
+                nueva.save();
+            }
+
+            ActiveAndroid.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (result != null)
+                result.stats.numIoExceptions++;
             System.out.println(e.getMessage());
         } finally {
             System.out.println("Bien actividad");

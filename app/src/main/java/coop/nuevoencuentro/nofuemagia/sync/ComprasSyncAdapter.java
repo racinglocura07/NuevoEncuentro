@@ -49,9 +49,12 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
 
         String que = extras.getString("QUE");
         if (que != null && que.equals("Actividades")) {
-            Common.SincronizarActividades(client);
+            Common.SincronizarActividades(client, syncResult);
         } else if (que != null && que.equals("Bolson")) {
-            Common.SincronizarBolsones(client);
+            Common.SincronizarBolsones(client, syncResult);
+        }
+        else if (que != null && que.equals("Bolson")) {
+            Common.SincronizarNoticias(client, syncResult);
         }
 
         syncResult.stats.numEntries++;
@@ -60,45 +63,4 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
         //syncResult.
         //SincronizarCaracteristicas("http://magyp-iis-desa.magyp.ar:8027/Home/GetCaracteristicas", client);
     }
-
-
-    private void SincronizarCaracteristicas(String url, SyncHttpClient client) {
-        client.get(url, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-
-                ActiveAndroid.beginTransaction();
-                try {
-                    Gson gson = new Gson();
-                    Type listType = new TypeToken<List<Caracteristica>>() {
-                    }.getType();
-
-
-                    List<Caracteristica> remoto = gson.fromJson(response.toString(), listType);
-                    System.out.println("Lista Remota = " + remoto.size());
-                    for (Caracteristica carRemoto : remoto) {
-                        Caracteristica enBase = new Select().from(Caracteristica.class).where(Caracteristica.NOMBRE + " = ?", carRemoto.getNombre()).executeSingle();
-                        if (enBase == null) {
-                            Caracteristica nueva = new Caracteristica(carRemoto.getNombre(), carRemoto.getCantidad());
-                            nueva.save();
-                        }
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    ActiveAndroid.endTransaction();
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
-    }
-
-
 }

@@ -66,5 +66,15 @@
 
     </LinearLayout>
 
+    <com.joanzapata.iconify.widget.IconButton
+        android:id="@id/instagram_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="@string/seguinos_insta"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/blanco" />
+
 
 </LinearLayout>

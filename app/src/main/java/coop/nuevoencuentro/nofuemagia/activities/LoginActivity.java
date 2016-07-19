@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 .remove(Common.PRIMER_NOMBRE).apply();
 
         if (preferences.getBoolean(Common.VER_TOUR_LOGIN, true)) {
-            MostrarTour();
+           // MostrarTour();
         }
 
         if (Build.VERSION.SDK_INT < 16) {

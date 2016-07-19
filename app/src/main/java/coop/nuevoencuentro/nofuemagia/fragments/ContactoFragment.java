@@ -1,6 +1,7 @@
 package coop.nuevoencuentro.nofuemagia.fragments;
 
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.facebook.share.widget.LikeView;
 import com.joanzapata.iconify.widget.IconButton;
+
 import coop.nuevoencuentro.nofuemagia.R;
 
 /**
@@ -44,8 +46,33 @@ public class ContactoFragment extends Fragment {
             }
         });
 
+        IconButton instaButton = (IconButton) v.findViewById(R.id.instagram_button);
+        instaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openInsta();
+            }
+        });
+
+        //
+
 
         return v;
+    }
+
+    private void openInsta() {
+        //
+        Uri uri = Uri.parse("http://instagram.com/_u/nuevoencuentrocomuna10");
+        Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
+
+        likeIng.setPackage("com.instagram.android");
+
+        try {
+            startActivity(likeIng);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://instagram.com/nuevoencuentrocomuna10")));
+        }
     }
 
     private void mandarMail() {

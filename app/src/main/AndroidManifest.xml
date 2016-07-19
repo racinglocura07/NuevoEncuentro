@@ -73,7 +73,7 @@
             android:value="nuevoencuentro.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="3" />
+            android:value="5" />
 
         <activity
             android:name="com.facebook.FacebookActivity"

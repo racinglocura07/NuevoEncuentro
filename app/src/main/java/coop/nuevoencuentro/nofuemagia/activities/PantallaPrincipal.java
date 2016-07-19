@@ -34,6 +34,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import cz.msebera.android.httpclient.Header;
 import coop.nuevoencuentro.nofuemagia.R;
@@ -87,6 +88,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         navigationView.setNavigationItemSelectedListener(this);
 
         Menu menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_noticias).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_newspaper_o).colorRes(R.color.partido));
         menu.findItem(R.id.nav_actividades).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_book).colorRes(R.color.partido));
         menu.findItem(R.id.nav_talleres).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_users).colorRes(R.color.partido));
         menu.findItem(R.id.nav_compras_comunitarias).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_shopping_bag).colorRes(R.color.partido));
@@ -112,7 +114,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             tvNombre.setText(getString(R.string.bienvenida, primer));
 
             fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_container, new ActividadesFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_container, new NoticiasFragment()).commit();
+            navigationView.getMenu().getItem(0).setChecked(true);
         } else {
             Loguearse();
         }
@@ -200,7 +203,9 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_actividades) {
+        if (id == R.id.nav_noticias) {
+            fragment = new NoticiasFragment();
+        } else if (id == R.id.nav_actividades) {
             fragment = new ActividadesFragment();
         } else if (id == R.id.nav_talleres) {
             fragment = new TalleresFragment();
