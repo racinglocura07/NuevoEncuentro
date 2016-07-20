@@ -41,4 +41,6 @@
     <item name="srl_noticias" type="id" />
     <item name="srl_actividades" type="id" />
     <item name="srl_talleres" type="id" />
+    <item name="et_nombre" type="id" />
+    <item name="ib_invidato" type="id" />
 </resources>

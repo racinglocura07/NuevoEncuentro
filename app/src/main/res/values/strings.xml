@@ -39,4 +39,8 @@
     <string name="obteniendo_flyer">Cargando...</string>
     <string name="noticias">Noticias</string>
     <string name="fa_arrow_right_35sp_color_colorprimary">{fa-arrow-right 35sp @color/colorPrimary}</string>
+    <string name="nombre">Nombre</string>
+    <string name="invitado">Si entras como invitado no vas a poder disfrutar de todas las opciones</string>
+    <string name="invitado_ingreso">Ingresar como invitado</string>
+    <string name="com_facebook_loginview_log_in_button_long">Ingresar con Facebook</string>
 </resources>

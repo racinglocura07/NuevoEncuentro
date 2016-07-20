@@ -1,15 +1,24 @@
 package coop.nuevoencuentro.nofuemagia.activities;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ActionBar;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.facebook.CallbackManager;
@@ -27,6 +36,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.widget.IconButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +61,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SharedPreferences preferences;
     private SignInButton signInButton;
     private GoogleApiClient mGoogleApiClient;
+    private IconButton ibInvitado;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,8 +101,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
         callbackManager = CallbackManager.Factory.create();
+
+        ibInvitado = (IconButton) findViewById(R.id.ib_invidato);
         loginButton = (LoginButton) findViewById(R.id.login_button);
         signInButton = (SignInButton) findViewById(R.id.sb_google);
+
         progress = (ProgressBar) findViewById(R.id.progress_fb);
         progress.setVisibility(View.GONE);
 
@@ -100,6 +116,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onClick(View view) {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+
+        ibInvitado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                comoInvitado();
             }
         });
 
@@ -144,6 +167,28 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
     }
 
+    private void comoInvitado() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_nombre, null);
+        final EditText edt = (EditText) dialogView.findViewById(R.id.et_nombre);
+
+        new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle(R.string.invitado_ingreso)
+                .setCancelable(true)
+                .setIcon(new IconDrawable(this, FontAwesomeIcons.fa_info).actionBarSize().color(R.color.colorAccent))
+                .setView(dialogView)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String nombre = edt.getText().toString();
+                        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                        if (!TextUtils.isEmpty(nombre)) {
+                            SavePreferences(getEmiailID(getApplicationContext()), nombre, android_id, nombre);
+                        }
+                    }
+                })
+                .show();
+    }
+
     private void SavePreferences(String email, String name, String id, String primerNombre) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Common.FB_REG, true);
@@ -155,6 +200,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         loginButton.setEnabled(true);
         progress.setVisibility(View.GONE);
+
         Intent principal = new Intent(LoginActivity.this, PantallaPrincipal.class);
         startActivity(principal);
         finish();
@@ -203,9 +249,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (logueado) {
             progress.setVisibility(View.VISIBLE);
             loginButton.setEnabled(false);
+            ibInvitado.setEnabled(false);
         } else {
             progress.setVisibility(View.GONE);
             loginButton.setEnabled(true);
+            ibInvitado.setEnabled(true);
         }
     }
 
@@ -229,5 +277,26 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         System.out.println("Error = " + connectionResult.toString());
+    }
+
+    private String getEmiailID(Context context) {
+        AccountManager accountManager = AccountManager.get(context);
+        Account account = getAccount(accountManager);
+        if (account == null) {
+            return null;
+        } else {
+            return account.name;
+        }
+    }
+
+    private static Account getAccount(AccountManager accountManager) {
+        Account[] accounts = accountManager.getAccountsByType("com.google");
+        Account account;
+        if (accounts.length > 0) {
+            account = accounts[0];
+        } else {
+            account = null;
+        }
+        return account;
     }
 }

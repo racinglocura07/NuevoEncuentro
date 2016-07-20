@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:background="@mipmap/portada"
     android:gravity="center"
     android:orientation="vertical">
@@ -51,6 +52,22 @@
         android:layout_marginStart="@dimen/pad_login"
         android:layout_marginTop="25dp"
         android:visibility="gone" />
+
+    <com.joanzapata.iconify.widget.IconButton
+        android:id="@id/ib_invidato"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_above="@+id/login_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="@dimen/pad_login"
+        android:layout_marginLeft="@dimen/pad_login"
+        android:layout_marginRight="@dimen/pad_login"
+        android:layout_marginStart="@dimen/pad_login"
+        android:text="{fa-user} Ingresar como invitado" />
 
 
 </RelativeLayout>

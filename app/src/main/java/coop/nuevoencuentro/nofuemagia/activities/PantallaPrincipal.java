@@ -153,7 +153,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     @Override
     protected void onResume() {
         super.onResume();
-        if (Profile.getCurrentProfile() == null) {
+        if (!preferences.getBoolean(Common.FB_REG, false)) {
             Loguearse();
         }
     }
