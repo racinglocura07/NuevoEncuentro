@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -180,9 +181,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String nombre = edt.getText().toString();
-                        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                        String deviceId = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
                         if (!TextUtils.isEmpty(nombre)) {
-                            SavePreferences(getEmiailID(getApplicationContext()), nombre, android_id, nombre);
+                            SavePreferences(getEmiailID(getApplicationContext()), nombre, deviceId, nombre);
                         }
                     }
                 })
