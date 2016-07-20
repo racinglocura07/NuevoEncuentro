@@ -34,4 +34,7 @@
     <item name="tv_titulo_noticia" type="id" />
     <item name="tv_desc_noticia" type="id" />
     <item name="instagram_button" type="id" />
+    <item name="sb_google" type="id" />
+    <item name="tv_id_noticia" type="id" />
+    <item name="tv_ir_noticia" type="id" />
 </resources>

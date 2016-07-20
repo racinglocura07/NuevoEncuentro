@@ -42,11 +42,12 @@ dependencies {
 
     compile 'it.sephiroth.android.library.imagezoom:imagezoom:1.0.5'
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2' // (v4.5)
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
 
     compile 'com.google.firebase:firebase-core:9.0.2'
     compile 'com.google.firebase:firebase-messaging:9.0.2'
 
+    compile 'com.google.android.gms:play-services-auth:9.0.2'
     compile 'com.google.android.gms:play-services-maps:9.0.2'
     compile 'com.google.android.gms:play-services-location:9.0.2'
 
@@ -55,7 +56,8 @@ dependencies {
     compile 'com.daimajia.androidanimations:library:1.1.2@aar'
     compile 'com.daimajia.androidviewhover:library:1.0.4@aar'
 
-    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
+    compile 'com.facebook.android:facebook-android-sdk:4.11.0'
+//    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

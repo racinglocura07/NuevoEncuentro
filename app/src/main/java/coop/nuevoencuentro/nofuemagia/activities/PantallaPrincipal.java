@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -53,6 +54,14 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private FragmentManager fragmentManager;
     private Picasso mPicasso;
     private SharedPreferences preferences;
+    private ActionBar abar;
+
+    private ComprasComunitariasFragment comprasFragment;
+    private NoticiasFragment noticiasFragment;
+    private ActividadesFragment actividadesFragment;
+    private TalleresFragment talleresFragment;
+    private ContactoFragment contactoFragment;
+    private UbicacionFragment ubicacionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         setContentView(R.layout.activity_pantalla_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        abar = getSupportActionBar();
 
         preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
 
@@ -69,6 +79,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
+        assert abar != null;
         assert fab != null;
         assert drawer != null;
         assert navigationView != null;
@@ -113,8 +124,17 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             TextView tvNombre = (TextView) headerView.findViewById(R.id.tv_nav_nombre);
             tvNombre.setText(getString(R.string.bienvenida, primer));
 
+
+            noticiasFragment = new NoticiasFragment();
+            actividadesFragment = new ActividadesFragment();
+            talleresFragment = new TalleresFragment();
+            comprasFragment = new ComprasComunitariasFragment();
+            contactoFragment = new ContactoFragment();
+            ubicacionFragment = new UbicacionFragment();
+
+
             fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_container, new NoticiasFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment).commit();
             navigationView.getMenu().getItem(0).setChecked(true);
         } else {
             Loguearse();
@@ -203,18 +223,20 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
         int id = item.getItemId();
 
+        abar.setTitle(item.getTitle());
+
         if (id == R.id.nav_noticias) {
-            fragment = new NoticiasFragment();
+            fragment = noticiasFragment;
         } else if (id == R.id.nav_actividades) {
-            fragment = new ActividadesFragment();
+            fragment = actividadesFragment;
         } else if (id == R.id.nav_talleres) {
-            fragment = new TalleresFragment();
+            fragment = talleresFragment;
         } else if (id == R.id.nav_compras_comunitarias) {
-            fragment = new ComprasComunitariasFragment();
+            fragment = comprasFragment;
         } else if (id == R.id.nav_contacto) {
-            fragment = new ContactoFragment();
+            fragment = contactoFragment;
         } else if (id == R.id.nav_ubicacion) {
-            fragment = new UbicacionFragment();
+            fragment = ubicacionFragment;
         } else if (id == R.id.nav_compartir) {
             CompartirApp();
         } else if (id == R.id.nav_salir) {

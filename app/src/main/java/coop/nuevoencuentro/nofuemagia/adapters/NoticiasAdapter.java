@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.joanzapata.iconify.widget.IconTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.ViewHo
         holder.ivImagen.setTag(item);
 
         String imagenUrl = Common.imagenURL + "noticia-" + item.idNoticia + ".jpg";
-        Picasso.with(mContext).load(imagenUrl).into(holder.ivImagen);
+        Picasso.with(mContext).load(imagenUrl).fit().centerCrop().into(holder.ivImagen);
     }
 
     @Override
@@ -74,18 +75,27 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
 
-            tvTitulo = (TextView) itemView.findViewById(R.id.tv_titulo_noticia);
-            tvDescripcion = (TextView) itemView.findViewById(R.id.tv_desc_noticia);
-            ivImagen = (ImageView) itemView.findViewById(R.id.iv_noticia);
-
-            View v = itemView;
-            v.setOnClickListener(new View.OnClickListener() {
+            IconTextView tvIrImagen = (IconTextView) itemView.findViewById(R.id.tv_ir_noticia);
+            tvIrImagen.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.link.trim()));
                     mContext.startActivity(browserIntent);
                 }
             });
+
+            tvTitulo = (TextView) itemView.findViewById(R.id.tv_titulo_noticia);
+            tvDescripcion = (TextView) itemView.findViewById(R.id.tv_desc_noticia);
+            ivImagen = (ImageView) itemView.findViewById(R.id.iv_noticia);
+
+            /*View v = itemView;
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.link.trim()));
+                    mContext.startActivity(browserIntent);
+                }
+            });*/
 
 
         }

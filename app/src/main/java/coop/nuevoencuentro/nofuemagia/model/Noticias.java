@@ -40,6 +40,7 @@ public class Noticias extends Model {
     public static List<Noticias> GetAll() {
         return new Select().all()
                 .from(Noticias.class)
+                .orderBy("idNoticia DESC")
                 .execute();
     }
 }

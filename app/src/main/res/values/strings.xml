@@ -38,4 +38,5 @@
     <string name="error_flyer">Error al obtener el flyer</string>
     <string name="obteniendo_flyer">Cargando...</string>
     <string name="noticias">Noticias</string>
+    <string name="fa_arrow_right_35sp_color_colorprimary">{fa-arrow-right 35sp @color/colorPrimary}</string>
 </resources>

@@ -29,9 +29,17 @@ public class ComprasComunitariasFragment extends Fragment {
     private ProgressBar pbCompras;
     private WebView wvCompras;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
         View v = inflater.inflate(R.layout.fragment_compras_comunitarias, container, false);
 
         wvCompras = (WebView) v.findViewById(R.id.wv_compras);
@@ -49,6 +57,7 @@ public class ComprasComunitariasFragment extends Fragment {
             Common.SincronizarBolsones(client, this);
             return v;
         }
+
 
         wvCompras.loadUrl(ultimo.getLink());
         return v;

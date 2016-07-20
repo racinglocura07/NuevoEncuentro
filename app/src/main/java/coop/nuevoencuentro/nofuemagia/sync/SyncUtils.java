@@ -29,15 +29,14 @@ public class SyncUtils {
             ContentResolver.setIsSyncable(account, context.getString(R.string.provider), 1);
             ContentResolver.setSyncAutomatically(account, context.getString(R.string.provider), true);
             ContentResolver.addPeriodicSync(account, context.getString(R.string.provider), params, (60 * 60) * 24);
-
             ContentResolver.requestSync(account, context.getString(R.string.provider), params);
         }
 
         //BORRRAR UNA VEZ QUE ANDE
-        Bundle params = new Bundle();
-        params.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        params.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        ContentResolver.requestSync(account, context.getString(R.string.provider), params);
+//        Bundle params = new Bundle();
+//        params.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+//        params.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+//        ContentResolver.requestSync(account, context.getString(R.string.provider), params);
     }
 
     public static Account getAccount(Context context) {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,9 +20,13 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,13 +39,16 @@ import coop.nuevoencuentro.nofuemagia.helper.Common;
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
+    private static final int RC_SIGN_IN = 0x01;
     private CallbackManager callbackManager;
     private ProgressBar progress;
     private LoginButton loginButton;
 
     private SharedPreferences preferences;
+    private SignInButton signInButton;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 .remove(Common.PRIMER_NOMBRE).apply();
 
         if (preferences.getBoolean(Common.VER_TOUR_LOGIN, true)) {
-           // MostrarTour();
+            // MostrarTour();
         }
 
         if (Build.VERSION.SDK_INT < 16) {
@@ -72,20 +80,34 @@ public class LoginActivity extends AppCompatActivity {
                 actionBar.hide();
         }
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.login_button);
+        signInButton = (SignInButton) findViewById(R.id.sb_google);
         progress = (ProgressBar) findViewById(R.id.progress_fb);
         progress.setVisibility(View.GONE);
 
         assert loginButton != null;
 
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                progress.setVisibility(View.VISIBLE);
-                loginButton.setEnabled(false);
+                updateUI(true);
 
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -96,20 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                             String id = object.getString("id");
                             String primerNombre = object.getString("first_name");
 
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putBoolean(Common.FB_REG, true);
-                            editor.putString(Common.EMAIL, email);
-                            editor.putString(Common.NOMBRE, name);
-                            editor.putString(Common.PRIMER_NOMBRE, primerNombre);
-                            editor.putString(Common.FBID, id);
-                            editor.apply();
-
-                            loginButton.setEnabled(true);
-                            progress.setVisibility(View.GONE);
-                            Intent principal = new Intent(LoginActivity.this, PantallaPrincipal.class);
-                            startActivity(principal);
-                            finish();
-
+                            SavePreferences(email, name, id, primerNombre);
                         } catch (JSONException e) {
                             System.out.println(e.getMessage());
                             e.printStackTrace();
@@ -125,32 +134,79 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                progress.setVisibility(View.GONE);
-                loginButton.setEnabled(true);
+                updateUI(false);
             }
 
             @Override
             public void onError(FacebookException exception) {
-                progress.setVisibility(View.GONE);
-                loginButton.setEnabled(true);
+                updateUI(false);
             }
         });
     }
 
-    private void MostrarTour() {
-        ViewTarget target = new ViewTarget(R.id.login_button, this);
-        new ShowcaseView.Builder(this)
-                .setTarget(target)
-                .setContentTitle("ShowcaseView")
-                .setContentText("This is highlighting the Home button")
-                .hideOnTouchOutside()
-                .build();
+    private void SavePreferences(String email, String name, String id, String primerNombre) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(Common.FB_REG, true);
+        editor.putString(Common.EMAIL, email);
+        editor.putString(Common.NOMBRE, name);
+        editor.putString(Common.PRIMER_NOMBRE, primerNombre);
+        editor.putString(Common.FBID, id);
+        editor.apply();
+
+        loginButton.setEnabled(true);
+        progress.setVisibility(View.GONE);
+        Intent principal = new Intent(LoginActivity.this, PantallaPrincipal.class);
+        startActivity(principal);
+        finish();
     }
+
+//    private void MostrarTour() {
+//        ViewTarget target = new ViewTarget(R.id.login_button, this);
+//        new ShowcaseView.Builder(this)
+//                .setTarget(target)
+//                .setContentTitle("ShowcaseView")
+//                .setContentText("This is highlighting the Home button")
+//                .hideOnTouchOutside()
+//                .build();
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+
+                GoogleSignInAccount acct = result.getSignInAccount();
+                if (acct != null) {
+                    String email = acct.getEmail();
+                    String name = acct.getDisplayName();
+                    String id = acct.getIdToken();
+                    String primerNombre = acct.getGivenName();
+
+                    SavePreferences(email, name, id, primerNombre);
+                }
+
+
+                updateUI(true);
+            } else {
+                System.out.println("Error = " + result.getStatus().toString());
+                updateUI(false);
+            }
+
+        } else
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void updateUI(boolean logueado) {
+        if (logueado) {
+            progress.setVisibility(View.VISIBLE);
+            loginButton.setEnabled(false);
+        } else {
+            progress.setVisibility(View.GONE);
+            loginButton.setEnabled(true);
+        }
     }
 
     @Override
@@ -168,5 +224,10 @@ public class LoginActivity extends AppCompatActivity {
             if (actionBar != null)
                 actionBar.hide();
         }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        System.out.println("Error = " + connectionResult.toString());
     }
 }

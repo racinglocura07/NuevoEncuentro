@@ -52,15 +52,11 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
             Common.SincronizarActividades(client, syncResult);
         } else if (que != null && que.equals("Bolson")) {
             Common.SincronizarBolsones(client, syncResult);
-        }
-        else if (que != null && que.equals("Bolson")) {
+        } else if (que != null && que.equals("Noticias")) {
             Common.SincronizarNoticias(client, syncResult);
         }
 
-        syncResult.stats.numEntries++;
-        syncResult.stats.numInserts++;
-
-        //syncResult.
-        //SincronizarCaracteristicas("http://magyp-iis-desa.magyp.ar:8027/Home/GetCaracteristicas", client);
+        System.out.println("Stast:");
+        System.out.println(syncResult.stats);
     }
 }

@@ -108,6 +108,9 @@ public class Common {
             bolson.setCreadoEl(response.getString("creadoEl"));
             bolson.save();
 
+            if (result != null)
+                result.stats.numInserts++;
+
             ActiveAndroid.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,11 +167,15 @@ public class Common {
 
 
             for (Actividades local : Actividades.GetAll(false)) {
+                if (result != null)
+                    result.stats.numDeletes++;
                 new Delete().from(Actividades.class).where("idActividad = ?", local.getId()).execute();
             }
 
             List<Actividades> remoto = gson.fromJson(response.toString(), listType);
             for (Actividades carRemoto : remoto) {
+                if (result != null)
+                    result.stats.numInserts++;
                 Actividades nueva = new Actividades(carRemoto.idActividad, carRemoto.nombre, carRemoto.descripcion, carRemoto.cuando, carRemoto.repeticion, carRemoto.esTaller);
                 nueva.save();
             }
@@ -229,11 +236,15 @@ public class Common {
 
 
             for (Noticias local : Noticias.GetAll()) {
-                new Delete().from(Actividades.class).where("idNoticia = ?", local.getId()).execute();
+                if (result != null)
+                    result.stats.numDeletes++;
+                new Delete().from(Noticias.class).where("idNoticia = ?", local.getId()).execute();
             }
 
             List<Noticias> remoto = gson.fromJson(response.toString(), listType);
             for (Noticias carRemoto : remoto) {
+                if (result != null)
+                    result.stats.numInserts++;
                 Noticias nueva = new Noticias(carRemoto.idNoticia, carRemoto.titulo, carRemoto.descripcion, carRemoto.link);
                 nueva.save();
             }
@@ -245,7 +256,7 @@ public class Common {
                 result.stats.numIoExceptions++;
             System.out.println(e.getMessage());
         } finally {
-            System.out.println("Bien actividad");
+            System.out.println("Bien Noticias");
             ActiveAndroid.endTransaction();
         }
     }
