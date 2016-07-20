@@ -37,4 +37,8 @@
     <item name="sb_google" type="id" />
     <item name="tv_id_noticia" type="id" />
     <item name="tv_ir_noticia" type="id" />
+    <item name="vpager_principal" type="id" />
+    <item name="srl_noticias" type="id" />
+    <item name="srl_actividades" type="id" />
+    <item name="srl_talleres" type="id" />
 </resources>

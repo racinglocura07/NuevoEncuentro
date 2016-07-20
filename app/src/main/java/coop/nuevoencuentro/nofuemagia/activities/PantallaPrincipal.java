@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -35,6 +36,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import coop.nuevoencuentro.nofuemagia.adapters.PantallaPrincipalAdapter;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import cz.msebera.android.httpclient.Header;
@@ -51,10 +53,13 @@ import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
 public class PantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String IDACTIVIDAD = "IDACTIVIDAD";
+
     private FragmentManager fragmentManager;
-    private Picasso mPicasso;
     private SharedPreferences preferences;
     private ActionBar abar;
+
+
+    private ViewPager viewPager;
 
     private ComprasComunitariasFragment comprasFragment;
     private NoticiasFragment noticiasFragment;
@@ -62,6 +67,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private TalleresFragment talleresFragment;
     private ContactoFragment contactoFragment;
     private UbicacionFragment ubicacionFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +84,9 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+//        viewPager = (ViewPager) findViewById(R.id.vpager_principal);
+//        viewPager.setAdapter(new PantallaPrincipalAdapter(getSupportFragmentManager()));
 
         assert abar != null;
         assert fab != null;

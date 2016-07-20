@@ -4,6 +4,7 @@ package coop.nuevoencuentro.nofuemagia.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,12 +26,21 @@ public class TalleresFragment extends Fragment {
 
     private ActividadesAdapter adapter;
     private RecyclerView recList;
-    private ProgressBar pbLista;
+    private SwipeRefreshLayout swipe;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_talleres, container, false);
+
+        swipe = (SwipeRefreshLayout) v.findViewById(R.id.srl_talleres);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipe.setRefreshing(true);
+                Common.SincronizarActividades(new AsyncHttpClient(), TalleresFragment.this);
+            }
+        });
 
         recList = (RecyclerView) v.findViewById(R.id.list_talleres);
         recList.setHasFixedSize(true);
@@ -39,11 +49,10 @@ public class TalleresFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        pbLista = (ProgressBar) v.findViewById(R.id.pb_talleres);
-        pbLista.setVisibility(View.VISIBLE);
 
-        adapter = new ActividadesAdapter(getContext(), true, pbLista);
+        adapter = new ActividadesAdapter(getContext(), true);
         if (adapter.haveUpdate()) {
+            swipe.setRefreshing(true);
             Common.SincronizarActividades(new AsyncHttpClient(), this);
         } else
             recList.setAdapter(adapter);
@@ -52,7 +61,8 @@ public class TalleresFragment extends Fragment {
     }
 
     public void recargar() {
-        adapter = new ActividadesAdapter(getContext(), true, pbLista);
+        swipe.setRefreshing(false);
+        adapter = new ActividadesAdapter(getContext(), true);
         recList.setAdapter(adapter);
     }
 }

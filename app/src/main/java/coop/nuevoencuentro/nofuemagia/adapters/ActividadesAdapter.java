@@ -48,12 +48,11 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
 //        mPP = (PantallaPrincipal) _c;
 //    }
 
-    public ActividadesAdapter(Context _c, boolean esTaller, ProgressBar pb) {
+    public ActividadesAdapter(Context _c, boolean esTaller) {
         mDataset = Actividades.GetAll(esTaller);
         mContext = _c;
         mPP = (PantallaPrincipal) _c;
         mEsTaller = esTaller;
-        pb.setVisibility(View.GONE);
     }
 
     public boolean haveUpdate() {

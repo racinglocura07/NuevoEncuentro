@@ -166,7 +166,7 @@ public class Common {
             }.getType();
 
 
-            for (Actividades local : Actividades.GetAll(false)) {
+            for (Actividades local : Actividades.GetAll()) {
                 if (result != null)
                     result.stats.numDeletes++;
                 new Delete().from(Actividades.class).where("idActividad = ?", local.getId()).execute();

@@ -50,4 +50,10 @@ public class Actividades extends Model {
                 .where("esTaller = ?", esTaller)
                 .execute();
     }
+
+    public static List<Actividades> GetAll() {
+        return new Select()
+                .from(Actividades.class)
+                .execute();
+    }
 }
