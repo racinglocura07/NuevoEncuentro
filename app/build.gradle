@@ -10,8 +10,8 @@ android {
         applicationId "coop.nuevoencuentro.nofuemagia"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 17
-        versionName "0.2.8"
+        versionCode 19
+        versionName "0.3.0"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
     }
@@ -27,37 +27,38 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
+    // (v4.5)
 
 
+
+
+
+
+    compile('com.github.worker8:tourguide:1.0.17-SNAPSHOT@aar') {
+        transitive = true
+    }
+//    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
     compile 'com.android.support:recyclerview-v7:24.0.0'
     compile 'com.android.support:cardview-v7:24.0.0'
     compile 'com.android.support:support-v4:24.0.0'
-
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     compile 'it.sephiroth.android.library.imagezoom:imagezoom:1.0.5'
-    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2' // (v4.5)
-
-
+    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
     compile 'com.google.firebase:firebase-core:9.0.2'
     compile 'com.google.firebase:firebase-messaging:9.0.2'
-
     compile 'com.google.android.gms:play-services-auth:9.0.2'
     compile 'com.google.android.gms:play-services-maps:9.0.2'
     compile 'com.google.android.gms:play-services-location:9.0.2'
-
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.easing:library:1.0.0@aar'
     compile 'com.daimajia.androidanimations:library:1.1.2@aar'
     compile 'com.daimajia.androidviewhover:library:1.0.4@aar'
-
     compile 'com.facebook.android:facebook-android-sdk:4.11.0'
-//    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

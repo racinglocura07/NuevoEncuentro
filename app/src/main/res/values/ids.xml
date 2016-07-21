@@ -43,4 +43,8 @@
     <item name="srl_talleres" type="id" />
     <item name="et_nombre" type="id" />
     <item name="ib_invidato" type="id" />
+    <item name="tb_noticia" type="id" />
+    <item name="tb_actividad" type="id" />
+    <item name="tb_taller" type="id" />
+    <item name="tb_mensajes" type="id" />
 </resources>

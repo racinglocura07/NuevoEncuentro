@@ -59,4 +59,6 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
         System.out.println("Stast:");
         System.out.println(syncResult.stats);
     }
+
+
 }

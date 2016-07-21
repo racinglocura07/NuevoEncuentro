@@ -2,10 +2,12 @@ package coop.nuevoencuentro.nofuemagia.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,10 +128,18 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                 }
             });
 
-            IconTextView publicar = (IconTextView) hover.findViewById(R.id.fb_actividad);
+            final IconTextView publicar = (IconTextView) hover.findViewById(R.id.fb_actividad);
             publicar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
+
+                    SharedPreferences preferences = mContext.getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
+                    if (!preferences.getBoolean(Common.ES_FB, false)) {
+                        Snackbar.make(v, R.string.iniciar_sesion_fb, Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                    Snackbar.make(v, R.string.cargando, Snackbar.LENGTH_LONG).show();
+                    publicar.setEnabled(false);
                     Actividades usada = (Actividades) ivImagen.getTag();
                     String imagenUrl = Common.imagenURL + (mEsTaller ? "taller-" : "actividad-") + usada.idActividad + ".jpg";
 
@@ -157,6 +167,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
 
                                         ShareDialog shareDialog = new ShareDialog((PantallaPrincipal) mContext);
                                         shareDialog.show(content);
+                                        publicar.setEnabled(true);
 
                                     } else
                                         Common.ShowOkMessage(v, R.string.tener_instalado);

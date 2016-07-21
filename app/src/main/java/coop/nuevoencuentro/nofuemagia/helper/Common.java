@@ -44,6 +44,11 @@ public class Common {
     public static final String FB_REG = "FB_REG";
     public static final String PRIMER_NOMBRE = "PRIMER_NOMBRE";
     public static final String VER_TOUR_LOGIN = "VER_TOUR_LOGIN";
+    public static final String ES_FB = "ES_FB";
+    public static final String RECIBIR_NOTICIA = "RECIBIR_NOTICIA";
+    public static final String RECIBIR_ACTIVIDAD = "RECIBIR_ACTIVIDAD";
+    public static final String RECIBIR_TALLER = "RECIBIR_TALLER";
+    public static final String RECIBIR_MENSAJES = "RECIBIR_MENSAJES";
 
     public static String REGISTRAR_URL = "http://nofuemagia.ueuo.com/Nuevo/backend/usuarios/crearUsuario.php";
     public static String imagenURL = "http://nofuemagia.ueuo.com/Nuevo/imagenes/";

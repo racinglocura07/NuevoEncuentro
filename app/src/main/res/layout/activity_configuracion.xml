@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:shadowColor="@color/negrotransparente"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="1"
+            card_view:cardBackgroundColor="#F5F5F5"
+            card_view:cardCornerRadius="1dp"
+            card_view:cardElevation="4dp"
+            card_view:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:shadowColor="@color/colorPrimaryDark"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
+                    android:text="{fa-bell 24sp} Notificaciones"
+                    android:textSize="24sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@id/tb_noticia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Nueva noticia"
+                    android:textSize="@dimen/fuente_conf" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@id/tb_actividad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Nueva actividad"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="@dimen/fuente_conf" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@id/tb_taller"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Nuevo taller"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="@dimen/fuente_conf" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@id/tb_mensajes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:padding="10dp"
+                    android:text="Mensajes"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textSize="@dimen/fuente_conf" />
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

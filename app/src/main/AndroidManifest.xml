@@ -8,13 +8,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="coop.nuevoencuentro.nofuemagia.MyApp"
+        android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,42 +21,41 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <activity
-            android:name="coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal"
+            android:name=".activities.PantallaPrincipal"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <service android:name="coop.nuevoencuentro.nofuemagia.sync.ComprasAuthService">
+        <service android:name=".sync.ComprasAuthService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-
-
         <service
-            android:name="coop.nuevoencuentro.nofuemagia.sync.ComprasSyncService"
+            android:name=".sync.ComprasSyncService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
+
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
 
-
         <provider
-            android:name="coop.nuevoencuentro.nofuemagia.provider.ComprasProvider"
+            android:name=".provider.ComprasProvider"
             android:authorities="@string/provider"
             android:exported="true" />
-
 
         <!-- <meta-data -->
         <!-- android:name="AA_DB_NAME" -->
@@ -77,29 +75,33 @@
             android:value="5" />
 
         <activity
+            android:name=".activities.ConfiguracionActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".activities.PantallaPrincipal"
+            android:theme="@style/AppTheme">
+        </activity>
+
+        <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <activity
-            android:name="coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity"
+            android:name=".activities.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
-            android:name="coop.nuevoencuentro.nofuemagia.activities.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service android:name="coop.nuevoencuentro.nofuemagia.fcm.MyFirebaseMessagingService">
+        <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <service android:name="coop.nuevoencuentro.nofuemagia.fcm.MyFirebaseInstanceIDService">
+        <service android:name=".fcm.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -108,11 +110,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" />
@@ -121,6 +121,7 @@
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider1770519086495157"
             android:exported="true" />
+
     </application>
 
 </manifest>

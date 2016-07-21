@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -15,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -48,6 +50,12 @@ import java.util.Arrays;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
+import tourguide.tourguide.ChainTourGuide;
+import tourguide.tourguide.Overlay;
+import tourguide.tourguide.Pointer;
+import tourguide.tourguide.Sequence;
+import tourguide.tourguide.ToolTip;
+import tourguide.tourguide.TourGuide;
 
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia
@@ -63,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private SignInButton signInButton;
     private GoogleApiClient mGoogleApiClient;
     private IconButton ibInvitado;
+    private TourGuide mTourGuideHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,7 +152,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             String id = object.getString("id");
                             String primerNombre = object.getString("first_name");
 
-                            SavePreferences(email, name, id, primerNombre);
+                            SavePreferences(email, name, id, primerNombre, true);
                         } catch (JSONException e) {
                             System.out.println(e.getMessage());
                             e.printStackTrace();
@@ -167,6 +176,44 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 updateUI(false);
             }
         });
+
+
+
+        //runOverlay_ContinueMethod();
+    }
+
+    private void runOverlay_ContinueMethod(){
+        // the return handler is used to manipulate the cleanup of all the tutorial elements
+        ChainTourGuide tourGuide1 = ChainTourGuide.init(this)
+                .setToolTip(new ToolTip()
+                        .setTitle("Nuevo Encuentro")
+                        .setDescription("Podes iniciar sesion como invitado.")
+                        .setGravity(Gravity.BOTTOM)
+                )
+                // note that there is not Overlay here, so the default one will be used
+                .playLater(ibInvitado);
+
+        ChainTourGuide tourGuide2 = ChainTourGuide.init(this)
+                .setToolTip(new ToolTip()
+                        .setTitle("Nuevo Encuentro")
+                        .setDescription("O con facebook para usar todas las funcionalidades.")
+                        .setGravity(Gravity.TOP)
+                        .setBackgroundColor(Color.parseColor("#c0392b"))
+                )
+                .setOverlay(new Overlay()
+                        .setBackgroundColor(Color.parseColor("#EE2c3e50"))
+                )
+                .playLater(loginButton);
+
+        Sequence sequence = new Sequence.SequenceBuilder()
+                .add(tourGuide1, tourGuide2)
+                .setDefaultOverlay(new Overlay())
+                .setDefaultPointer(null)
+                .setContinueMethod(Sequence.ContinueMethod.Overlay)
+                .build();
+
+
+        ChainTourGuide.init(this).playInSequence(sequence);
     }
 
     private void comoInvitado() {
@@ -184,20 +231,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         String nombre = edt.getText().toString();
                         String deviceId = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
                         if (!TextUtils.isEmpty(nombre)) {
-                            SavePreferences(getEmiailID(getApplicationContext()), nombre, deviceId, nombre);
+                            SavePreferences(getEmiailID(getApplicationContext()), nombre, deviceId, nombre,false);
                         }
                     }
                 })
                 .show();
     }
 
-    private void SavePreferences(String email, String name, String id, String primerNombre) {
+    private void SavePreferences(String email, String name, String id, String primerNombre, boolean invitado) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Common.FB_REG, true);
         editor.putString(Common.EMAIL, email);
         editor.putString(Common.NOMBRE, name);
         editor.putString(Common.PRIMER_NOMBRE, primerNombre);
         editor.putString(Common.FBID, id);
+        editor.putBoolean(Common.ES_FB, invitado);
         editor.apply();
 
         loginButton.setEnabled(true);
@@ -233,7 +281,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     String id = acct.getIdToken();
                     String primerNombre = acct.getGivenName();
 
-                    SavePreferences(email, name, id, primerNombre);
+                    SavePreferences(email, name, id, primerNombre,false);
                 }
 
 
