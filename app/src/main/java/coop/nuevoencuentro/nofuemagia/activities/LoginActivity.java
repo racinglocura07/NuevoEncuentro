@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .remove(Common.NOMBRE)
                 .remove(Common.FBID)
                 .remove(Common.FB_REG)
+                .remove(Common.YA_REGISTRADO)
                 .remove(Common.PRIMER_NOMBRE).apply();
 
         if (preferences.getBoolean(Common.VER_TOUR_LOGIN, true)) {

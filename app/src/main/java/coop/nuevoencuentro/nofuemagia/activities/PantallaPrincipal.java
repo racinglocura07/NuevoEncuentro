@@ -125,7 +125,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             String id = preferences.getString(Common.FBID, null);
             String primer = preferences.getString(Common.PRIMER_NOMBRE, null);
 
-            if (!preferences.getBoolean(Common.YA_REGISTRADO, false))
+            boolean registrado = preferences.getBoolean(Common.YA_REGISTRADO, false);
+            if (!registrado)
                 sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken(), id, nombre, email);
 
             View headerView = navigationView.getHeaderView(0);
