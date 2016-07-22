@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -33,17 +34,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // TODO(developer): Handle FCM messages here.
         System.out.println("Mensaje" + " From: " + remoteMessage.getFrom());
 
-        sendNotification(remoteMessage.getData());
+
+        checkNotification(remoteMessage.getData());
     }
 
-    private void sendNotification(Map<String, String> messageBody) {
-        Intent intent = new Intent(this, PantallaPrincipal.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    private void checkNotification(Map<String, String> messageBody) {
 
 
         String titulo = messageBody.get("title");
         String msg = messageBody.get("body");
         int idActividad = Integer.parseInt(messageBody.get("idActividad"));
+
+        if (titulo == null || titulo.equals("")) {
+            Bundle params = new Bundle();
+            params.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+            params.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+            params.putString("QUE", msg);
+            ContentResolver.requestSync(SyncUtils.getAccount(this), getString(R.string.provider), params);
+
+            return;
+        }
+
+        Intent intent = new Intent(this, PantallaPrincipal.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         if (idActividad != -1) {
             String imagenUrl = Common.imagenURL + "actividad-" + idActividad + ".jpg";
@@ -57,34 +70,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (titulo == null || titulo.equals("")) {
-            //msg = "SyncAdaptaer";
-
-
-            Bundle params = new Bundle();
-            params.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-            params.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-            params.putString("QUE", msg);
-            ContentResolver.requestSync(SyncUtils.getAccount(this), getString(R.string.provider), params);
-
-            return;
-        }
-
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notif)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
-                .setContentTitle(titulo)
-                .setTicker(titulo)
-                .setContentText(msg)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(msg))
-                .setPriority(Notification.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notificationBuilder.build());
+        SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
+        if (preferences.getBoolean(Common.RECIBIR_NOTICIA, true))
+            Common.sendNotification(this, titulo, msg, pendingIntent);
     }
 }

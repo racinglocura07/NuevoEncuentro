@@ -50,7 +50,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Nueva actividad"
+                    android:text="Nueva actividad/Taller"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textSize="@dimen/fuente_conf" />
 
@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Nuevo taller"
+                    android:text="Compra de bolsones"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textSize="@dimen/fuente_conf" />
 

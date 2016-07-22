@@ -36,8 +36,8 @@ public class ConfiguracionActivity extends AppCompatActivity implements Compound
 
         SwitchCompat tbTaller = (SwitchCompat) findViewById(R.id.tb_taller);
         tbTaller.setOnCheckedChangeListener(this);
-        tbTaller.setTag(Common.RECIBIR_TALLER);
-        tbTaller.setChecked(preferences.getBoolean(Common.RECIBIR_TALLER, false));
+        tbTaller.setTag(Common.RECIBIR_BOLSON);
+        tbTaller.setChecked(preferences.getBoolean(Common.RECIBIR_BOLSON, true));
 
         SwitchCompat tbMensajes = (SwitchCompat) findViewById(R.id.tb_mensajes);
         tbMensajes.setOnCheckedChangeListener(this);

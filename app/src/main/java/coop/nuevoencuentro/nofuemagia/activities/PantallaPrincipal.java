@@ -138,10 +138,37 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             contactoFragment = new ContactoFragment();
             ubicacionFragment = new UbicacionFragment();
 
-
             fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment).commit();
-            navigationView.getMenu().getItem(0).setChecked(true);
+
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+
+                String abrirDonde = extras.getString(Common.ABRIR_DONDE);
+                if (abrirDonde != null) {
+                    switch (abrirDonde) {
+                        case "Actividades":
+                            fragmentManager.beginTransaction().replace(R.id.main_container, actividadesFragment).commit();
+                            navigationView.getMenu().getItem(1).setChecked(true);
+                            break;
+                        case "Bolson":
+                            fragmentManager.beginTransaction().replace(R.id.main_container, comprasFragment).commit();
+                            navigationView.getMenu().getItem(3).setChecked(true);
+                            break;
+                        case "Noticias":
+                            fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment).commit();
+                            navigationView.getMenu().getItem(0).setChecked(true);
+                            break;
+                    }
+                } else {
+                    fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment).commit();
+                    navigationView.getMenu().getItem(0).setChecked(true);
+                }
+            } else {
+                fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment).commit();
+                navigationView.getMenu().getItem(0).setChecked(true);
+            }
+
+
         } else {
             Loguearse();
         }

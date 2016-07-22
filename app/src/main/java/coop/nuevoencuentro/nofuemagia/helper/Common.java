@@ -1,8 +1,17 @@
 package coop.nuevoencuentro.nofuemagia.helper;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.SyncResult;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.view.View;
 
 import com.activeandroid.ActiveAndroid;
@@ -19,6 +28,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
@@ -27,10 +37,11 @@ import coop.nuevoencuentro.nofuemagia.model.Actividades;
 import coop.nuevoencuentro.nofuemagia.model.Bolsones;
 import coop.nuevoencuentro.nofuemagia.model.Noticias;
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.client.HttpClient;
 
 /**
  * Created by Tano on 16/06/2016.
+ * Nuevo Encuentro
+ * No Fue Magia
  */
 public class Common {
 
@@ -47,8 +58,10 @@ public class Common {
     public static final String ES_FB = "ES_FB";
     public static final String RECIBIR_NOTICIA = "RECIBIR_NOTICIA";
     public static final String RECIBIR_ACTIVIDAD = "RECIBIR_ACTIVIDAD";
-    public static final String RECIBIR_TALLER = "RECIBIR_TALLER";
+    public static final String RECIBIR_BOLSON = "RECIBIR_BOLSON";
     public static final String RECIBIR_MENSAJES = "RECIBIR_MENSAJES";
+    private static final int ID_NOTIF = 0x2207;
+    public static final String ABRIR_DONDE = "ABRIR_DONDE";
 
     public static String REGISTRAR_URL = "http://nofuemagia.ueuo.com/Nuevo/backend/usuarios/crearUsuario.php";
     public static String imagenURL = "http://nofuemagia.ueuo.com/Nuevo/imagenes/";
@@ -264,5 +277,29 @@ public class Common {
             System.out.println("Bien Noticias");
             ActiveAndroid.endTransaction();
         }
+    }
+
+    public static void sendNotification(Context context, String titulo, String msg, PendingIntent pendingIntent) {
+
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_notif)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher))
+                .setContentTitle(titulo)
+                .setTicker(titulo)
+                .setContentText(msg)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(msg))
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
+        }
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(ID_NOTIF, notificationBuilder.build());
     }
 }
