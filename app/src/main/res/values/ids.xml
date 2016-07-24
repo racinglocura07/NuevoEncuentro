@@ -49,4 +49,5 @@
     <item name="tb_mensajes" type="id" />
     <item name="tv_cargando_actividad" type="id" />
     <item name="tv_cargando_noticias" type="id" />
+    <item name="pb_navegador" type="id" />
 </resources>

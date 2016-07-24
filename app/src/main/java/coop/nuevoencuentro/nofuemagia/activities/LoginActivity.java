@@ -61,6 +61,51 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient mGoogleApiClient;
     private IconButton ibInvitado;
 
+    private static Account getAccount(AccountManager accountManager) {
+        Account[] accounts = accountManager.getAccountsByType("com.google");
+        Account account;
+        if (accounts.length > 0) {
+            account = accounts[0];
+        } else {
+            account = null;
+        }
+        return account;
+    }
+
+//    private void runOverlay_ContinueMethod(){
+//        // the return handler is used to manipulate the cleanup of all the tutorial elements
+//        ChainTourGuide tourGuide1 = ChainTourGuide.init(this)
+//                .setToolTip(new ToolTip()
+//                        .setTitle("Nuevo Encuentro")
+//                        .setDescription("Podes iniciar sesion como invitado.")
+//                        .setGravity(Gravity.BOTTOM)
+//                )
+//                // note that there is not Overlay here, so the default one will be used
+//                .playLater(ibInvitado);
+//
+//        ChainTourGuide tourGuide2 = ChainTourGuide.init(this)
+//                .setToolTip(new ToolTip()
+//                        .setTitle("Nuevo Encuentro")
+//                        .setDescription("O con facebook para usar todas las funcionalidades.")
+//                        .setGravity(Gravity.TOP)
+//                        .setBackgroundColor(Color.parseColor("#c0392b"))
+//                )
+//                .setOverlay(new Overlay()
+//                        .setBackgroundColor(Color.parseColor("#EE2c3e50"))
+//                )
+//                .playLater(loginButton);
+//
+//        Sequence sequence = new Sequence.SequenceBuilder()
+//                .add(tourGuide1, tourGuide2)
+//                .setDefaultOverlay(new Overlay())
+//                .setDefaultPointer(null)
+//                .setContinueMethod(Sequence.ContinueMethod.Overlay)
+//                .build();
+//
+//
+//        ChainTourGuide.init(this).playInSequence(sequence);
+//    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,20 +113,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
 
         preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
-        preferences.edit()
-                .remove(Common.EMAIL)
-                .remove(Common.NOMBRE)
-                .remove(Common.FBID)
-                .remove(Common.FB_REG)
-                .remove(Common.RECIBIR_NOTICIA)
-                .remove(Common.RECIBIR_ACTIVIDAD)
-                .remove(Common.RECIBIR_BOLSON)
-                .remove(Common.RECIBIR_BOLSON)
-                .remove(Common.YA_REGISTRADO)
-                .remove(Common.PRIMER_NOMBRE).apply();
+        preferences.edit().clear().apply();
 
         if (preferences.getBoolean(Common.VER_TOUR_LOGIN, true)) {
-            // MostrarTour();
             System.out.println("Mostrar tour");
         }
 
@@ -174,40 +208,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         //runOverlay_ContinueMethod();
     }
 
-//    private void runOverlay_ContinueMethod(){
-//        // the return handler is used to manipulate the cleanup of all the tutorial elements
-//        ChainTourGuide tourGuide1 = ChainTourGuide.init(this)
-//                .setToolTip(new ToolTip()
-//                        .setTitle("Nuevo Encuentro")
-//                        .setDescription("Podes iniciar sesion como invitado.")
-//                        .setGravity(Gravity.BOTTOM)
-//                )
-//                // note that there is not Overlay here, so the default one will be used
-//                .playLater(ibInvitado);
-//
-//        ChainTourGuide tourGuide2 = ChainTourGuide.init(this)
-//                .setToolTip(new ToolTip()
-//                        .setTitle("Nuevo Encuentro")
-//                        .setDescription("O con facebook para usar todas las funcionalidades.")
-//                        .setGravity(Gravity.TOP)
-//                        .setBackgroundColor(Color.parseColor("#c0392b"))
-//                )
-//                .setOverlay(new Overlay()
-//                        .setBackgroundColor(Color.parseColor("#EE2c3e50"))
-//                )
-//                .playLater(loginButton);
-//
-//        Sequence sequence = new Sequence.SequenceBuilder()
-//                .add(tourGuide1, tourGuide2)
-//                .setDefaultOverlay(new Overlay())
-//                .setDefaultPointer(null)
-//                .setContinueMethod(Sequence.ContinueMethod.Overlay)
-//                .build();
-//
-//
-//        ChainTourGuide.init(this).playInSequence(sequence);
-//    }
-
     private void comoInvitado() {
         View dialogView = View.inflate(this, R.layout.dialog_nombre, null);// LayoutInflater.from(this).inflate(R.layout.dialog_nombre, null, false);
         final EditText edt = (EditText) dialogView.findViewById(R.id.et_nombre);
@@ -230,6 +230,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .show();
     }
 
+//    private void MostrarTour() {
+//        ViewTarget target = new ViewTarget(R.id.login_button, this);
+//        new ShowcaseView.Builder(this)
+//                .setTarget(target)
+//                .setContentTitle("ShowcaseView")
+//                .setContentText("This is highlighting the Home button")
+//                .hideOnTouchOutside()
+//                .build();
+//    }
+
     private void SavePreferences(String email, String name, String id, String primerNombre, boolean invitado) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Common.FB_REG, true);
@@ -247,16 +257,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         startActivity(principal);
         finish();
     }
-
-//    private void MostrarTour() {
-//        ViewTarget target = new ViewTarget(R.id.login_button, this);
-//        new ShowcaseView.Builder(this)
-//                .setTarget(target)
-//                .setContentTitle("ShowcaseView")
-//                .setContentText("This is highlighting the Home button")
-//                .hideOnTouchOutside()
-//                .build();
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -329,16 +329,5 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         } else {
             return account.name;
         }
-    }
-
-    private static Account getAccount(AccountManager accountManager) {
-        Account[] accounts = accountManager.getAccountsByType("com.google");
-        Account account;
-        if (accounts.length > 0) {
-            account = accounts[0];
-        } else {
-            account = null;
-        }
-        return account;
     }
 }

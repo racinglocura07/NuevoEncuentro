@@ -34,16 +34,16 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
-import coop.nuevoencuentro.nofuemagia.helper.Common;
-import cz.msebera.android.httpclient.Header;
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ContactoFragment;
+import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.UbicacionFragment;
+import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
+import cz.msebera.android.httpclient.Header;
 
 
 public class PantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -63,6 +63,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private TalleresFragment talleresFragment;
     private ContactoFragment contactoFragment;
     private UbicacionFragment ubicacionFragment;
+    private NavigationView navigationView;
 
 
     @Override
@@ -79,7 +80,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
 //        viewPager = (ViewPager) findViewById(R.id.vpager_principal);
 //        viewPager.setAdapter(new PantallaPrincipalAdapter(getSupportFragmentManager()));
@@ -140,37 +141,51 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
             fragmentManager = getSupportFragmentManager();
 
+            String ultima = preferences.getString(Common.ULTIMA, Common.NOTICIAS);
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-
                 String abrirDonde = extras.getString(Common.ABRIR_DONDE);
-                if (abrirDonde != null) {
-                    switch (abrirDonde) {
-                        case "Actividades":
-                            fragmentManager.beginTransaction().replace(R.id.main_container, actividadesFragment).commit();
-                            navigationView.getMenu().getItem(1).setChecked(true);
-                            break;
-                        case "Bolson":
-                            fragmentManager.beginTransaction().replace(R.id.main_container, comprasFragment).commit();
-                            navigationView.getMenu().getItem(3).setChecked(true);
-                            break;
-                        case "Noticias":
-                            fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment).commit();
-                            navigationView.getMenu().getItem(0).setChecked(true);
-                            break;
-                    }
-                } else {
-                    fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment).commit();
-                    navigationView.getMenu().getItem(0).setChecked(true);
-                }
+                AbrirEnFragment(abrirDonde == null ? ultima : abrirDonde);
             } else {
-                fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment).commit();
-                navigationView.getMenu().getItem(0).setChecked(true);
+                AbrirEnFragment(ultima);
             }
 
 
         } else {
             Loguearse();
+        }
+    }
+
+    private void AbrirEnFragment(String abrirDonde) {
+        if (abrirDonde == null)
+            abrirDonde = Common.NOTICIAS;
+
+        switch (abrirDonde) {
+            case Common.NOTICIAS:
+                fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment, Common.NOTICIAS).commit();
+                navigationView.getMenu().getItem(0).setChecked(true);
+                break;
+            case Common.ACTIVIDADES:
+                fragmentManager.beginTransaction().replace(R.id.main_container, actividadesFragment, Common.ACTIVIDADES).commit();
+                navigationView.getMenu().getItem(1).setChecked(true);
+                break;
+            case Common.TALLERES:
+                fragmentManager.beginTransaction().replace(R.id.main_container, talleresFragment, Common.TALLERES).commit();
+                navigationView.getMenu().getItem(2).setChecked(true);
+                break;
+            case Common.BOLSONES:
+                fragmentManager.beginTransaction().replace(R.id.main_container, comprasFragment, Common.BOLSONES).commit();
+                navigationView.getMenu().getItem(3).setChecked(true);
+                break;
+            case Common.CONTACTO:
+                fragmentManager.beginTransaction().replace(R.id.main_container, contactoFragment, Common.CONTACTO).commit();
+                navigationView.getMenu().getItem(4).setChecked(true);
+                break;
+            case Common.MICOMUNA:
+                fragmentManager.beginTransaction().replace(R.id.main_container, ubicacionFragment, Common.MICOMUNA).commit();
+                navigationView.getMenu().getItem(5).setChecked(true);
+                break;
+
         }
     }
 
@@ -180,6 +195,13 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         if (!preferences.getBoolean(Common.FB_REG, false)) {
             Loguearse();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        String tag = getSupportFragmentManager().findFragmentById(R.id.main_container).getTag();
+        preferences.edit().putString(Common.ULTIMA, tag).apply();
+        super.onDestroy();
     }
 
     private void sendRegistrationToServer(String token, String fid, String nombre, String email) {
@@ -258,21 +280,28 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         Fragment fragment = null;
 
         int id = item.getItemId();
+        String tag = null;
 
         abar.setTitle(item.getTitle());
 
         if (id == R.id.nav_noticias) {
             fragment = noticiasFragment;
+            tag = Common.NOTICIAS;
         } else if (id == R.id.nav_actividades) {
             fragment = actividadesFragment;
+            tag = Common.ACTIVIDADES;
         } else if (id == R.id.nav_talleres) {
             fragment = talleresFragment;
+            tag = Common.TALLERES;
         } else if (id == R.id.nav_compras_comunitarias) {
             fragment = comprasFragment;
+            tag = Common.BOLSONES;
         } else if (id == R.id.nav_contacto) {
             fragment = contactoFragment;
+            tag = Common.CONTACTO;
         } else if (id == R.id.nav_ubicacion) {
             fragment = ubicacionFragment;
+            tag = Common.MICOMUNA;
         } else if (id == R.id.nav_compartir) {
             CompartirApp();
         } else if (id == R.id.nav_salir) {
@@ -282,7 +311,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         }
 
         if (fragment != null)
-            fragmentManager.beginTransaction().replace(R.id.main_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.main_container, fragment, tag).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;

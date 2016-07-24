@@ -12,7 +12,7 @@
         android:contentDescription="@string/app_name"
         android:src="@mipmap/banner" />
 
-    <TextView
+    <com.joanzapata.iconify.widget.IconTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -25,8 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:layout_marginBottom="15dp" />
+        android:layout_marginBottom="15dp"
+        android:textAppearance="?android:textAppearanceMedium" />
 
     <!--<ImageView-->
     <!--android:id="@id/tw_button"-->

@@ -28,7 +28,7 @@
     <string name="registro_mal">Hubo un error al registrar la aplicación\nSe seguirá intentando!</string>
     <string name="compartir_asunto">Que estas esperando?? Bajate nuestra aplicación!</string>
     <string name="compartir_titulo">Compartir vía</string>
-    <string name="direccion">Vení a conocer nuestro local\nCalderón de la Barca 1674</string>
+    <string name="direccion">Vení a conocer nuestro local\nCalderón de la Barca 1674 {fa-hand-peace-o}</string>
     <string name="seguinos_twitter">Seguinos {fa-twitter}</string>
     <string name="escribinos_envelope">Escribinos {fa-envelope}</string>
     <string name="seguinos_insta">Seguinos {fa-instagram}</string>

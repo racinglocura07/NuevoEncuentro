@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
 
-
     <WebView
         android:id="@id/wv_compras"
         android:layout_width="match_parent"
@@ -18,6 +17,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true" />
+
+    <ProgressBar
+        android:id="@id/pb_navegador"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:indeterminate="false" />
 
 
 </FrameLayout>

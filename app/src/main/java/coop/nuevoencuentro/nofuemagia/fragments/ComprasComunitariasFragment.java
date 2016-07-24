@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -27,6 +28,7 @@ public class ComprasComunitariasFragment extends Fragment {
 
     private ProgressBar pbCompras;
     private WebView wvCompras;
+    private ProgressBar pbNavegador;
 
     @Nullable
     @Override
@@ -43,6 +45,7 @@ public class ComprasComunitariasFragment extends Fragment {
         webSettings.setJavaScriptEnabled(true);
 
         pbCompras = (ProgressBar) v.findViewById(R.id.pb_compras);
+        pbNavegador = (ProgressBar) v.findViewById(R.id.pb_navegador);
 
         Bolsones ultimo = Bolsones.getLast();
         if (ultimo == null) {
@@ -50,20 +53,21 @@ public class ComprasComunitariasFragment extends Fragment {
             Common.SincronizarBolsones(client, this);
             return v;
         }
+        pbCompras.setVisibility(View.GONE);
+        pbNavegador.setVisibility(View.VISIBLE);
 
+        wvCompras.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                getActivity().setTitle("Cargando...");
+                pbNavegador.setProgress(progress);
+
+                if (progress == 100)
+                    getActivity().setTitle(R.string.compras_comunitarias);
+            }
+        });
 
         wvCompras.loadUrl(ultimo.getLink());
         return v;
-    }
-
-    public void showProgress() {
-        pbCompras.setProgress(0);
-        pbCompras.setVisibility(View.VISIBLE);
-    }
-
-    private void hideProgress() {
-        pbCompras.setProgress(100);
-        pbCompras.setVisibility(View.GONE);
     }
 
     public void recargar() {
@@ -80,13 +84,14 @@ public class ComprasComunitariasFragment extends Fragment {
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            ComprasComunitariasFragment.this.hideProgress();
+            pbNavegador.setVisibility(View.GONE);
             super.onPageFinished(view, url);
         }
 
+
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            ComprasComunitariasFragment.this.showProgress();
+            pbNavegador.setVisibility(View.VISIBLE);
             super.onPageStarted(view, url, favicon);
         }
 

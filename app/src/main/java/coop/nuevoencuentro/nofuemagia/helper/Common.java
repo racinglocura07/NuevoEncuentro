@@ -63,12 +63,17 @@ public class Common {
     public static final String RECIBIR_ACTIVIDAD = "RECIBIR_ACTIVIDAD";
     public static final String RECIBIR_BOLSON = "RECIBIR_BOLSON";
     public static final String RECIBIR_MENSAJES = "RECIBIR_MENSAJES";
-    private static final int ID_NOTIF = 0x2207;
-    public static final String ABRIR_DONDE = "ABRIR_DONDE";
-    public static final String ACTIVIDADES = "Actividades";
-    public static final String BOLSONES = "Bolson";
-    public static final String NOTICIAS = "Noticias";
 
+    public static final String ABRIR_DONDE = "ABRIR_DONDE";
+    public static final String NOTICIAS = "Noticias";
+    public static final String ACTIVIDADES = "Actividades";
+    public static final String TALLERES = "Talleres";
+    public static final String BOLSONES = "Bolson";
+    public static final String MICOMUNA = "MiComuna";
+    public static final String CONTACTO = "Contacto";
+    public static final String ULTIMA = "ULTIMA";
+    public static final String MICOMUNA = "MiComuna";
+    private static final int ID_NOTIF = 0x2207;
     public static String REGISTRAR_URL = "http://nofuemagia.ueuo.com/Nuevo/backend/usuarios/crearUsuario.php";
     public static String imagenURL = "http://nofuemagia.ueuo.com/Nuevo/imagenes/";
 
