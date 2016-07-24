@@ -10,14 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.loopj.android.http.AsyncHttpClient;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.adapters.ActividadesAdapter;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
-import coop.nuevoencuentro.nofuemagia.model.Actividades;
 
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia

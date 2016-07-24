@@ -11,4 +11,6 @@
     <dimen name="pad_login">15dp</dimen>
     <dimen name="pad_item_noticias_bot">5dp</dimen>
     <dimen name="fuente_conf">20sp</dimen>
+    <dimen name="botones_pad">10dp</dimen>
+    <dimen name="botones_mar">5dp</dimen>
 </resources>

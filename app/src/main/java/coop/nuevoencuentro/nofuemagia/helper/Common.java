@@ -4,6 +4,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SyncResult;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
@@ -29,6 +31,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
+import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
@@ -62,6 +65,9 @@ public class Common {
     public static final String RECIBIR_MENSAJES = "RECIBIR_MENSAJES";
     private static final int ID_NOTIF = 0x2207;
     public static final String ABRIR_DONDE = "ABRIR_DONDE";
+    public static final String ACTIVIDADES = "Actividades";
+    public static final String BOLSONES = "Bolson";
+    public static final String NOTICIAS = "Noticias";
 
     public static String REGISTRAR_URL = "http://nofuemagia.ueuo.com/Nuevo/backend/usuarios/crearUsuario.php";
     public static String imagenURL = "http://nofuemagia.ueuo.com/Nuevo/imagenes/";
@@ -86,12 +92,22 @@ public class Common {
         snackBar.show();
     }
 
-    public static void SincronizarBolsones(SyncHttpClient client, final SyncResult result) {
+    public static void SincronizarBolsones(final Context mContext, SyncHttpClient client, final SyncResult result) {
         client.get(urlBolsones, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 guadarBolsones(response, result);
+
+                Intent intent = new Intent(mContext, PantallaPrincipal.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(Common.ABRIR_DONDE, BOLSONES);
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                SharedPreferences preferences = mContext.getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
+                if (preferences.getBoolean(Common.RECIBIR_BOLSON, true))
+                    Common.sendNotification(mContext, mContext.getString(R.string.titulo_notif_bolson), mContext.getString(R.string.desc_notif_bolson), pendingIntent);
             }
 
             @Override
@@ -141,12 +157,22 @@ public class Common {
         }
     }
 
-    public static void SincronizarActividades(SyncHttpClient client, final SyncResult result) {
+    public static void SincronizarActividades(final Context mContext, SyncHttpClient client, final SyncResult result) {
         client.get(urlActividades, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 guardarActividades(response, result);
+
+                Intent intent = new Intent(mContext, PantallaPrincipal.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(Common.ABRIR_DONDE, ACTIVIDADES);
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                SharedPreferences preferences = mContext.getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
+                if (preferences.getBoolean(Common.RECIBIR_ACTIVIDAD, false))
+                    Common.sendNotification(mContext, mContext.getString(R.string.titulo_notif_actividades), mContext.getString(R.string.desc_notif_actividades), pendingIntent);
             }
 
             @Override
@@ -210,12 +236,22 @@ public class Common {
         }
     }
 
-    public static void SincronizarNoticias(SyncHttpClient client, final SyncResult result) {
+    public static void SincronizarNoticias(final Context mContext, SyncHttpClient client, final SyncResult result) {
         client.get(urlNoticias, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 guardarNoticias(response, result);
+
+                Intent intent = new Intent(mContext, PantallaPrincipal.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(Common.ABRIR_DONDE, NOTICIAS);
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                SharedPreferences preferences = mContext.getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
+                if (preferences.getBoolean(Common.RECIBIR_NOTICIA, false))
+                    Common.sendNotification(mContext, mContext.getString(R.string.titulo_notif_noticias), mContext.getString(R.string.desc_notif_noticias), pendingIntent);
             }
 
             @Override
@@ -281,6 +317,10 @@ public class Common {
 
     public static void sendNotification(Context context, String titulo, String msg, PendingIntent pendingIntent) {
 
+        SharedPreferences preferences = context.getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
+        if (!preferences.getBoolean(YA_REGISTRADO, false)) {
+            return;
+        }
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)

@@ -16,22 +16,23 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="start"
+        android:contentDescription="@string/app_name"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:scaleType="fitCenter"
         android:src="@mipmap/ne" />
 
     <TextView
+        android:id="@id/tv_nav_nombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="New Text"
-        android:id="@id/tv_nav_nombre"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <!--<TextView-->
-        <!--android:id="@+id/textView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="android.studio@android.com" />-->
+    <!--android:id="@+id/textView"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="android.studio@android.com" />-->
 
 </LinearLayout>

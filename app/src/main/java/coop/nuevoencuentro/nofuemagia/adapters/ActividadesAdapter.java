@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -22,17 +20,20 @@ import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.widget.IconTextView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.List;
 
+import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
-import coop.nuevoencuentro.nofuemagia.R;
 
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia
@@ -41,7 +42,6 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
 
     private final boolean mEsTaller;
     private final List<Actividades> mDataset;
-    private final PantallaPrincipal mPP;
     private Context mContext;
 
 //    public ActividadesAdapter(Context _c, List<Actividades> actividades) {
@@ -53,7 +53,6 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
     public ActividadesAdapter(Context _c, boolean esTaller) {
         mDataset = Actividades.GetAll(esTaller);
         mContext = _c;
-        mPP = (PantallaPrincipal) _c;
         mEsTaller = esTaller;
     }
 
@@ -68,7 +67,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ActividadesViewHolder holder, int position) {
+    public void onBindViewHolder(final ActividadesViewHolder holder, int position) {
         Actividades item = mDataset.get(position);
 
         holder.tvTitulo.setText(item.nombre);
@@ -76,7 +75,18 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         holder.ivImagen.setTag(item);
 
         String imagenUrl = Common.imagenURL + (mEsTaller ? "taller-" : "actividad-") + item.idActividad + ".jpg";
-        Picasso.with(mContext).load(imagenUrl).into(holder.ivImagen);
+
+        Picasso.with(mContext).load(imagenUrl).noFade().into(holder.ivImagen, new Callback() {
+            @Override
+            public void onSuccess() {
+                holder.tvCargando.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onError() {
+                holder.tvCargando.setText(R.string.error_cargando);
+            }
+        });
     }
 
     @Override
@@ -90,15 +100,18 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         private final TextView tvDescripcion;
         private final ImageView ivImagen;
         private final BlurLayout blur;
+        private final IconTextView tvCargando;
 
         public ActividadesViewHolder(View itemView) {
             super(itemView);
 
-            View hover = LayoutInflater.from(mContext).inflate(R.layout.hover_item_actividades, null);// (ViewGroup) itemView.getRootView());
+            View hover = View.inflate(mContext, R.layout.hover_item_actividades, null);
+            //LayoutInflater.from(mContext).inflate(R.layout.hover_item_actividades, null);// (ViewGroup) itemView.getRootView());
             tvTitulo = (TextView) itemView.findViewById(R.id.tv_titulo_item_actividades);
             tvTitulo.setBackgroundResource(mEsTaller ? R.color.talleres : R.color.actividades);
             tvDescripcion = (TextView) itemView.findViewById(R.id.tv_descripcion_item_actividades);
             ivImagen = (ImageView) itemView.findViewById(R.id.iv_item_actividad);
+            tvCargando = (IconTextView) itemView.findViewById(R.id.tv_cargando_actividad);
             blur = (BlurLayout) itemView.findViewById(R.id.blur_actividad);
 
             blur.setHoverView(hover);

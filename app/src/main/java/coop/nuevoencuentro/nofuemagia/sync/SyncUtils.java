@@ -43,7 +43,6 @@ public class SyncUtils {
         String nombre = context.getString(R.string.app_name);
         String tipo = context.getString(R.string.auth_type);
 
-        Account account = new Account(nombre, tipo);
-        return account;
+        return new Account(nombre, tipo);
     }
 }

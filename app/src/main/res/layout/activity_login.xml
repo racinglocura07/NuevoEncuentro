@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:background="@mipmap/portada"
     android:gravity="center"
     android:orientation="vertical">
@@ -67,7 +66,7 @@
         android:layout_marginLeft="@dimen/pad_login"
         android:layout_marginRight="@dimen/pad_login"
         android:layout_marginStart="@dimen/pad_login"
-        android:text="{fa-user} Ingresar como invitado" />
+        android:text="@string/ingresar_como_invitado" />
 
 
 </RelativeLayout>

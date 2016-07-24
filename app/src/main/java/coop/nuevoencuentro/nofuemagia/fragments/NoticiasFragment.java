@@ -9,17 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.loopj.android.http.AsyncHttpClient;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.adapters.NoticiasAdapter;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
-import coop.nuevoencuentro.nofuemagia.model.Noticias;
 
 /**
  * Created by Tano on 18/07/2016.
+ Nuevo Encuentro
+ No Fue Magia
  */
 public class NoticiasFragment extends Fragment {
 

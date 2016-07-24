@@ -86,7 +86,7 @@ public class ContactoFragment extends Fragment {
     }
 
     private void openTw() {
-        Intent intent = null;
+        Intent intent;
         try {
             // get the Twitter app if possible
             getActivity().getPackageManager().getPackageInfo("com.twitter.android", 0);

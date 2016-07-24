@@ -12,6 +12,8 @@ import coop.nuevoencuentro.nofuemagia.helper.Common;
 
 /**
  * Created by Tano on 21/07/2016.
+ Nuevo Encuentro
+ No Fue Magia
  */
 public class ConfiguracionActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 

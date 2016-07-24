@@ -7,6 +7,8 @@ import com.activeandroid.query.Select;
 
 /**
  * Created by Tano on 17/07/2016.
+ * Nuevo Encuentro
+ * No Fue Magia
  */
 @Table(name = "Bolsones", id = "idBolson")
 public class Bolsones extends Model {
@@ -27,10 +29,6 @@ public class Bolsones extends Model {
         return new Select().all().from(Bolsones.class).orderBy("idBolson DESC").executeSingle();
     }
 
-    public int getIdBolson() {
-        return idBolson;
-    }
-
     public void setIdBolson(int idBolson) {
         this.idBolson = idBolson;
     }
@@ -41,10 +39,6 @@ public class Bolsones extends Model {
 
     public void setLink(String link) {
         this.link = link;
-    }
-
-    public String getCreadoEl() {
-        return creadoEl;
     }
 
     public void setCreadoEl(String creadoEl) {

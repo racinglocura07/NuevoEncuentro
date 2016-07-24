@@ -47,4 +47,6 @@
     <item name="tb_actividad" type="id" />
     <item name="tb_taller" type="id" />
     <item name="tb_mensajes" type="id" />
+    <item name="tv_cargando_actividad" type="id" />
+    <item name="tv_cargando_noticias" type="id" />
 </resources>

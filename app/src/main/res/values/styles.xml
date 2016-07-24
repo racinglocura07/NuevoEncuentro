@@ -23,5 +23,8 @@
         <item name="android:background">#FFFFFF</item>
     </style>
 
+    <style name="Color1SwitchStyle">
+        <item name="colorControlActivated">@color/verde</item>
+    </style>
 
 </resources>

@@ -34,7 +34,7 @@
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="1"
-                    android:text="{fa-bell 24sp} Notificaciones"
+                    android:text="@string/conf_notificaciones"
                     android:textSize="24sp" />
 
                 <android.support.v7.widget.SwitchCompat
@@ -42,26 +42,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Nueva noticia"
-                    android:textSize="@dimen/fuente_conf" />
+                    android:text="@string/nueva_noticia"
+                    android:textSize="@dimen/fuente_conf"
+                    android:theme="@style/Color1SwitchStyle" />
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@id/tb_actividad"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Nueva actividad/Taller"
+                    android:text="@string/nueva_actividad_taller"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="@dimen/fuente_conf" />
+                    android:textSize="@dimen/fuente_conf"
+                    android:theme="@style/Color1SwitchStyle" />
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@id/tb_taller"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Compra de bolsones"
+                    android:text="@string/compra_de_bolsones"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="@dimen/fuente_conf" />
+                    android:textSize="@dimen/fuente_conf"
+                    android:theme="@style/Color1SwitchStyle" />
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@id/tb_mensajes"
@@ -69,9 +72,10 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:padding="10dp"
-                    android:text="Mensajes"
+                    android:text="@string/mensajes"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="@dimen/fuente_conf" />
+                    android:textSize="@dimen/fuente_conf"
+                    android:theme="@style/Color1SwitchStyle" />
 
 
             </LinearLayout>

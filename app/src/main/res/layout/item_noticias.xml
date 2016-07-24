@@ -26,7 +26,8 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true">
 
                 <ImageView
                     android:id="@id/iv_noticia"
@@ -65,7 +66,15 @@
                     android:shadowDx="3"
                     android:shadowDy="3"
                     android:shadowRadius="1"
-                    android:text="@string/fa_arrow_right_35sp_color_colorprimary" />
+                    android:text="@string/fa_arrow_right_35sp_color_colorprimary"
+                    android:visibility="gone" />
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@id/tv_cargando_noticias"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:text="@string/cargando_noticias" />
             </FrameLayout>
 
             <TextView
