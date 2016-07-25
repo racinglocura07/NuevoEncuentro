@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.google.gson.annotations.Expose;
 
 import java.util.List;
 
@@ -14,21 +15,27 @@ import java.util.List;
 public class Actividades extends Model {
 
     @Column(name = "idActividad")
+    @Expose
     public int idActividad;
 
     @Column(name = "nombre")
+    @Expose
     public String nombre;
 
     @Column(name = "descripcion")
+    @Expose
     public String descripcion;
 
     @Column(name = "cuando")
+    @Expose
     public int cuando;
 
     @Column(name = "repeticion")
+    @Expose
     public int repeticion;
 
     @Column(name = "esTaller")
+    @Expose
     public boolean esTaller;
 
     public Actividades() {

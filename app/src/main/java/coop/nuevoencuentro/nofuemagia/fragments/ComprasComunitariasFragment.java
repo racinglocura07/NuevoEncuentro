@@ -71,6 +71,7 @@ public class ComprasComunitariasFragment extends Fragment {
     }
 
     public void recargar() {
+        pbCompras.setVisibility(View.GONE);
         Bolsones ultimo = Bolsones.getLast();
         wvCompras.loadUrl(ultimo.getLink());
     }

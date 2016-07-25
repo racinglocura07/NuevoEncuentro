@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -220,10 +221,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+
                         String nombre = edt.getText().toString();
                         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
                         if (!TextUtils.isEmpty(nombre)) {
                             SavePreferences(getEmiailID(getApplicationContext()), nombre, deviceId, nombre, false);
+                        } else {
+                            edt.setError(getString(R.string.nombre_obligatorio));
+                            Toast.makeText(LoginActivity.this, R.string.nombre_obligatorio, Toast.LENGTH_LONG).show();
                         }
                     }
                 })

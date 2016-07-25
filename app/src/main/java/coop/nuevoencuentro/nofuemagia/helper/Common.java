@@ -14,11 +14,13 @@ import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -27,7 +29,9 @@ import com.loopj.android.http.SyncHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
@@ -69,10 +73,10 @@ public class Common {
     public static final String ACTIVIDADES = "Actividades";
     public static final String TALLERES = "Talleres";
     public static final String BOLSONES = "Bolson";
-    public static final String MICOMUNA = "MiComuna";
     public static final String CONTACTO = "Contacto";
     public static final String ULTIMA = "ULTIMA";
     public static final String MICOMUNA = "MiComuna";
+
     private static final int ID_NOTIF = 0x2207;
     public static String REGISTRAR_URL = "http://nofuemagia.ueuo.com/Nuevo/backend/usuarios/crearUsuario.php";
     public static String imagenURL = "http://nofuemagia.ueuo.com/Nuevo/imagenes/";
@@ -167,7 +171,7 @@ public class Common {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                guardarActividades(response, result);
+                guardarActividades(mContext, response, result);
 
                 Intent intent = new Intent(mContext, PantallaPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -182,7 +186,6 @@ public class Common {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
     }
@@ -192,7 +195,7 @@ public class Common {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                guardarActividades(response, null);
+                guardarActividades(frag.getContext(), response, null);
                 if (frag instanceof ActividadesFragment)
                     ((ActividadesFragment) frag).recargar();
                 else if (frag instanceof TalleresFragment)
@@ -201,19 +204,19 @@ public class Common {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
     }
 
-    private static void guardarActividades(JSONArray response, SyncResult result) {
+    private static void guardarActividades(Context context, JSONArray response, SyncResult result) {
         ActiveAndroid.beginTransaction();
         try {
+            GsonBuilder builder = new GsonBuilder();
+            builder.excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC);
+            builder.excludeFieldsWithoutExposeAnnotation();
 
-            Gson gson = new Gson();
             Type listType = new TypeToken<List<Actividades>>() {
             }.getType();
-
 
             for (Actividades local : Actividades.GetAll()) {
                 if (result != null)
@@ -221,7 +224,7 @@ public class Common {
                 new Delete().from(Actividades.class).where("idActividad = ?", local.getId()).execute();
             }
 
-            List<Actividades> remoto = gson.fromJson(response.toString(), listType);
+            List<Actividades> remoto = builder.create().fromJson(response.toString(), listType);
             for (Actividades carRemoto : remoto) {
                 if (result != null)
                     result.stats.numInserts++;
@@ -234,8 +237,8 @@ public class Common {
             e.printStackTrace();
             if (result != null)
                 result.stats.numIoExceptions++;
-            System.out.println(e.getMessage());
         } finally {
+            sendNotification(null, null, null, null);
             System.out.println("Bien actividad");
             ActiveAndroid.endTransaction();
         }
@@ -289,7 +292,9 @@ public class Common {
         ActiveAndroid.beginTransaction();
         try {
 
-            Gson gson = new Gson();
+            GsonBuilder builder = new GsonBuilder();
+            builder.excludeFieldsWithoutExposeAnnotation();
+
             Type listType = new TypeToken<List<Noticias>>() {
             }.getType();
 
@@ -300,7 +305,7 @@ public class Common {
                 new Delete().from(Noticias.class).where("idNoticia = ?", local.getId()).execute();
             }
 
-            List<Noticias> remoto = gson.fromJson(response.toString(), listType);
+            List<Noticias> remoto = builder.create().fromJson(response.toString(), listType);
             for (Noticias carRemoto : remoto) {
                 if (result != null)
                     result.stats.numInserts++;
@@ -320,7 +325,21 @@ public class Common {
         }
     }
 
+    public static ArrayList<String> mensajes = new ArrayList<>();
+
     public static void sendNotification(Context context, String titulo, String msg, PendingIntent pendingIntent) {
+
+        if (context == null && titulo == null && msg == null && pendingIntent == null) {
+            mensajes.clear();
+            return;
+        }
+
+        if (titulo.equals("Pruebas")) {
+            mensajes.add(msg);
+        } else {
+            mensajes.clear();
+        }
+        msg = TextUtils.join("\n", mensajes);
 
         SharedPreferences preferences = context.getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
         if (!preferences.getBoolean(YA_REGISTRADO, false)) {

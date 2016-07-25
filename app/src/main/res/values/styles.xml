@@ -27,4 +27,10 @@
         <item name="colorControlActivated">@color/verde</item>
     </style>
 
+    <style name="AppThemeSplash" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/partido_medio</item>
+        <item name="colorPrimaryDark">@color/partido_medio</item>
+        <item name="colorAccent">@color/partido_medio</item>
+    </style>
+
 </resources>

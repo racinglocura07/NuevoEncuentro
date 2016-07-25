@@ -63,4 +63,5 @@
     <string name="error_cargando">Error cargando la imagen</string>
     <string name="cargando_noticias">{fa-spinner 50sp spin @color/colorPrimary}</string>
     <string name="cargando_actividades">{fa-spinner 50sp spin @color/colorAccent}</string>
+    <string name="nombre_obligatorio">El nombre es obligatorio</string>
 </resources>

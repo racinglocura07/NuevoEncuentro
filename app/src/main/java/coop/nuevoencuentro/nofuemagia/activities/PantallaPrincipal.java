@@ -199,8 +199,13 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
     @Override
     protected void onDestroy() {
-        String tag = getSupportFragmentManager().findFragmentById(R.id.main_container).getTag();
-        preferences.edit().putString(Common.ULTIMA, tag).apply();
+        try {
+            String tag = getSupportFragmentManager().findFragmentById(R.id.main_container).getTag();
+            preferences.edit().putString(Common.ULTIMA, tag).apply();
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+
         super.onDestroy();
     }
 
