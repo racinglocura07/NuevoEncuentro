@@ -1,5 +1,7 @@
 package coop.nuevoencuentro.nofuemagia.activities;
 
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -203,7 +205,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             String tag = getSupportFragmentManager().findFragmentById(R.id.main_container).getTag();
             preferences.edit().putString(Common.ULTIMA, tag).apply();
         } catch (Exception ex) {
-            System.err.println(ex.getMessage());
+            //System.err.println(ex.getMessage());
         }
 
         super.onDestroy();

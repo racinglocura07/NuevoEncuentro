@@ -336,10 +336,10 @@ public class Common {
 
         if (titulo.equals("Pruebas")) {
             mensajes.add(msg);
+            msg = TextUtils.join("\n", mensajes);
         } else {
             mensajes.clear();
         }
-        msg = TextUtils.join("\n", mensajes);
 
         SharedPreferences preferences = context.getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
         if (!preferences.getBoolean(YA_REGISTRADO, false)) {

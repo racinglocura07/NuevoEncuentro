@@ -48,7 +48,7 @@
     <string name="title_activity_configuracion">Configuración</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="titulo_notif_bolson">Nuevo formulario de compra!</string>
+    <string name="titulo_notif_bolson">No te quedes sin tu bolson!!</string>
     <string name="desc_notif_bolson">Desde hoy podes hacer tu pedido!</string>
     <string name="titulo_notif_actividades">Hay actividades nuevas!</string>
     <string name="desc_notif_actividades">No te pierdas las ultimas novedades</string>
