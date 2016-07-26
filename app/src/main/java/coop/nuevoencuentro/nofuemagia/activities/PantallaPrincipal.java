@@ -72,7 +72,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        Iconify.with(new FontAwesomeModule());
+
         setContentView(R.layout.activity_pantalla_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -157,6 +157,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             Loguearse();
         }
     }
+
 
     private void AbrirEnFragment(String abrirDonde) {
         if (abrirDonde == null)
@@ -255,7 +256,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
+            moveTaskToBack(true);
         }
     }
 
@@ -341,4 +343,6 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         Intent login = new Intent(this, LoginActivity.class);
         startActivity(login);
     }
+
+
 }

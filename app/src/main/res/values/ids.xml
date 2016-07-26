@@ -50,4 +50,5 @@
     <item name="tv_cargando_actividad" type="id" />
     <item name="tv_cargando_noticias" type="id" />
     <item name="pb_navegador" type="id" />
+    <item name="tv_version" type="id" />
 </resources>

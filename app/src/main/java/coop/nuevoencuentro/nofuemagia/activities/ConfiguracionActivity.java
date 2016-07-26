@@ -1,19 +1,21 @@
 package coop.nuevoencuentro.nofuemagia.activities;
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 
 /**
  * Created by Tano on 21/07/2016.
- Nuevo Encuentro
- No Fue Magia
+ * Nuevo Encuentro
+ * No Fue Magia
  */
 public class ConfiguracionActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
@@ -25,6 +27,13 @@ public class ConfiguracionActivity extends AppCompatActivity implements Compound
         setContentView(R.layout.activity_configuracion);
 
         preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
+
+        TextView tvVersion = (TextView) findViewById(R.id.tv_version);
+        try {
+            tvVersion.setText(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            
+        }
 
         SwitchCompat tbNoticia = (SwitchCompat) findViewById(R.id.tb_noticia);
         tbNoticia.setOnCheckedChangeListener(this);

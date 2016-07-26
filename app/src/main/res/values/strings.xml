@@ -64,4 +64,6 @@
     <string name="cargando_noticias">{fa-spinner 50sp spin @color/colorPrimary}</string>
     <string name="cargando_actividades">{fa-spinner 50sp spin @color/colorAccent}</string>
     <string name="nombre_obligatorio">El nombre es obligatorio</string>
+    <string name="conf_acerca_de">{fa-info 24sp} Acerca De</string>
+    <string name="version">Version</string>
 </resources>
