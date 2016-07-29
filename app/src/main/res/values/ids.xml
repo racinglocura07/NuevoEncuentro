@@ -51,4 +51,15 @@
     <item name="tv_cargando_noticias" type="id" />
     <item name="pb_navegador" type="id" />
     <item name="tv_version" type="id" />
+    <item name="action_admin" type="id" />
+    <item name="ll_crear_actividad" type="id" />
+    <item name="et_titulo" type="id" />
+    <item name="et_descripcion" type="id" />
+    <item name="et_cuando" type="id" />
+    <item name="sp_repite" type="id" />
+    <item name="cb_notificar" type="id" />
+    <item name="btn_grabar_actividad" type="id" />
+    <item name="itv_camara_actividades" type="id" />
+    <item name="frag_admin_container" type="id" />
+    <item name="iv_cargada_actividad" type="id" />
 </resources>

@@ -78,12 +78,19 @@ public class Common {
     public static final String MICOMUNA = "MiComuna";
 
     private static final int ID_NOTIF = 0x2207;
-    public static String REGISTRAR_URL = "http://nofuemagia.ueuo.com/Nuevo/backend/usuarios/crearUsuario.php";
-    public static String imagenURL = "http://nofuemagia.ueuo.com/Nuevo/imagenes/";
 
-    public static String urlActividades = "http://nofuemagia.ueuo.com/Nuevo/backend/actividades/listActividades.php?fid=-2";
-    public static String urlBolsones = "http://nofuemagia.ueuo.com/Nuevo/backend/bolsones/listBolsones.php?fid=-2";
-    private static String urlNoticias = "http://nofuemagia.ueuo.com/Nuevo/backend/noticias/listNoticias.php?fid=-1";
+    public static final String MAIN_URL = "http://nofuemagia.ueuo.com/Nuevo/";
+
+    public static final String ESADMIN_URL = MAIN_URL + "backend/usuarios/esAdmin.php";
+
+    public static final String AGREGARACTIVIDAD = MAIN_URL + "backend/actividades/crearActividad.php";
+    public static final String REGISTRAR_URL = MAIN_URL + "backend/usuarios/crearUsuario.php";
+
+    public static final String imagenURL = MAIN_URL + "imagenes/";
+
+    public static final String urlActividades = MAIN_URL + "backend/actividades/listActividades.php?fid=-2";
+    public static final String urlBolsones = MAIN_URL + "backend/bolsones/listBolsones.php?fid=-2";
+    private static final String urlNoticias = MAIN_URL + "backend/noticias/listNoticias.php?fid=-1";
 
     public static void ShowOkMessage(View v, int mensaje) {
         final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_INDEFINITE);

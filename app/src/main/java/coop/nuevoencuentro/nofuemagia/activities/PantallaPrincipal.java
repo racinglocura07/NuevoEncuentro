@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import coop.nuevoencuentro.nofuemagia.R;
+import coop.nuevoencuentro.nofuemagia.fragments.ActividadesAdminFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ContactoFragment;
@@ -66,6 +67,9 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private ContactoFragment contactoFragment;
     private UbicacionFragment ubicacionFragment;
     private NavigationView navigationView;
+    private AsyncHttpClient client;
+
+    private MenuItem miAdmin;
 
 
     @Override
@@ -79,6 +83,11 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         abar = getSupportActionBar();
 
         preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
+
+        client = new AsyncHttpClient();
+        client.setConnectTimeout(25000 * 10);
+        client.setTimeout(25000 * 10);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -153,9 +162,39 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             }
 
 
+            CheckEsAdmin(id);
+
+
         } else {
             Loguearse();
         }
+    }
+
+    private void CheckEsAdmin(String id) {
+
+        RequestParams params = new RequestParams();
+        params.put("facebookId", id);
+        client.post(Common.ESADMIN_URL, params, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    System.out.println(response);
+                    if (!response.getBoolean("error")) {
+                        boolean esAdmin = response.getBoolean("esAdmin");
+                        miAdmin.setVisible(esAdmin);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
     }
 
 
@@ -222,9 +261,6 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         params.put("nombreApellido", nombre);
         params.put("email", email);
 
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.setConnectTimeout(25000 * 10);
-        client.setTimeout(25000 * 10);
         client.post(Common.REGISTRAR_URL, params, new JsonHttpResponseHandler() {
 
             @Override
@@ -264,6 +300,9 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pantalla_principal, menu);
+
+        miAdmin = menu.findItem(R.id.action_admin);
+
         return true;
     }
 
@@ -272,10 +311,21 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            System.out.println("Confi");
-
             Intent conf = new Intent(this, ConfiguracionActivity.class);
             startActivity(conf);
+            return true;
+        } else if (id == R.id.action_admin) {
+
+            Bundle args = new Bundle();
+            if (getSupportFragmentManager().findFragmentByTag(Common.ACTIVIDADES) != null) {
+                args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
+            } else if (getSupportFragmentManager().findFragmentByTag(Common.TALLERES) != null) {
+                args.putBoolean(ActividadesAdminFragment.ESTALLER, true);
+            }
+
+            Intent admin = new Intent(this, AdminActivity.class);
+            admin.putExtras(args);
+            startActivity(admin);
             return true;
         }
 

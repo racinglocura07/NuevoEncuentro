@@ -66,4 +66,25 @@
     <string name="nombre_obligatorio">El nombre es obligatorio</string>
     <string name="conf_acerca_de">{fa-info 24sp} Acerca De</string>
     <string name="version">Version</string>
+    <string name="action_admin">Agregar</string>
+    <string name="titulo">Titulo</string>
+    <string name="desc">Descripción</string>
+    <string name="cuando">Cuando</string>
+
+    <string name="no">No repite</string>
+    <string name="una">Cada 1 Semana</string>
+    <string name="dos">Cada 2 Semana</string>
+    <string name="tres">Cada 3 Semana</string>
+    <string name="cuatro">Cada 4 Semana</string>
+    <string name="agregar_foto">{fa-camera 46sp}\n\nAgregar Foto</string>
+    <string name="notificar">Notificar</string>
+    <string name="grabar">{fa-save} Grabar</string>
+    <string name="obligatorio">Campo obligatorio</string>
+    <string-array name="repeticion">
+        <item>@string/no</item>
+        <item>@string/una</item>
+        <item>@string/dos</item>
+        <item>@string/tres</item>
+        <item>@string/cuatro</item>
+    </string-array>
 </resources>
