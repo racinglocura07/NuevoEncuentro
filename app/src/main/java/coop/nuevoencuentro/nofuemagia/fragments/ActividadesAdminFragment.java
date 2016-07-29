@@ -169,7 +169,7 @@ public class ActividadesAdminFragment extends Fragment {
                 params.put("cuando", cuando);
                 params.put("repeticion", repite);
                 params.put("esTallerCel", esTaller ? "true" : "false");
-                params.put("notifica", cbNotificar.isChecked());
+                params.put("notifica", cbNotificar.isChecked() ? "true" : "false");
 
                 client.post(Common.AGREGARACTIVIDAD, params, new TextHttpResponseHandler() {
                     @Override
