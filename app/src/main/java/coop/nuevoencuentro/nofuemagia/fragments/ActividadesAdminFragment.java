@@ -25,6 +25,7 @@ import com.joanzapata.iconify.widget.IconTextView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -136,7 +137,7 @@ public class ActividadesAdminFragment extends Fragment {
         boolean cancel = false;
 
         String nombre = etNombre.getText().toString();
-        String descripcion = etNombre.getText().toString();
+        String descripcion = etDescripcion.getText().toString();
         String cuando = etCuando.getText().toString();
         int repite = spRepite.getSelectedItemPosition();
 
@@ -167,26 +168,19 @@ public class ActividadesAdminFragment extends Fragment {
                 params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
                 params.put("cuando", cuando);
                 params.put("repeticion", repite);
-                params.put("esTaller", esTaller);
+                params.put("esTallerCel", esTaller ? "true" : "false");
                 params.put("notifica", cbNotificar.isChecked());
 
-                client.post(Common.AGREGARACTIVIDAD, params, new JsonHttpResponseHandler() {
-
+                client.post(Common.AGREGARACTIVIDAD, params, new TextHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        System.out.println(response);
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        System.out.println(statusCode + " - " + responseString);
                     }
 
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        System.out.println(response);
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        System.out.println(statusCode + " - " + responseString);
                     }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                    }
-
                 });
             } catch (Exception ex) {
                 Snackbar.make(itvCamera, "Error: " + ex.getMessage(), Snackbar.LENGTH_LONG).show();
