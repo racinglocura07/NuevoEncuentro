@@ -5,6 +5,8 @@ import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,6 +37,13 @@ public class UbicacionFragment extends SupportMapFragment implements OnMapReadyC
         getMapAsync(this);
 
 
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item=menu.findItem(R.id.action_admin);
+        item.setVisible(false);
     }
 
     @Override

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -68,6 +70,13 @@ public class ComprasComunitariasFragment extends Fragment {
 
         wvCompras.loadUrl(ultimo.getLink());
         return v;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item=menu.findItem(R.id.action_admin);
+        item.setVisible(false);
     }
 
     public void recargar() {
