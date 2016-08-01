@@ -11,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.adapters.NoticiasAdapter;
 import coop.nuevoencuentro.nofuemagia.adapters.NoticiasComunAdapter;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by Tano on 31/07/2016.
@@ -57,6 +59,18 @@ public class NuestrasVocesFragment extends Fragment {
 
     private void BuscarNoticias() {
 
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(getContext(), Common.NUESTAS_VOCES, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+            }
+        })
     }
 
 }
