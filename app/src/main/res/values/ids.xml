@@ -69,4 +69,5 @@
     <item name="tv_ir_noticia_comun" type="id" />
     <item name="tv_titulo_noticia_comun" type="id" />
     <item name="tv_desc_noticia_comun" type="id" />
+    <item name="tv_construccion" type="id" />
 </resources>

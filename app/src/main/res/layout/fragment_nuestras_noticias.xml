@@ -17,4 +17,13 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <TextView
+        android:id="@id/tv_construccion"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Sección todavía no disponible"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 </FrameLayout>

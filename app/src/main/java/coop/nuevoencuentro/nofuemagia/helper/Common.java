@@ -92,8 +92,13 @@ public class Common {
     public static final String urlActividades = MAIN_URL + "backend/actividades/listActividades.php?fid=-2";
     public static final String urlBolsones = MAIN_URL + "backend/bolsones/listBolsones.php?fid=-2";
     private static final String urlNoticias = MAIN_URL + "backend/noticias/listNoticias.php?fid=-1";
-    public static final String NUESTAS_VOCES = "";
+
+    public static final String NUESTAS_VOCES = "http://www.nuestrasvoces.com.ar/feed/";
+    public static final String PAGINA_12 = "http://www.pagina12.com.ar/diario/rss/principal.xml";
+    public static final String PAGINA_12_ULTIMAS = "http://www.pagina12.com.ar/diario/rss/ultimas_noticias.xml";
+
     public static String AGREGARNOTICIA = MAIN_URL + "backend/noticias/crearNoticia.php";
+
 
     public static void ShowOkMessage(View v, int mensaje) {
         final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_INDEFINITE);
