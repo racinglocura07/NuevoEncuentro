@@ -60,13 +60,6 @@ public class TalleresFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        MenuItem item=menu.findItem(R.id.action_admin);
-        item.setVisible(true);
-    }
-
     public void recargar() {
         swipe.setRefreshing(false);
         adapter = new ActividadesAdapter(getContext(), true);

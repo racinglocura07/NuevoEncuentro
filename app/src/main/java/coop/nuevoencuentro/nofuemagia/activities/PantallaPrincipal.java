@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -300,7 +301,6 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pantalla_principal, menu);
-
         miAdmin = menu.findItem(R.id.action_admin);
 
         return true;
@@ -326,6 +326,9 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             } else if (getSupportFragmentManager().findFragmentByTag(Common.NOTICIAS) != null) {
                 args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
                 args.putBoolean(ActividadesAdminFragment.NOTICIAS, true);
+            } else {
+                Toast.makeText(this, "Opcion no valida en esta seccion", Toast.LENGTH_LONG).show();
+                return true;
             }
 
             Intent admin = new Intent(this, AdminActivity.class);
@@ -351,21 +354,27 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         if (id == R.id.nav_noticias) {
             fragment = noticiasFragment;
             tag = Common.NOTICIAS;
+            miAdmin.setVisible(true);
         } else if (id == R.id.nav_actividades) {
             fragment = actividadesFragment;
             tag = Common.ACTIVIDADES;
+            miAdmin.setVisible(true);
         } else if (id == R.id.nav_talleres) {
             fragment = talleresFragment;
             tag = Common.TALLERES;
+            miAdmin.setVisible(true);
         } else if (id == R.id.nav_compras_comunitarias) {
             fragment = comprasFragment;
             tag = Common.BOLSONES;
+            miAdmin.setVisible(false);
         } else if (id == R.id.nav_contacto) {
             fragment = contactoFragment;
             tag = Common.CONTACTO;
+            miAdmin.setVisible(false);
         } else if (id == R.id.nav_ubicacion) {
             fragment = ubicacionFragment;
             tag = Common.MICOMUNA;
+            miAdmin.setVisible(false);
         } else if (id == R.id.nav_compartir) {
             CompartirApp();
         } else if (id == R.id.nav_salir) {
@@ -380,6 +389,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 

@@ -39,12 +39,6 @@ public class UbicacionFragment extends SupportMapFragment implements OnMapReadyC
 
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        MenuItem item=menu.findItem(R.id.action_admin);
-        item.setVisible(false);
-    }
 
     @Override
     public void onMapReady(GoogleMap map) {

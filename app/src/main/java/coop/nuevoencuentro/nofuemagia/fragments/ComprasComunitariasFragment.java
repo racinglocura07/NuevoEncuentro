@@ -1,6 +1,7 @@
 package coop.nuevoencuentro.nofuemagia.fragments;
 
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -60,11 +61,16 @@ public class ComprasComunitariasFragment extends Fragment {
 
         wvCompras.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
-                getActivity().setTitle("Cargando...");
                 pbNavegador.setProgress(progress);
 
-                if (progress == 100)
-                    getActivity().setTitle(R.string.compras_comunitarias);
+                Activity act = getActivity();
+                if (act != null) {
+                    act.setTitle("Cargando...");
+                    if (progress == 100)
+                        act.setTitle(R.string.compras_comunitarias);
+                }
+
+
             }
         });
 
@@ -75,7 +81,7 @@ public class ComprasComunitariasFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        MenuItem item=menu.findItem(R.id.action_admin);
+        MenuItem item = menu.findItem(R.id.action_admin);
         item.setVisible(false);
     }
 
