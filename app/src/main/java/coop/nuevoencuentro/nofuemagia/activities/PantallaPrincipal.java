@@ -319,8 +319,13 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             Bundle args = new Bundle();
             if (getSupportFragmentManager().findFragmentByTag(Common.ACTIVIDADES) != null) {
                 args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
+                args.putBoolean(ActividadesAdminFragment.NOTICIAS, false);
             } else if (getSupportFragmentManager().findFragmentByTag(Common.TALLERES) != null) {
                 args.putBoolean(ActividadesAdminFragment.ESTALLER, true);
+                args.putBoolean(ActividadesAdminFragment.NOTICIAS, false);
+            } else if (getSupportFragmentManager().findFragmentByTag(Common.NOTICIAS) != null) {
+                args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
+                args.putBoolean(ActividadesAdminFragment.NOTICIAS, true);
             }
 
             Intent admin = new Intent(this, AdminActivity.class);

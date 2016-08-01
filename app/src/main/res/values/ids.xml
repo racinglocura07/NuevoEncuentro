@@ -62,4 +62,6 @@
     <item name="itv_camara_actividades" type="id" />
     <item name="frag_admin_container" type="id" />
     <item name="iv_cargada_actividad" type="id" />
+    <item name="pb_crear_actividad" type="id" />
+    <item name="et_link" type="id" />
 </resources>

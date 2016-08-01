@@ -28,7 +28,7 @@ public class Actividades extends Model {
 
     @Column(name = "cuando")
     @Expose
-    public int cuando;
+    public String cuando;
 
     @Column(name = "repeticion")
     @Expose
@@ -42,7 +42,7 @@ public class Actividades extends Model {
         super();
     }
 
-    public Actividades(int idActividad, String nombre, String descripcion, int cuando, int repeticion, boolean esTaller) {
+    public Actividades(int idActividad, String nombre, String descripcion, String cuando, int repeticion, boolean esTaller) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.descripcion = descripcion;

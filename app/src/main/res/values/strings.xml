@@ -80,6 +80,9 @@
     <string name="notificar">Notificar</string>
     <string name="grabar">{fa-save} Grabar</string>
     <string name="obligatorio">Campo obligatorio</string>
+    <string name="nuevo_taller">Nuevo taller</string>
+    <string name="nueva_actividad">Nueva actividad</string>
+    <string name="link">Link</string>
     <string-array name="repeticion">
         <item>@string/no</item>
         <item>@string/una</item>
