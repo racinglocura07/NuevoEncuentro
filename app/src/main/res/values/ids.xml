@@ -64,4 +64,9 @@
     <item name="iv_cargada_actividad" type="id" />
     <item name="pb_crear_actividad" type="id" />
     <item name="et_link" type="id" />
+    <item name="tabs_noticias" type="id" />
+    <item name="viewpager_noticias" type="id" />
+    <item name="tv_ir_noticia_comun" type="id" />
+    <item name="tv_titulo_noticia_comun" type="id" />
+    <item name="tv_desc_noticia_comun" type="id" />
 </resources>

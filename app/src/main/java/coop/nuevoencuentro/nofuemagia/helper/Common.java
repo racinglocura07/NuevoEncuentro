@@ -39,6 +39,7 @@ import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
+import coop.nuevoencuentro.nofuemagia.fragments.NuestrasNoticiasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
 import coop.nuevoencuentro.nofuemagia.model.Bolsones;
@@ -278,7 +279,7 @@ public class Common {
         });
     }
 
-    public static void SincronizarNoticias(AsyncHttpClient client, final NoticiasFragment frag) {
+    public static void SincronizarNoticias(AsyncHttpClient client, final NuestrasNoticiasFragment frag) {
         client.get(urlNoticias, new JsonHttpResponseHandler() {
 
             @Override
