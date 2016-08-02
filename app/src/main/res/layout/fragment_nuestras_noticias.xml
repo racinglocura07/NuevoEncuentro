@@ -17,13 +17,13 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@id/tv_construccion"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Sección todavía no disponible"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <!--<com.joanzapata.iconify.widget.IconTextView-->
+        <!--android:id="@id/tv_construccion"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:text="@string/cargando_noticias"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+        <!--android:visibility="gone" />-->
 
 </FrameLayout>

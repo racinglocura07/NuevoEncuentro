@@ -14,15 +14,17 @@ import android.widget.TextView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import org.xml.sax.XMLReader;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
-import coop.nuevoencuentro.nofuemagia.adapters.NoticiasAdapter;
 import coop.nuevoencuentro.nofuemagia.adapters.NoticiasComunAdapter;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
+import coop.nuevoencuentro.nofuemagia.xml.XMLNuestrasVoces;
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -32,18 +34,29 @@ import cz.msebera.android.httpclient.Header;
  */
 public class NuestrasVocesFragment extends Fragment {
 
+    private AsyncHttpClient client;
+
     public static final CharSequence TITLE = "Nuestras Voces";
+
     private SwipeRefreshLayout swipe;
     private RecyclerView recList;
     private NoticiasComunAdapter adapter;
+//    private TextView tvConstruccion;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        client = new AsyncHttpClient();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_nuestras_noticias, container, false);
 
-        TextView tvConstruccion = (TextView) v.findViewById(R.id.tv_construccion);
-        tvConstruccion.setVisibility(View.VISIBLE);
+//        tvConstruccion = (TextView) v.findViewById(R.id.tv_construccion);
+//        tvConstruccion.setVisibility(View.VISIBLE);
 
         swipe = (SwipeRefreshLayout) v.findViewById(R.id.srl_noticias);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -61,14 +74,15 @@ public class NuestrasVocesFragment extends Fragment {
         recList.setLayoutManager(llm);
 
         adapter = new NoticiasComunAdapter(getContext());
-        BuscarNoticias();
+        if (adapter.haveUpdate()) {
+            swipe.setRefreshing(true);
+            BuscarNoticias();
+        }
 
         return v;
     }
 
     private void BuscarNoticias() {
-
-        AsyncHttpClient client = new AsyncHttpClient();
         client.get(getContext(), Common.NUESTAS_VOCES, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -77,17 +91,19 @@ public class NuestrasVocesFragment extends Fragment {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                System.out.println(statusCode + " - " + responseString);
-
+                //System.out.println(statusCode + " - " + responseString);
 
                 try {
-                    XmlPullParserFactory pullParserFactory = XmlPullParserFactory.newInstance();
-                    XmlPullParser parser = pullParserFactory.newPullParser();
-                } catch (XmlPullParserException e) {
+                    List<XMLNuestrasVoces> items = XMLNuestrasVoces.parse(responseString, false);
+                    adapter.setItems(items);
+                    if (recList != null) {
+                        recList.setAdapter(adapter);
+                        swipe.setRefreshing(false);
+                    }
 
-                    e.printStackTrace();
+                } catch (Exception ex) {
+                    System.out.println("Error xml = " + ex.getMessage());
                 }
-
             }
         });
     }

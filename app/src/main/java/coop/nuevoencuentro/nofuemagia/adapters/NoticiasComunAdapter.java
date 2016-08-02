@@ -3,16 +3,22 @@ package coop.nuevoencuentro.nofuemagia.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.model.Noticias;
+import coop.nuevoencuentro.nofuemagia.xml.XMLNuestrasVoces;
 
 /**
  * Created by Tano on 31/07/2016.
@@ -21,16 +27,15 @@ import coop.nuevoencuentro.nofuemagia.model.Noticias;
  */
 public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdapter.ViewHolder> {
 
-    private final List<Noticias> mDataset;
+    private List<XMLNuestrasVoces> mDataset;
     private Context mContext;
 
     public NoticiasComunAdapter(Context _c) {
-        mDataset = Noticias.GetAll();
         mContext = _c;
     }
 
     public boolean haveUpdate() {
-        return mDataset.size() == 0;
+        return mDataset == null || mDataset.size() == 0;
     }
 
     @Override
@@ -41,15 +46,31 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Noticias item = mDataset.get(position);
+        XMLNuestrasVoces item = mDataset.get(position);
 
-        holder.tvTitulo.setText(item.titulo);
-        holder.tvDescripcion.setText(item.descripcion);
+        Spanned titulo;
+        Spanned desc;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            titulo = Html.fromHtml(item.title, Html.FROM_HTML_MODE_LEGACY);
+            desc = Html.fromHtml(item.description, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            titulo = Html.fromHtml(item.title);
+            desc = Html.fromHtml(item.description);
+        }
+
+        holder.item = item;
+        holder.tvTitulo.setText(titulo);
+        holder.tvDescripcion.setText(desc);
     }
 
     @Override
     public int getItemCount() {
         return mDataset.size();
+    }
+
+    public void setItems(List<XMLNuestrasVoces> items) {
+        this.mDataset = items;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -58,7 +79,7 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
         private final TextView tvDescripcion;
         private final TextView tvIrImagen;
 
-        private Noticias item;
+        private XMLNuestrasVoces item;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -67,13 +88,18 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
             tvIrImagen.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    if (item.link.contains("pagina12"))
+                        item.link = item.link.replace("www", "m");
+
+
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.link.trim()));
                     mContext.startActivity(browserIntent);
                 }
             });
 
-            tvTitulo = (TextView) itemView.findViewById(R.id.tv_titulo_noticia);
-            tvDescripcion = (TextView) itemView.findViewById(R.id.tv_desc_noticia);
+            tvTitulo = (TextView) itemView.findViewById(R.id.tv_titulo_noticia_comun);
+            tvDescripcion = (TextView) itemView.findViewById(R.id.tv_desc_noticia_comun);
 
         }
     }
