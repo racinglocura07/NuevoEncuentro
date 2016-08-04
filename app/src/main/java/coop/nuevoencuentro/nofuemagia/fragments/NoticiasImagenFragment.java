@@ -21,7 +21,7 @@ import coop.nuevoencuentro.nofuemagia.helper.Common;
  * Nuevo Encuentro
  * No Fue Magia
  */
-public class NuestrasNoticiasFragment extends Fragment {
+public class NoticiasImagenFragment extends Fragment {
 
     public static final CharSequence TITLE = "Nuevo Encuentro";
 
@@ -41,7 +41,7 @@ public class NuestrasNoticiasFragment extends Fragment {
             public void onRefresh() {
                 recList.setAdapter(null);
                 swipe.setRefreshing(true);
-                Common.SincronizarNoticias(new AsyncHttpClient(), NuestrasNoticiasFragment.this);
+                Common.SincronizarNoticias(new AsyncHttpClient(), NoticiasImagenFragment.this);
             }
         });
 
@@ -54,6 +54,7 @@ public class NuestrasNoticiasFragment extends Fragment {
 
         adapter = new NoticiasAdapter(getContext());
         if (adapter.haveUpdate()) {
+            recList.setAdapter(null);
             swipe.post(new Runnable() {
                 @Override
                 public void run() {

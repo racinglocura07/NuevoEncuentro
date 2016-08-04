@@ -29,20 +29,22 @@ import coop.nuevoencuentro.nofuemagia.helper.Common;
 public class NoticiasFragment extends Fragment {
 
 
-    private NoticiasPageAdapter noticiasAdapter;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_noticias, container, false);
 
-
         ViewPager vpPager = (ViewPager) v.findViewById(R.id.viewpager_noticias);
         TabLayout tabs = (TabLayout) v.findViewById(R.id.tabs_noticias);
 
-        noticiasAdapter = new NoticiasPageAdapter(getContext(), getActivity().getSupportFragmentManager());
-        vpPager.setAdapter(noticiasAdapter);
-        tabs.setupWithViewPager(vpPager);
+        if ( savedInstanceState == null ){
+            NoticiasPageAdapter noticiasAdapter = new NoticiasPageAdapter(getContext(), getChildFragmentManager());
+            vpPager.setAdapter(noticiasAdapter);
+            vpPager.setOffscreenPageLimit(3);
+            tabs.setupWithViewPager(vpPager);
+        }
+
+
 
         return v;
     }

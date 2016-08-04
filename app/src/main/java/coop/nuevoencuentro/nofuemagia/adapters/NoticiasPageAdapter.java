@@ -1,13 +1,16 @@
 package coop.nuevoencuentro.nofuemagia.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.view.ViewGroup;
 
-import coop.nuevoencuentro.nofuemagia.fragments.NuestrasNoticiasFragment;
-import coop.nuevoencuentro.nofuemagia.fragments.NuestrasVocesFragment;
+import coop.nuevoencuentro.nofuemagia.fragments.NoticiasImagenFragment;
+import coop.nuevoencuentro.nofuemagia.fragments.NoticiasSinImagenFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.PaginaFragment;
 
 /**
@@ -15,23 +18,29 @@ import coop.nuevoencuentro.nofuemagia.fragments.PaginaFragment;
  * Nuevo Encuentro
  * No Fue Magia
  */
-public class NoticiasPageAdapter extends FragmentStatePagerAdapter {
+public class NoticiasPageAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_ITEMS = 3;
     private final Context mContext;
 
 
-    private final Fragment nuestraComuna;
-    private final Fragment nuestrasVoces;
-    private final Fragment paginas12;
+    private final NoticiasImagenFragment nuestraComuna;
+    private final NoticiasSinImagenFragment nuestrasVoces;
+    private final NoticiasSinImagenFragment paginas12;
 
     public NoticiasPageAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
 
-        nuestraComuna = Fragment.instantiate(mContext, NuestrasNoticiasFragment.class.getName());
-        nuestrasVoces = Fragment.instantiate(mContext, NuestrasVocesFragment.class.getName());
-        paginas12 = Fragment.instantiate(mContext, PaginaFragment.class.getName());
+        Bundle argspagina = new Bundle();
+        argspagina.putBoolean(NoticiasSinImagenFragment.ESPAGINA, true);
+
+        Bundle argsnuestras = new Bundle();
+        argsnuestras.putBoolean(NoticiasSinImagenFragment.ESPAGINA, false);
+
+        nuestraComuna = (NoticiasImagenFragment) Fragment.instantiate(mContext, NoticiasImagenFragment.class.getName());
+        nuestrasVoces = (NoticiasSinImagenFragment) Fragment.instantiate(mContext, NoticiasSinImagenFragment.class.getName(), argsnuestras);
+        paginas12 = (NoticiasSinImagenFragment) Fragment.instantiate(mContext, NoticiasSinImagenFragment.class.getName(), argspagina);
     }
 
     // Returns total number of pages
@@ -51,7 +60,7 @@ public class NoticiasPageAdapter extends FragmentStatePagerAdapter {
             case 2:
                 return paginas12;
             default:
-                return null;
+                return nuestraComuna;
         }
     }
 
@@ -60,11 +69,11 @@ public class NoticiasPageAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0: // Fragment # 0 - This will show FirstFragment
-                return NuestrasNoticiasFragment.TITLE;
+                return "Novedades";
             case 1:
-                return NuestrasVocesFragment.TITLE;
+                return "Nuestras Voces";
             case 2: // Fragment # 1 - This will show SecondFragment
-                return PaginaFragment.TITLE;
+                return "Página 12";
             default:
                 return null;
         }

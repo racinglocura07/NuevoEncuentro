@@ -19,7 +19,6 @@ import android.view.View;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
@@ -38,8 +37,7 @@ import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
-import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
-import coop.nuevoencuentro.nofuemagia.fragments.NuestrasNoticiasFragment;
+import coop.nuevoencuentro.nofuemagia.fragments.NoticiasImagenFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
 import coop.nuevoencuentro.nofuemagia.model.Bolsones;
@@ -186,7 +184,7 @@ public class Common {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                guardarActividades(mContext, response, result);
+                guardarActividades(response, result);
 
                 Intent intent = new Intent(mContext, PantallaPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -210,7 +208,7 @@ public class Common {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                guardarActividades(frag.getContext(), response, null);
+                guardarActividades(response, null);
                 if (frag instanceof ActividadesFragment)
                     ((ActividadesFragment) frag).recargar();
                 else if (frag instanceof TalleresFragment)
@@ -223,7 +221,7 @@ public class Common {
         });
     }
 
-    private static void guardarActividades(Context context, JSONArray response, SyncResult result) {
+    private static void guardarActividades(JSONArray response, SyncResult result) {
         ActiveAndroid.beginTransaction();
         try {
             GsonBuilder builder = new GsonBuilder();
@@ -285,7 +283,7 @@ public class Common {
         });
     }
 
-    public static void SincronizarNoticias(AsyncHttpClient client, final NuestrasNoticiasFragment frag) {
+    public static void SincronizarNoticias(AsyncHttpClient client, final NoticiasImagenFragment frag) {
         client.get(urlNoticias, new JsonHttpResponseHandler() {
 
             @Override
@@ -348,6 +346,9 @@ public class Common {
             mensajes.clear();
             return;
         }
+
+        assert titulo != null;
+        assert context != null;
 
         if (titulo.equals("Pruebas")) {
             mensajes.add(msg);

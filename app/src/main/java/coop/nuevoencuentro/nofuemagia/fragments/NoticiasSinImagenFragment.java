@@ -32,16 +32,15 @@ import cz.msebera.android.httpclient.Header;
  * Nuevo Encuentro
  * No Fue Magia
  */
-public class NuestrasVocesFragment extends Fragment {
+public class NoticiasSinImagenFragment extends Fragment {
 
+    public static final String ESPAGINA = "ESPAGINA";
     private AsyncHttpClient client;
-
-    public static final CharSequence TITLE = "Nuestras Voces";
-
     private SwipeRefreshLayout swipe;
     private RecyclerView recList;
     private NoticiasComunAdapter adapter;
-//    private TextView tvConstruccion;
+
+    private String url = null;
 
 
     @Override
@@ -55,8 +54,11 @@ public class NuestrasVocesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_nuestras_noticias, container, false);
 
-//        tvConstruccion = (TextView) v.findViewById(R.id.tv_construccion);
-//        tvConstruccion.setVisibility(View.VISIBLE);
+        if (getArguments().getBoolean(ESPAGINA))
+            url = Common.PAGINA_12;
+        else
+            url = Common.NUESTAS_VOCES;
+
 
         swipe = (SwipeRefreshLayout) v.findViewById(R.id.srl_noticias);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -64,7 +66,7 @@ public class NuestrasVocesFragment extends Fragment {
             public void onRefresh() {
                 recList.setAdapter(null);
                 swipe.setRefreshing(true);
-                BuscarNoticias();
+                BuscarNoticias(url);
             }
         });
 
@@ -77,20 +79,21 @@ public class NuestrasVocesFragment extends Fragment {
 
         adapter = new NoticiasComunAdapter(getContext());
         if (adapter.haveUpdate()) {
+            recList.setAdapter(null);
             swipe.post(new Runnable() {
                 @Override
                 public void run() {
                     swipe.setRefreshing(true);
                 }
             });
-            BuscarNoticias();
+            BuscarNoticias(url);
         }
 
         return v;
     }
 
-    private void BuscarNoticias() {
-        client.get(getContext(), Common.NUESTAS_VOCES, new TextHttpResponseHandler() {
+    private void BuscarNoticias(String url) {
+        client.get(getContext(), url, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 System.out.println(statusCode + " - " + responseString);
