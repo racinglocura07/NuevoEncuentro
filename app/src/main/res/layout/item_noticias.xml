@@ -37,7 +37,7 @@
                     android:layout_gravity="center_horizontal|top"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/app_name"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="centerCrop" />
 
                 <TextView
                     android:id="@id/tv_titulo_noticia"

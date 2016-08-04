@@ -39,8 +39,9 @@ public class NuestrasNoticiasFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                recList.setAdapter(null);
+                swipe.setRefreshing(true);
                 Common.SincronizarNoticias(new AsyncHttpClient(), NuestrasNoticiasFragment.this);
-                swipe.setRefreshing(false);
             }
         });
 
@@ -53,7 +54,12 @@ public class NuestrasNoticiasFragment extends Fragment {
 
         adapter = new NoticiasAdapter(getContext());
         if (adapter.haveUpdate()) {
-            swipe.setRefreshing(true);
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                }
+            });
             Common.SincronizarNoticias(new AsyncHttpClient(), this);
         } else
             recList.setAdapter(adapter);

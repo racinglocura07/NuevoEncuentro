@@ -37,6 +37,7 @@ public class ActividadesFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                recList.setAdapter(null);
                 swipe.setRefreshing(true);
                 Common.SincronizarActividades(new AsyncHttpClient(), ActividadesFragment.this);
             }
@@ -52,7 +53,12 @@ public class ActividadesFragment extends Fragment {
 
         adapter = new ActividadesAdapter(getContext(), false);
         if (adapter.haveUpdate()) {
-            swipe.setRefreshing(true);
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                }
+            });
             Common.SincronizarActividades(new AsyncHttpClient(), this);
         } else
             recList.setAdapter(adapter);

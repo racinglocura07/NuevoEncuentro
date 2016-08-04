@@ -55,6 +55,8 @@ public class PaginaFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                recList.setAdapter(null);
+                swipe.setRefreshing(true);
                 BuscarNoticias();
             }
         });
@@ -68,7 +70,12 @@ public class PaginaFragment extends Fragment {
 
         adapter = new NoticiasComunAdapter(getContext());
         if (adapter.haveUpdate()) {
-            swipe.setRefreshing(true);
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                }
+            });
             BuscarNoticias();
         }
 

@@ -37,6 +37,7 @@ public class TalleresFragment extends Fragment {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                recList.setAdapter(null);
                 swipe.setRefreshing(true);
                 Common.SincronizarActividades(new AsyncHttpClient(), TalleresFragment.this);
             }
@@ -52,7 +53,12 @@ public class TalleresFragment extends Fragment {
 
         adapter = new ActividadesAdapter(getContext(), true);
         if (adapter.haveUpdate()) {
-            swipe.setRefreshing(true);
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                }
+            });
             Common.SincronizarActividades(new AsyncHttpClient(), this);
         } else
             recList.setAdapter(adapter);
