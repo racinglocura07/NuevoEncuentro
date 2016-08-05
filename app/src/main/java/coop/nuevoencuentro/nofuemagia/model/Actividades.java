@@ -55,12 +55,14 @@ public class Actividades extends Model {
         return new Select()
                 .from(Actividades.class)
                 .where("esTaller = ?", esTaller)
+                .orderBy("idActividad DESC")
                 .execute();
     }
 
     public static List<Actividades> GetAll() {
         return new Select()
                 .from(Actividades.class)
+                .orderBy("idActividad DESC")
                 .execute();
     }
 }

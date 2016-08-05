@@ -9,13 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.TextHttpResponseHandler;
 
-import java.io.StringReader;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
@@ -86,7 +83,7 @@ public class PaginaFragment extends Fragment {
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
             try {
-                List<XMLNuestrasVoces> items = XMLNuestrasVoces.parse(new String(responseBody, "ISO-8859-1"), true);
+                List<XMLNuestrasVoces> items = XMLNuestrasVoces.parse(new String(responseBody), true);
                 adapter.setItems(items);
                 if (recList != null) {
                     recList.setAdapter(adapter);

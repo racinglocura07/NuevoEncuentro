@@ -15,8 +15,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,13 +72,17 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private NavigationView navigationView;
     private AsyncHttpClient client;
 
-    private MenuItem miAdmin;
+    private boolean mEsAdmin;
+    private boolean mTieneAdmin;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        mEsAdmin = false;
+        mTieneAdmin = false;
 
         setContentView(R.layout.activity_pantalla_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -164,11 +170,27 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
 
             CheckEsAdmin(id);
-
+            RateApp();
 
         } else {
             Loguearse();
         }
+    }
+
+    private void RateApp() {
+
+        LayoutInflater inflater = getLayoutInflater();
+        View v = View.inflate(this, R.layout.dialog_rate, null);
+
+        AlertDialog.Builder buider = new AlertDialog.Builder(this)
+                .setCancelable(true)
+                .setView(v)
+                .setIcon(new IconDrawable(this, FontAwesomeIcons.fa_star))
+                .setTitle(R.string.calificar_app)
+                .setNegativeButton("No, Gracias!", null)
+                .setPositiveButton("Calificar ahora!", null);
+
+        buider.show();
     }
 
     private void CheckEsAdmin(String id) {
@@ -182,8 +204,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
                 try {
                     System.out.println(response);
                     if (!response.getBoolean("error")) {
-                        boolean esAdmin = response.getBoolean("esAdmin");
-                        miAdmin.setVisible(esAdmin);
+                        mEsAdmin = response.getBoolean("esAdmin");
+                        invalidateOptionsMenu();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -207,26 +229,32 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             case Common.NOTICIAS:
                 fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment, Common.NOTICIAS).commit();
                 navigationView.getMenu().getItem(0).setChecked(true);
+                mTieneAdmin = true;
                 break;
             case Common.ACTIVIDADES:
                 fragmentManager.beginTransaction().replace(R.id.main_container, actividadesFragment, Common.ACTIVIDADES).commit();
                 navigationView.getMenu().getItem(1).setChecked(true);
+                mTieneAdmin = true;
                 break;
             case Common.TALLERES:
                 fragmentManager.beginTransaction().replace(R.id.main_container, talleresFragment, Common.TALLERES).commit();
                 navigationView.getMenu().getItem(2).setChecked(true);
+                mTieneAdmin = true;
                 break;
             case Common.BOLSONES:
                 fragmentManager.beginTransaction().replace(R.id.main_container, comprasFragment, Common.BOLSONES).commit();
                 navigationView.getMenu().getItem(3).setChecked(true);
+                mTieneAdmin = false;
                 break;
             case Common.CONTACTO:
                 fragmentManager.beginTransaction().replace(R.id.main_container, contactoFragment, Common.CONTACTO).commit();
                 navigationView.getMenu().getItem(4).setChecked(true);
+                mTieneAdmin = false;
                 break;
             case Common.MICOMUNA:
                 fragmentManager.beginTransaction().replace(R.id.main_container, ubicacionFragment, Common.MICOMUNA).commit();
                 navigationView.getMenu().getItem(5).setChecked(true);
+                mTieneAdmin = false;
                 break;
 
         }
@@ -301,7 +329,10 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pantalla_principal, menu);
-        miAdmin = menu.findItem(R.id.action_admin);
+        MenuItem miAdmin = menu.findItem(R.id.action_admin);
+
+        miAdmin.setVisible(mEsAdmin && mTieneAdmin);
+
 
         return true;
     }
@@ -354,27 +385,27 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         if (id == R.id.nav_noticias) {
             fragment = noticiasFragment;
             tag = Common.NOTICIAS;
-            miAdmin.setVisible(true);
+            mTieneAdmin = true;
         } else if (id == R.id.nav_actividades) {
             fragment = actividadesFragment;
             tag = Common.ACTIVIDADES;
-            miAdmin.setVisible(true);
+            mTieneAdmin = true;
         } else if (id == R.id.nav_talleres) {
             fragment = talleresFragment;
             tag = Common.TALLERES;
-            miAdmin.setVisible(true);
+            mTieneAdmin = true;
         } else if (id == R.id.nav_compras_comunitarias) {
             fragment = comprasFragment;
             tag = Common.BOLSONES;
-            miAdmin.setVisible(false);
+            mTieneAdmin = false;
         } else if (id == R.id.nav_contacto) {
             fragment = contactoFragment;
             tag = Common.CONTACTO;
-            miAdmin.setVisible(false);
+            mTieneAdmin = false;
         } else if (id == R.id.nav_ubicacion) {
             fragment = ubicacionFragment;
             tag = Common.MICOMUNA;
-            miAdmin.setVisible(false);
+            mTieneAdmin = false;
         } else if (id == R.id.nav_compartir) {
             CompartirApp();
         } else if (id == R.id.nav_salir) {
@@ -389,6 +420,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
+
+        invalidateOptionsMenu();
 
         return true;
     }
