@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -41,6 +42,7 @@ public class NoticiasSinImagenFragment extends Fragment {
     private NoticiasComunAdapter adapter;
 
     private String url = null;
+    private AsyncHttpResponseHandler handler;
 
 
     @Override
@@ -54,10 +56,15 @@ public class NoticiasSinImagenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_nuestras_noticias, container, false);
 
-        if (getArguments().getBoolean(ESPAGINA))
+        if (getArguments().getBoolean(ESPAGINA)) {
             url = Common.PAGINA_12;
-        else
+            handler = handlerPagina;
+            handler.setCharset("ISO-8859-1");
+        }
+        else {
             url = Common.NUESTAS_VOCES;
+            handler = handlerVoces;
+        }
 
 
         swipe = (SwipeRefreshLayout) v.findViewById(R.id.srl_noticias);
@@ -92,30 +99,61 @@ public class NoticiasSinImagenFragment extends Fragment {
         return v;
     }
 
-    private void BuscarNoticias(String url) {
-        client.get(getContext(), url, new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                System.out.println(statusCode + " - " + responseString);
-            }
+    //NUESTRAS VOCES
+    private TextHttpResponseHandler handlerVoces = new TextHttpResponseHandler() {
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            System.out.println(statusCode + " - " + responseString);
+        }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                //System.out.println(statusCode + " - " + responseString);
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            //System.out.println(statusCode + " - " + responseString);
 
-                try {
-                    List<XMLNuestrasVoces> items = XMLNuestrasVoces.parse(responseString, false);
-                    adapter.setItems(items);
-                    if (recList != null) {
-                        recList.setAdapter(adapter);
-                        swipe.setRefreshing(false);
-                    }
-
-                } catch (Exception ex) {
-                    System.out.println("Error xml = " + ex.getMessage());
+            try {
+                List<XMLNuestrasVoces> items = XMLNuestrasVoces.parse(responseString, false);
+                adapter.setItems(items);
+                if (recList != null) {
+                    recList.setAdapter(adapter);
+                    swipe.setRefreshing(false);
                 }
+
+            } catch (Exception ex) {
+                System.out.println("Error xml = " + ex.getMessage());
             }
-        });
+        }
+    };
+
+    //PAGINA 12
+    private AsyncHttpResponseHandler handlerPagina = new AsyncHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            try {
+                List<XMLNuestrasVoces> items = XMLNuestrasVoces.parse(new String(responseBody, "ISO-8859-1"), true);
+                adapter.setItems(items);
+                if (recList != null) {
+                    recList.setAdapter(adapter);
+                    swipe.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipe.setRefreshing(false);
+                        }
+                    });
+                }
+
+            } catch (Exception ex) {
+                System.out.println("Error xml = " + ex.getMessage());
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            System.out.println(statusCode + " - " + error.getMessage());
+        }
+    };
+
+    private void BuscarNoticias(String url) {
+        client.get(getContext(), url, handler);
     }
 
 }

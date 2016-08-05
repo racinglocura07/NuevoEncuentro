@@ -10,8 +10,8 @@ android {
         applicationId "coop.nuevoencuentro.nofuemagia"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 32
-        versionName "0.4.3"
+        versionCode 34
+        versionName "0.4.5"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
     }
@@ -64,6 +64,8 @@ dependencies {
 
     compile 'com.facebook.android:facebook-android-sdk:4.11.0'
     compile 'com.github.ViksaaSkool:AwesomeSplash:v1.0.0'
+
+    compile 'org.jsoup:jsoup:1.8.3'
 
 
 }
