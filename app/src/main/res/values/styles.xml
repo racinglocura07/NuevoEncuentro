@@ -37,5 +37,10 @@
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
+    <style name="SinPaddingButton" parent="Base.TextAppearance.AppCompat.Widget.Button">
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
+
 
 </resources>

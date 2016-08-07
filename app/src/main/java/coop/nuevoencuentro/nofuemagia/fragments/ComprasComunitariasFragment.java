@@ -50,14 +50,16 @@ public class ComprasComunitariasFragment extends Fragment {
         pbCompras = (ProgressBar) v.findViewById(R.id.pb_compras);
         pbNavegador = (ProgressBar) v.findViewById(R.id.pb_navegador);
 
+        pbCompras.setVisibility(View.GONE);
+        pbNavegador.setVisibility(View.VISIBLE);
+
         Bolsones ultimo = Bolsones.getLast();
         if (ultimo == null) {
             AsyncHttpClient client = new AsyncHttpClient();
             Common.SincronizarBolsones(client, this);
             return v;
         }
-        pbCompras.setVisibility(View.GONE);
-        pbNavegador.setVisibility(View.VISIBLE);
+
 
         wvCompras.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {

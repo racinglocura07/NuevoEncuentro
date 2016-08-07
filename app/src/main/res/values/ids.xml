@@ -70,4 +70,7 @@
     <item name="tv_titulo_noticia_comun" type="id" />
     <item name="tv_desc_noticia_comun" type="id" />
     <item name="tv_construccion" type="id" />
+    <item name="rating_bar" type="id" />
+    <item name="btn_compartir" type="id" />
+    <item name="btn_leer" type="id" />
 </resources>

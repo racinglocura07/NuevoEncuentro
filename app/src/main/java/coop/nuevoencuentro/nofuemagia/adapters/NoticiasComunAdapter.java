@@ -11,12 +11,14 @@ import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
+import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Noticias;
 import coop.nuevoencuentro.nofuemagia.xml.XMLNuestrasVoces;
 
@@ -77,15 +79,15 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
 
         private final TextView tvTitulo;
         private final TextView tvDescripcion;
-        private final TextView tvIrImagen;
+        //private final TextView tvIrImagen;
 
         private XMLNuestrasVoces item;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            tvIrImagen = (TextView) itemView.findViewById(R.id.tv_ir_noticia_comun);
-            tvIrImagen.setOnClickListener(new View.OnClickListener() {
+            Button btnIrNoticia = (Button) itemView.findViewById(R.id.btn_leer);
+            btnIrNoticia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -95,6 +97,24 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
 
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.link.trim()));
                     mContext.startActivity(browserIntent);
+                }
+            });
+
+            Button btnCompartir = (Button) itemView.findViewById(R.id.btn_compartir);
+            btnCompartir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (item.link.contains("pagina12"))
+                        item.link = item.link.replace("www", "m");
+
+                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    sharingIntent.setType("text/plain");
+
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, item.title);
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, item.link);
+
+                    mContext.startActivity(Intent.createChooser(sharingIntent, mContext.getString(R.string.compartir_titulo)));
                 }
             });
 

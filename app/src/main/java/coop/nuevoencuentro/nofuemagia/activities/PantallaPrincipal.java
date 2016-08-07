@@ -1,9 +1,12 @@
 package coop.nuevoencuentro.nofuemagia.activities;
 
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -179,18 +183,64 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
     private void RateApp() {
 
-        LayoutInflater inflater = getLayoutInflater();
-        View v = View.inflate(this, R.layout.dialog_rate, null);
+        final String RATE_NO_MOSTRAR = "RATE_NO_MOSTRAR";
+        String RATE_VECES = "RATE_VECES";
+        String RATE_FECHA = "RATE_FECHA";
 
-        AlertDialog.Builder buider = new AlertDialog.Builder(this)
-                .setCancelable(true)
-                .setView(v)
-                .setIcon(new IconDrawable(this, FontAwesomeIcons.fa_star))
-                .setTitle(R.string.calificar_app)
-                .setNegativeButton("No, Gracias!", null)
-                .setPositiveButton("Calificar ahora!", null);
+        int DAYS_UNTIL_PROMPT = 3;
+        int LAUNCHES_UNTIL_PROMPT = 7;
 
-        buider.show();
+        if (preferences.getBoolean(RATE_NO_MOSTRAR, false)) { return ; }
+
+        final SharedPreferences.Editor editor = preferences.edit();
+
+        long launch_count = preferences.getLong(RATE_VECES, 0) + 1;
+        editor.putLong(RATE_VECES, launch_count);
+
+        Long date_firstLaunch = preferences.getLong(RATE_FECHA, 0);
+        if (date_firstLaunch == 0) {
+            date_firstLaunch = System.currentTimeMillis();
+            editor.putLong(RATE_FECHA, date_firstLaunch);
+        }
+
+        if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
+            if (System.currentTimeMillis() >= date_firstLaunch + (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
+                AlertDialog.Builder buider = new AlertDialog.Builder(this)
+                        .setCancelable(true)
+                        .setMessage(R.string.calificando_la_aplicaci_n_nos_ayudas_a_mejorarla)
+                        .setIcon(new IconDrawable(this, FontAwesomeIcons.fa_star).colorRes(R.color.partido))
+                        .setTitle(R.string.calificar_app)
+                        .setNegativeButton("No, Gracias!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                editor.putBoolean(RATE_NO_MOSTRAR, true);
+                                editor.apply();
+                            }
+                        })
+                        .setPositiveButton("Calificar ahora!", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                editor.putBoolean(RATE_NO_MOSTRAR, true);
+                                editor.apply();
+                                mostrarMarket();
+                            }
+                        });
+
+                buider.show();
+            }
+        }
+
+        editor.apply();
+    }
+
+    public void mostrarMarket(){
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(myAppLinkToMarket);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, " Imposible abrir la tienda", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void CheckEsAdmin(String id) {

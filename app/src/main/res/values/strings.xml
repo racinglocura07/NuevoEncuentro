@@ -83,8 +83,8 @@
     <string name="nuevo_taller">Nuevo taller</string>
     <string name="nueva_actividad">Nueva actividad</string>
     <string name="link">Link</string>
-    <string name="calificar_app">Calificá la app!</string>
-    <string name="calificando_la_aplicaci_n_nos_ayudas_a_mejorarla">Calificando la aplicación nos ayudas a mejorarla!</string>
+    <string name="calificar_app">Calificá la aplicación!</string>
+    <string name="calificando_la_aplicaci_n_nos_ayudas_a_mejorarla">Si te gusta nuestra aplicación, danos una mano calificandola!\nNo te va a llevar más de un minuto, gracias!</string>
     <string-array name="repeticion">
         <item>@string/no</item>
         <item>@string/una</item>
