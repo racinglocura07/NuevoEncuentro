@@ -73,8 +73,6 @@ public class RSSItems {
         Document doc = Jsoup.parse(response, "", Parser.xmlParser());
         for (Element e : doc.select("item")) {
             String title = e.select(("title")).text();
-            if (title.contains("paz, pan y trabajo"))
-                System.out.println(title);
             String description = e.select(("description")).text();
             if (pagina) {
                 Document doca = Jsoup.parse(description);
