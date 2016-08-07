@@ -29,6 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
+                android:layout_marginBottom="@dimen/noticia_vertical"
                 android:background="@color/negrotransparente"
                 android:gravity="center"
                 android:padding="5dp"
@@ -40,19 +41,33 @@
                 android:id="@id/tv_desc_noticia_comun"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:ellipsize="end"
-                android:paddingBottom="@dimen/pad_item_noticias_bot"
-                android:paddingEnd="@dimen/pad_item_noticias"
-                android:paddingLeft="@dimen/pad_item_noticias"
-                android:paddingRight="@dimen/pad_item_noticias"
-                android:paddingStart="@dimen/pad_item_noticias"
-                android:paddingTop="@dimen/pad_item_noticias_bot"
+                android:maxLines="6"
+                android:paddingEnd="@dimen/noticia_horizontal"
+                android:paddingLeft="@dimen/noticia_horizontal"
+                android:paddingRight="@dimen/noticia_horizontal"
+                android:paddingStart="@dimen/noticia_horizontal"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@id/tv_fecha_noticia_comun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingEnd="@dimen/noticia_horizontal"
+                android:paddingLeft="@dimen/noticia_horizontal"
+                android:paddingRight="@dimen/noticia_horizontal"
+                android:paddingStart="@dimen/noticia_horizontal"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
+                android:layout_marginTop="@dimen/noticia_vertical"
                 android:background="@color/partido_oscuro" />
 
             <LinearLayout

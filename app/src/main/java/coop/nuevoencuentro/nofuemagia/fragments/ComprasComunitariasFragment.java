@@ -55,8 +55,7 @@ public class ComprasComunitariasFragment extends Fragment {
 
         Bolsones ultimo = Bolsones.getLast();
         if (ultimo == null) {
-            AsyncHttpClient client = new AsyncHttpClient();
-            Common.SincronizarBolsones(client, this);
+            Common.SincronizarBolsones(this);
             return v;
         }
 

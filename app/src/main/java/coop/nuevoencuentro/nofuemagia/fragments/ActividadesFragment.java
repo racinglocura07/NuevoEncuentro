@@ -39,7 +39,7 @@ public class ActividadesFragment extends Fragment {
             public void onRefresh() {
                 recList.setAdapter(null);
                 swipe.setRefreshing(true);
-                Common.SincronizarActividades(new AsyncHttpClient(), ActividadesFragment.this);
+                Common.SincronizarActividades(ActividadesFragment.this);
             }
         });
 
@@ -59,7 +59,7 @@ public class ActividadesFragment extends Fragment {
                     swipe.setRefreshing(true);
                 }
             });
-            Common.SincronizarActividades(new AsyncHttpClient(), this);
+            Common.SincronizarActividades(this);
         } else
             recList.setAdapter(adapter);
 

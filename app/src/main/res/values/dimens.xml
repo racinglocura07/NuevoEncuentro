@@ -9,10 +9,12 @@
     <dimen name="padding_actividades">10dp</dimen>
     <dimen name="pad_item_noticias">15dp</dimen>
     <dimen name="pad_login">15dp</dimen>
-    <dimen name="pad_item_noticias_bot">5dp</dimen>
+    <dimen name="pad_item_noticias_bot">10dp</dimen>
     <dimen name="fuente_conf">16sp</dimen>
     <dimen name="botones_pad">10dp</dimen>
     <dimen name="botones_mar">5dp</dimen>
     <dimen name="fuente_conf_info">16sp</dimen>
     <dimen name="alto_celular">200dp</dimen>
+    <dimen name="noticia_horizontal">20dp</dimen>
+    <dimen name="noticia_vertical">10dp</dimen>
 </resources>

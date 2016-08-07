@@ -74,10 +74,15 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private ContactoFragment contactoFragment;
     private UbicacionFragment ubicacionFragment;
     private NavigationView navigationView;
+
     private AsyncHttpClient client;
 
     private boolean mEsAdmin;
     private boolean mTieneAdmin;
+
+    public AsyncHttpClient GetAsynk(){
+        return client;
+    }
 
 
     @Override

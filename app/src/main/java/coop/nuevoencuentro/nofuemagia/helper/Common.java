@@ -139,7 +139,8 @@ public class Common {
         });
     }
 
-    public static void SincronizarBolsones(AsyncHttpClient client, final ComprasComunitariasFragment frag) {
+    public static void SincronizarBolsones(final ComprasComunitariasFragment frag) {
+        AsyncHttpClient client = ((PantallaPrincipal)frag.getActivity()).GetAsynk();
         client.get(urlBolsones, new JsonHttpResponseHandler() {
 
             @Override
@@ -203,7 +204,8 @@ public class Common {
         });
     }
 
-    public static void SincronizarActividades(AsyncHttpClient client, final Fragment frag) {
+    public static void SincronizarActividades(final Fragment frag) {
+        AsyncHttpClient client = ((PantallaPrincipal)frag.getActivity()).GetAsynk();
         client.get(urlActividades, new JsonHttpResponseHandler() {
 
             @Override
@@ -283,7 +285,8 @@ public class Common {
         });
     }
 
-    public static void SincronizarNoticias(AsyncHttpClient client, final NoticiasImagenFragment frag) {
+    public static void SincronizarNoticias(final NoticiasImagenFragment frag) {
+        AsyncHttpClient client = ((PantallaPrincipal)frag.getActivity()).GetAsynk();
         client.get(urlNoticias, new JsonHttpResponseHandler() {
 
             @Override

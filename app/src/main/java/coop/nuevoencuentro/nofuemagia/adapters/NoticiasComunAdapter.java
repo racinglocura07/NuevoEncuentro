@@ -3,24 +3,20 @@ package coop.nuevoencuentro.nofuemagia.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Spannable;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
-import coop.nuevoencuentro.nofuemagia.helper.Common;
-import coop.nuevoencuentro.nofuemagia.model.Noticias;
-import coop.nuevoencuentro.nofuemagia.xml.XMLNuestrasVoces;
+import coop.nuevoencuentro.nofuemagia.xml.RSSItems;
 
 /**
  * Created by Tano on 31/07/2016.
@@ -29,7 +25,7 @@ import coop.nuevoencuentro.nofuemagia.xml.XMLNuestrasVoces;
  */
 public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdapter.ViewHolder> {
 
-    private List<XMLNuestrasVoces> mDataset;
+    private List<RSSItems> mDataset;
     private Context mContext;
 
     public NoticiasComunAdapter(Context _c) {
@@ -48,22 +44,33 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        XMLNuestrasVoces item = mDataset.get(position);
+        RSSItems item = mDataset.get(position);
+
+        String creador = item.getCreador();
+        if (creador == null)
+            creador = "";
 
         Spanned titulo;
         Spanned desc;
+        Spanned crea;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            titulo = Html.fromHtml(item.title, Html.FROM_HTML_MODE_LEGACY);
-            desc = Html.fromHtml(item.description, Html.FROM_HTML_MODE_LEGACY);
+            titulo = Html.fromHtml(item.getTitulo(), Html.FROM_HTML_MODE_LEGACY);
+            desc = Html.fromHtml(item.getDescripcion(), Html.FROM_HTML_MODE_LEGACY);
+            crea = Html.fromHtml(creador, Html.FROM_HTML_MODE_LEGACY);
         } else {
-            titulo = Html.fromHtml(item.title);
-            desc = Html.fromHtml(item.description);
+            titulo = Html.fromHtml(item.getTitulo());
+            desc = Html.fromHtml(item.getDescripcion());
+            crea = Html.fromHtml(creador);
         }
+
 
         holder.item = item;
         holder.tvTitulo.setText(titulo);
         holder.tvDescripcion.setText(desc);
+        holder.tvFecha.setText(crea + item.getFechaPublicado());
+        if (TextUtils.isEmpty(desc))
+            holder.tvDescripcion.setVisibility(View.GONE);
     }
 
     @Override
@@ -71,7 +78,7 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
         return mDataset.size();
     }
 
-    public void setItems(List<XMLNuestrasVoces> items) {
+    public void setItems(List<RSSItems> items) {
         this.mDataset = items;
     }
 
@@ -79,9 +86,10 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
 
         private final TextView tvTitulo;
         private final TextView tvDescripcion;
+        private final TextView tvFecha;
         //private final TextView tvIrImagen;
 
-        private XMLNuestrasVoces item;
+        private RSSItems item;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -91,11 +99,12 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
                 @Override
                 public void onClick(View view) {
 
-                    if (item.link.contains("pagina12"))
-                        item.link = item.link.replace("www", "m");
+                    String link = item.getLink().trim();
+                    if (link.contains("pagina12"))
+                        link = link.replace("www", "m");
 
 
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.link.trim()));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
                     mContext.startActivity(browserIntent);
                 }
             });
@@ -105,14 +114,15 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
                 @Override
                 public void onClick(View view) {
 
-                    if (item.link.contains("pagina12"))
-                        item.link = item.link.replace("www", "m");
+                    String link = item.getLink().trim();
+                    if (link.contains("pagina12"))
+                        link = link.replace("www", "m");
 
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
 
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, item.title);
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, item.link);
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, item.getTitulo());
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, link);
 
                     mContext.startActivity(Intent.createChooser(sharingIntent, mContext.getString(R.string.compartir_titulo)));
                 }
@@ -120,6 +130,7 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
 
             tvTitulo = (TextView) itemView.findViewById(R.id.tv_titulo_noticia_comun);
             tvDescripcion = (TextView) itemView.findViewById(R.id.tv_desc_noticia_comun);
+            tvFecha = (TextView) itemView.findViewById(R.id.tv_fecha_noticia_comun);
 
         }
     }

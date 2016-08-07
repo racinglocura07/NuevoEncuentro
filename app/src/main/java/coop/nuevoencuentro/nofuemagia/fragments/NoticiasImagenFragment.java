@@ -41,7 +41,7 @@ public class NoticiasImagenFragment extends Fragment {
             public void onRefresh() {
                 recList.setAdapter(null);
                 swipe.setRefreshing(true);
-                Common.SincronizarNoticias(new AsyncHttpClient(), NoticiasImagenFragment.this);
+                Common.SincronizarNoticias(NoticiasImagenFragment.this);
             }
         });
 
@@ -61,7 +61,7 @@ public class NoticiasImagenFragment extends Fragment {
                     swipe.setRefreshing(true);
                 }
             });
-            Common.SincronizarNoticias(new AsyncHttpClient(), this);
+            Common.SincronizarNoticias(this);
         } else
             recList.setAdapter(adapter);
 
