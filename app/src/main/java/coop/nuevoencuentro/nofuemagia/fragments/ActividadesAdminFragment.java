@@ -54,8 +54,10 @@ import cz.msebera.android.httpclient.Header;
 public class ActividadesAdminFragment extends Fragment {
 
     private static final int SELECT_PICTURE = 0x1212;
+
     public static final String ESTALLER = "ESTALLER";
     public static final String NOTICIAS = "NOTICIAS";
+    public static final String BOLSON = "BOLSON";
 
     private TextInputEditText etNombre;
     private TextInputEditText etDescripcion;
@@ -69,10 +71,12 @@ public class ActividadesAdminFragment extends Fragment {
     private ImageView ivCargada;
 
     private Uri mSelectedImage;
-    private boolean esTaller;
-    private boolean esNoticia;
     private ProgressBar pbGuardar;
     private TextInputEditText etLink;
+    private boolean esTaller;
+    private boolean esNoticia;
+    private boolean esBolson;
+
 
     @Nullable
     @Override
@@ -82,6 +86,7 @@ public class ActividadesAdminFragment extends Fragment {
         Bundle args = getArguments();
         esTaller = args.getBoolean(ActividadesAdminFragment.ESTALLER);
         esNoticia = args.getBoolean(ActividadesAdminFragment.NOTICIAS);
+        esBolson = args.getBoolean(ActividadesAdminFragment.BOLSON);
 
         calendar = Calendar.getInstance();
         mSelectedImage = null;
@@ -97,13 +102,22 @@ public class ActividadesAdminFragment extends Fragment {
         btnGuardar = (Button) v.findViewById(R.id.btn_grabar_actividad);
         pbGuardar = (ProgressBar) v.findViewById(R.id.pb_crear_actividad);
 
-        if (esTaller && !esNoticia)
+        if (esTaller && !esNoticia && !esBolson)
             getActivity().setTitle(R.string.nuevo_taller);
-        else if (!esTaller && !esNoticia)
+        else if (!esTaller && !esNoticia && !esBolson)
             getActivity().setTitle(R.string.nueva_actividad);
-        else if (!esTaller && esNoticia) {
+        else if (!esTaller && esNoticia && !esBolson) {
             getActivity().setTitle(R.string.nueva_noticia);
             etCuando.setVisibility(View.GONE);
+            spRepite.setVisibility(View.GONE);
+            etLink.setVisibility(View.VISIBLE);
+        } else if (!esTaller && !esNoticia && esBolson) {
+            getActivity().setTitle(R.string.nueva_bolson);
+            etNombre.setVisibility(View.GONE);
+            etDescripcion.setVisibility(View.GONE);
+            etCuando.setVisibility(View.GONE);
+            itvCamera.setVisibility(View.GONE);
+            ivCargada.setVisibility(View.GONE);
             spRepite.setVisibility(View.GONE);
             etLink.setVisibility(View.VISIBLE);
         }
@@ -185,7 +199,7 @@ public class ActividadesAdminFragment extends Fragment {
 
     private void Grabar() {
 
-        if (mSelectedImage == null) {
+        if (mSelectedImage == null && !esBolson && (esTaller || esNoticia)) {
             Snackbar.make(itvCamera, "Hay que seleccionar una imagen", Snackbar.LENGTH_LONG).show();
             return;
         }
@@ -198,22 +212,22 @@ public class ActividadesAdminFragment extends Fragment {
         String link = etLink.getText().toString().trim();
         int repite = spRepite.getSelectedItemPosition();
 
-        if (TextUtils.isEmpty(nombre)) {
+        if (TextUtils.isEmpty(nombre) && !esBolson) {
             etNombre.setError(getString(R.string.obligatorio));
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(descripcion)) {
+        if (TextUtils.isEmpty(descripcion) && !esBolson) {
             etDescripcion.setError(getString(R.string.obligatorio));
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(link) && esNoticia) {
+        if (TextUtils.isEmpty(link) && esNoticia && esBolson) {
             etLink.setError(getString(R.string.obligatorio));
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(cuando) && !esNoticia) {
+        if (TextUtils.isEmpty(cuando) && !esNoticia && !esBolson) {
             etCuando.setError(getString(R.string.obligatorio));
             cancel = true;
         }
@@ -226,21 +240,35 @@ public class ActividadesAdminFragment extends Fragment {
                 client.setTimeout(25000 * 10);
 
                 RequestParams params = new RequestParams();
-                params.put("descripcion", descripcion);
-                params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
-                if (!esNoticia) {
+                params.put("notifica", cbNotificar.isChecked() ? "true" : "false");
+
+                if (esNoticia && !esTaller && !esBolson) {
+                    params.put("titulo", nombre);
+                    params.put("descripcion", descripcion);
+                    params.put("link", link);
+                    params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
+                } else if (!esNoticia && esTaller && !esBolson) {
                     params.put("nombre", nombre);
+                    params.put("descripcion", descripcion);
+                    params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
                     params.put("cuando", cuando);
                     params.put("repeticion", repite);
                     params.put("esTallerCel", esTaller ? "true" : "false");
-                    params.put("notifica", cbNotificar.isChecked() ? "true" : "false");
-                } else {
-                    params.put("titulo", nombre);
+                } else if (!esNoticia && !esTaller && esBolson) {
                     params.put("link", link);
                 }
 
 
-                client.post(esNoticia ? Common.AGREGARNOTICIA : Common.AGREGARACTIVIDAD, params, new JsonHttpResponseHandler() {
+                String url = null;
+                if (esTaller && !esBolson && !esNoticia)
+                    url = Common.AGREGARACTIVIDAD;
+                else if (!esTaller && !esBolson && esNoticia)
+                    url = Common.AGREGARNOTICIA;
+                else if (!esTaller && esBolson && !esNoticia)
+                    url = Common.AGREGARBOLSON;
+
+
+                client.post(url, params, new JsonHttpResponseHandler() {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

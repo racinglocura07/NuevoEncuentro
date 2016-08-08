@@ -80,7 +80,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private boolean mEsAdmin;
     private boolean mTieneAdmin;
 
-    public AsyncHttpClient GetAsynk(){
+    public AsyncHttpClient GetAsynk() {
         return client;
     }
 
@@ -195,7 +195,9 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         int DAYS_UNTIL_PROMPT = 3;
         int LAUNCHES_UNTIL_PROMPT = 7;
 
-        if (preferences.getBoolean(RATE_NO_MOSTRAR, false)) { return ; }
+        if (preferences.getBoolean(RATE_NO_MOSTRAR, false)) {
+            return;
+        }
 
         final SharedPreferences.Editor editor = preferences.edit();
 
@@ -238,7 +240,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         editor.apply();
     }
 
-    public void mostrarMarket(){
+    public void mostrarMarket() {
         Uri uri = Uri.parse("market://details?id=" + getPackageName());
         Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
         try {
@@ -406,12 +408,19 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             if (getSupportFragmentManager().findFragmentByTag(Common.ACTIVIDADES) != null) {
                 args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
                 args.putBoolean(ActividadesAdminFragment.NOTICIAS, false);
+                args.putBoolean(ActividadesAdminFragment.BOLSON, false);
             } else if (getSupportFragmentManager().findFragmentByTag(Common.TALLERES) != null) {
                 args.putBoolean(ActividadesAdminFragment.ESTALLER, true);
                 args.putBoolean(ActividadesAdminFragment.NOTICIAS, false);
+                args.putBoolean(ActividadesAdminFragment.BOLSON, false);
             } else if (getSupportFragmentManager().findFragmentByTag(Common.NOTICIAS) != null) {
                 args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
                 args.putBoolean(ActividadesAdminFragment.NOTICIAS, true);
+                args.putBoolean(ActividadesAdminFragment.BOLSON, false);
+            } else if (getSupportFragmentManager().findFragmentByTag(Common.BOLSONES) != null) {
+                args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
+                args.putBoolean(ActividadesAdminFragment.NOTICIAS, false);
+                args.putBoolean(ActividadesAdminFragment.BOLSON, true);
             } else {
                 Toast.makeText(this, "Opcion no valida en esta seccion", Toast.LENGTH_LONG).show();
                 return true;
@@ -452,7 +461,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         } else if (id == R.id.nav_compras_comunitarias) {
             fragment = comprasFragment;
             tag = Common.BOLSONES;
-            mTieneAdmin = false;
+            mTieneAdmin = true;
         } else if (id == R.id.nav_contacto) {
             fragment = contactoFragment;
             tag = Common.CONTACTO;

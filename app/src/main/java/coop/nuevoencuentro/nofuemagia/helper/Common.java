@@ -82,7 +82,7 @@ public class Common {
 
     public static final String ESADMIN_URL = MAIN_URL + "backend/usuarios/esAdmin.php";
 
-    public static final String AGREGARACTIVIDAD = MAIN_URL + "backend/actividades/crearActividad.php";
+
     public static final String REGISTRAR_URL = MAIN_URL + "backend/usuarios/crearUsuario.php";
 
     public static final String imagenURL = MAIN_URL + "imagenes/";
@@ -95,7 +95,10 @@ public class Common {
     public static final String PAGINA_12 = "http://www.pagina12.com.ar/diario/rss/principal.xml";
     public static final String PAGINA_12_ULTIMAS = "http://www.pagina12.com.ar/diario/rss/ultimas_noticias.xml";
 
-    public static String AGREGARNOTICIA = MAIN_URL + "backend/noticias/crearNoticia.php";
+
+    public static final String AGREGARACTIVIDAD = MAIN_URL + "backend/actividades/crearActividad.php";
+    public static final String AGREGARNOTICIA = MAIN_URL + "backend/noticias/crearNoticia.php";
+    public static final String AGREGARBOLSON = MAIN_URL + "backend/bolsones/crearBolson.php";
 
 
     public static void ShowOkMessage(View v, int mensaje) {

@@ -85,6 +85,7 @@
     <string name="link">Link</string>
     <string name="calificar_app">Calificá la aplicación!</string>
     <string name="calificando_la_aplicaci_n_nos_ayudas_a_mejorarla">Si te gusta nuestra aplicación, danos una mano calificandola!\nNo te va a llevar más de un minuto, gracias!</string>
+    <string name="nueva_bolson">Nuevo Bolson</string>
     <string-array name="repeticion">
         <item>@string/no</item>
         <item>@string/una</item>
