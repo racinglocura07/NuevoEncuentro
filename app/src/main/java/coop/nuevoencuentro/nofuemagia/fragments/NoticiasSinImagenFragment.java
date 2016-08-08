@@ -23,6 +23,7 @@ import coop.nuevoencuentro.nofuemagia.adapters.NoticiasComunAdapter;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.xml.RSSItems;
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpHeaders;
 
 /**
  * Created by Tano on 31/07/2016.
@@ -170,6 +171,7 @@ public class NoticiasSinImagenFragment extends Fragment {
     };
 
     private void BuscarNoticias(String url) {
+        client.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
         client.get(getContext(), url, handler);
     }
 

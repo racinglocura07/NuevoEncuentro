@@ -1,8 +1,6 @@
 package coop.nuevoencuentro.nofuemagia.activities;
 
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,17 +12,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,9 +28,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.joanzapata.iconify.IconDrawable;
-import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
-import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -58,14 +51,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class PantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String IDACTIVIDAD = "IDACTIVIDAD";
-
     private FragmentManager fragmentManager;
     private SharedPreferences preferences;
     private ActionBar abar;
-
-
-    private ViewPager viewPager;
 
     private ComprasComunitariasFragment comprasFragment;
     private NoticiasFragment noticiasFragment;
@@ -108,9 +96,6 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-//        viewPager = (ViewPager) findViewById(R.id.vpager_principal);
-//        viewPager.setAdapter(new PantallaPrincipalAdapter(getSupportFragmentManager()));
 
         assert abar != null;
         assert fab != null;
@@ -259,10 +244,10 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
-                    System.out.println(response);
                     if (!response.getBoolean("error")) {
                         mEsAdmin = response.getBoolean("esAdmin");
                         invalidateOptionsMenu();
+                        preferences.edit().putBoolean(Common.ES_ADMIN, mEsAdmin).apply();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -329,7 +314,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     protected void onDestroy() {
         try {
             String tag = getSupportFragmentManager().findFragmentById(R.id.main_container).getTag();
-            preferences.edit().putString(Common.ULTIMA, tag).apply();
+            preferences.edit().putString(Common.ULTIMA, tag).putBoolean(Common.ES_ADMIN, false).apply();
         } catch (Exception ex) {
             //System.err.println(ex.getMessage());
         }
@@ -406,21 +391,21 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
             Bundle args = new Bundle();
             if (getSupportFragmentManager().findFragmentByTag(Common.ACTIVIDADES) != null) {
-                args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
-                args.putBoolean(ActividadesAdminFragment.NOTICIAS, false);
-                args.putBoolean(ActividadesAdminFragment.BOLSON, false);
+                args.putBoolean(AdminActivity.ESTALLER, false);
+                args.putBoolean(AdminActivity.NOTICIAS, false);
+                args.putBoolean(AdminActivity.BOLSON, false);
             } else if (getSupportFragmentManager().findFragmentByTag(Common.TALLERES) != null) {
-                args.putBoolean(ActividadesAdminFragment.ESTALLER, true);
-                args.putBoolean(ActividadesAdminFragment.NOTICIAS, false);
-                args.putBoolean(ActividadesAdminFragment.BOLSON, false);
+                args.putBoolean(AdminActivity.ESTALLER, true);
+                args.putBoolean(AdminActivity.NOTICIAS, false);
+                args.putBoolean(AdminActivity.BOLSON, false);
             } else if (getSupportFragmentManager().findFragmentByTag(Common.NOTICIAS) != null) {
-                args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
-                args.putBoolean(ActividadesAdminFragment.NOTICIAS, true);
-                args.putBoolean(ActividadesAdminFragment.BOLSON, false);
+                args.putBoolean(AdminActivity.ESTALLER, false);
+                args.putBoolean(AdminActivity.NOTICIAS, true);
+                args.putBoolean(AdminActivity.BOLSON, false);
             } else if (getSupportFragmentManager().findFragmentByTag(Common.BOLSONES) != null) {
-                args.putBoolean(ActividadesAdminFragment.ESTALLER, false);
-                args.putBoolean(ActividadesAdminFragment.NOTICIAS, false);
-                args.putBoolean(ActividadesAdminFragment.BOLSON, true);
+                args.putBoolean(AdminActivity.ESTALLER, false);
+                args.putBoolean(AdminActivity.NOTICIAS, false);
+                args.putBoolean(AdminActivity.BOLSON, true);
             } else {
                 Toast.makeText(this, "Opcion no valida en esta seccion", Toast.LENGTH_LONG).show();
                 return true;

@@ -11,10 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:padding="20dp"
         android:text="@string/fa_zoom"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/colorAccent"
-        android:padding="30dp"
         android:textSize="40sp" />
 
     <com.joanzapata.iconify.widget.IconTextView
@@ -22,9 +21,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="30dp"
+        android:padding="20dp"
         android:text="@string/fa_facebook"
         android:textColor="@color/colorAccent"
         android:textSize="40sp" />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@id/editar_actividad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="20dp"
+        android:text="{fa-pencil}"
+        android:textColor="@color/colorAccent"
+        android:textSize="40sp"
+        android:visibility="gone" />
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@id/borrar_actividad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="20dp"
+        android:text="{fa-trash}"
+        android:textColor="@color/colorAccent"
+        android:textSize="40sp"
+        android:visibility="gone" />
 
 </LinearLayout>

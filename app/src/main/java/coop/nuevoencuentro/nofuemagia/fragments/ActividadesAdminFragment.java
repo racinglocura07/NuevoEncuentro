@@ -3,7 +3,6 @@ package coop.nuevoencuentro.nofuemagia.fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -33,18 +32,17 @@ import com.joanzapata.iconify.widget.IconTextView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
+import com.squareup.picasso.LruCache;
+import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.Calendar;
 import java.util.Locale;
 
 import coop.nuevoencuentro.nofuemagia.R;
+import coop.nuevoencuentro.nofuemagia.activities.AdminActivity;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import cz.msebera.android.httpclient.Header;
 
@@ -54,10 +52,6 @@ import cz.msebera.android.httpclient.Header;
 public class ActividadesAdminFragment extends Fragment {
 
     private static final int SELECT_PICTURE = 0x1212;
-
-    public static final String ESTALLER = "ESTALLER";
-    public static final String NOTICIAS = "NOTICIAS";
-    public static final String BOLSON = "BOLSON";
 
     private TextInputEditText etNombre;
     private TextInputEditText etDescripcion;
@@ -77,6 +71,10 @@ public class ActividadesAdminFragment extends Fragment {
     private boolean esNoticia;
     private boolean esBolson;
 
+    private boolean editando;
+    private int id;
+    private String imagenURL;
+
 
     @Nullable
     @Override
@@ -84,9 +82,11 @@ public class ActividadesAdminFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_actividades_admin, container, false);
 
         Bundle args = getArguments();
-        esTaller = args.getBoolean(ActividadesAdminFragment.ESTALLER);
-        esNoticia = args.getBoolean(ActividadesAdminFragment.NOTICIAS);
-        esBolson = args.getBoolean(ActividadesAdminFragment.BOLSON);
+        esTaller = args.getBoolean(AdminActivity.ESTALLER);
+        esNoticia = args.getBoolean(AdminActivity.NOTICIAS);
+        esBolson = args.getBoolean(AdminActivity.BOLSON);
+
+        editando = args.getString(AdminActivity.TITULO, null) != null;
 
         calendar = Calendar.getInstance();
         mSelectedImage = null;
@@ -165,6 +165,21 @@ public class ActividadesAdminFragment extends Fragment {
             }
         });
 
+        if (editando) {
+            String nombre = args.getString(AdminActivity.TITULO, null);
+            String desc = args.getString(AdminActivity.DESCRIPCION, null);
+            imagenURL = args.getString(AdminActivity.IMAGEN_URL, null);
+            String cuando = args.getString(AdminActivity.CUANDO, null);
+            int repite = args.getInt(AdminActivity.REPITE, 0);
+            id = args.getInt(AdminActivity.ID, 0);
+
+            etNombre.setText(nombre);
+            etDescripcion.setText(desc);
+            etCuando.setText(cuando.replace("-", "/"));
+            Picasso.with(getContext()).load(imagenURL).into(ivCargada);
+            spRepite.setSelection(repite, true);
+        }
+
         return v;
     }
 
@@ -199,9 +214,11 @@ public class ActividadesAdminFragment extends Fragment {
 
     private void Grabar() {
 
-        if (mSelectedImage == null && !esBolson && (esTaller || esNoticia)) {
-            Snackbar.make(itvCamera, "Hay que seleccionar una imagen", Snackbar.LENGTH_LONG).show();
-            return;
+        if (mSelectedImage == null) {
+            if (!esBolson && !editando) {
+                Snackbar.make(itvCamera, "Hay que seleccionar una imagen", Snackbar.LENGTH_LONG).show();
+                return;
+            }
         }
 
         boolean cancel = false;
@@ -246,11 +263,17 @@ public class ActividadesAdminFragment extends Fragment {
                     params.put("titulo", nombre);
                     params.put("descripcion", descripcion);
                     params.put("link", link);
-                    params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
-                } else if (!esNoticia && esTaller && !esBolson) {
+                    if (!editando)
+                        params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
+                    else if (editando && mSelectedImage != null)
+                        params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
+                } else if (!esNoticia && !esBolson) {
                     params.put("nombre", nombre);
                     params.put("descripcion", descripcion);
-                    params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
+                    if (!editando)
+                        params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
+                    else if (editando && mSelectedImage != null)
+                        params.put("imagen_img", getActivity().getContentResolver().openInputStream(mSelectedImage));
                     params.put("cuando", cuando);
                     params.put("repeticion", repite);
                     params.put("esTallerCel", esTaller ? "true" : "false");
@@ -258,12 +281,19 @@ public class ActividadesAdminFragment extends Fragment {
                     params.put("link", link);
                 }
 
+                if (editando && !esNoticia)
+                    params.put("idActividad", id);
+
 
                 String url = null;
-                if (esTaller && !esBolson && !esNoticia)
-                    url = Common.AGREGARACTIVIDAD;
-                else if (!esTaller && !esBolson && esNoticia)
-                    url = Common.AGREGARNOTICIA;
+                if (!esBolson && !esNoticia && !editando)
+                    url = Common.AGREGAR_ACTIVIDAD;
+                else if (!esBolson && !esNoticia && editando)
+                    url = Common.EDITAR_ACTIVIDAD;
+                else if (!esTaller && !esBolson && esNoticia && !editando)
+                    url = Common.AGREGAR_NOTICIA;
+                else if (!esTaller && !esBolson && esNoticia && editando)
+                    url = Common.EDITAR_NOTICIA;
                 else if (!esTaller && esBolson && !esNoticia)
                     url = Common.AGREGARBOLSON;
 
@@ -287,6 +317,9 @@ public class ActividadesAdminFragment extends Fragment {
                             String title = error ? "Error" : "Nuevo Encuentro";
                             String msg = response.getString("mensaje");
                             Drawable icono = new IconDrawable(getContext(), error ? FontAwesomeIcons.fa_warning : FontAwesomeIcons.fa_hand_peace_o);
+
+                            if (editando)
+                                Picasso.with(getContext()).invalidate(imagenURL);
 
                             new AlertDialog.Builder(getContext())
                                     .setTitle(title)

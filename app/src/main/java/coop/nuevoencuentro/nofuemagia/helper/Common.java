@@ -66,6 +66,7 @@ public class Common {
     public static final String RECIBIR_ACTIVIDAD = "RECIBIR_ACTIVIDAD";
     public static final String RECIBIR_BOLSON = "RECIBIR_BOLSON";
     public static final String RECIBIR_MENSAJES = "RECIBIR_MENSAJES";
+    public static final String ES_ADMIN = "ES_ADMIN";
 
     public static final String ABRIR_DONDE = "ABRIR_DONDE";
     public static final String NOTICIAS = "Noticias";
@@ -96,8 +97,13 @@ public class Common {
     public static final String PAGINA_12_ULTIMAS = "http://www.pagina12.com.ar/diario/rss/ultimas_noticias.xml";
 
 
-    public static final String AGREGARACTIVIDAD = MAIN_URL + "backend/actividades/crearActividad.php";
-    public static final String AGREGARNOTICIA = MAIN_URL + "backend/noticias/crearNoticia.php";
+    public static final String AGREGAR_ACTIVIDAD = MAIN_URL + "backend/actividades/crearActividad.php";
+    public static final String EDITAR_ACTIVIDAD = MAIN_URL + "backend/actividades/editarActividad.php";
+    public static final String BORRAR_ACTIVIDAD = MAIN_URL + "backend/actividades/borrarActividad.php";
+
+    public static final String AGREGAR_NOTICIA = MAIN_URL + "backend/noticias/crearNoticia.php";
+    public static final String EDITAR_NOTICIA = MAIN_URL + "backend/noticias/editarNoticia.php";
+
     public static final String AGREGARBOLSON = MAIN_URL + "backend/bolsones/crearBolson.php";
 
 
@@ -143,7 +149,7 @@ public class Common {
     }
 
     public static void SincronizarBolsones(final ComprasComunitariasFragment frag) {
-        AsyncHttpClient client = ((PantallaPrincipal)frag.getActivity()).GetAsynk();
+        AsyncHttpClient client = ((PantallaPrincipal) frag.getActivity()).GetAsynk();
         client.get(urlBolsones, new JsonHttpResponseHandler() {
 
             @Override
@@ -208,7 +214,7 @@ public class Common {
     }
 
     public static void SincronizarActividades(final Fragment frag) {
-        AsyncHttpClient client = ((PantallaPrincipal)frag.getActivity()).GetAsynk();
+        AsyncHttpClient client = ((PantallaPrincipal) frag.getActivity()).GetAsynk();
         client.get(urlActividades, new JsonHttpResponseHandler() {
 
             @Override
@@ -289,7 +295,7 @@ public class Common {
     }
 
     public static void SincronizarNoticias(final NoticiasImagenFragment frag) {
-        AsyncHttpClient client = ((PantallaPrincipal)frag.getActivity()).GetAsynk();
+        AsyncHttpClient client = ((PantallaPrincipal) frag.getActivity()).GetAsynk();
         client.get(urlNoticias, new JsonHttpResponseHandler() {
 
             @Override

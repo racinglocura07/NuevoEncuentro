@@ -14,6 +14,18 @@ import coop.nuevoencuentro.nofuemagia.fragments.ActividadesAdminFragment;
  */
 public class AdminActivity extends AppCompatActivity {
 
+    public static final String ESTALLER = "ESTALLER";
+    public static final String NOTICIAS = "NOTICIAS";
+    public static final String BOLSON = "BOLSON";
+
+    public static final String TITULO = "TITULO";
+    public static final String DESCRIPCION = "DESCRIPCION";
+    public static final String IMAGEN_URL = "IMAGEN_URL";
+    public static final String CUANDO = "CUANDO";
+    public static final String REPITE = "REPITE";
+    public static final String ID = "ID";
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -50,8 +50,8 @@ public class ComprasComunitariasFragment extends Fragment {
         pbCompras = (ProgressBar) v.findViewById(R.id.pb_compras);
         pbNavegador = (ProgressBar) v.findViewById(R.id.pb_navegador);
 
-        pbCompras.setVisibility(View.GONE);
-        pbNavegador.setVisibility(View.VISIBLE);
+        pbCompras.setVisibility(View.VISIBLE);
+        pbNavegador.setVisibility(View.GONE);
 
         Bolsones ultimo = Bolsones.getLast();
         if (ultimo == null) {
@@ -88,6 +88,8 @@ public class ComprasComunitariasFragment extends Fragment {
 
     public void recargar() {
         pbCompras.setVisibility(View.GONE);
+        pbNavegador.setProgress(0);
+        pbNavegador.setVisibility(View.VISIBLE);
         Bolsones ultimo = Bolsones.getLast();
         wvCompras.loadUrl(ultimo.getLink());
     }
@@ -108,6 +110,7 @@ public class ComprasComunitariasFragment extends Fragment {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            pbCompras.setVisibility(View.GONE);
             pbNavegador.setVisibility(View.VISIBLE);
             super.onPageStarted(view, url, favicon);
         }

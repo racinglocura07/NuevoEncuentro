@@ -1,12 +1,14 @@
 package coop.nuevoencuentro.nofuemagia.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,17 +25,28 @@ import com.facebook.share.widget.ShareDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.widget.IconTextView;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
+import coop.nuevoencuentro.nofuemagia.activities.AdminActivity;
 import coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
+import coop.nuevoencuentro.nofuemagia.fragments.ActividadesAdminFragment;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
+import coop.nuevoencuentro.nofuemagia.xml.RSSItems;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia
@@ -70,6 +83,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
     public void onBindViewHolder(final ActividadesViewHolder holder, int position) {
         Actividades item = mDataset.get(position);
 
+        holder.item = item;
         holder.tvTitulo.setText(item.nombre);
         holder.tvDescripcion.setText(item.descripcion);
         holder.ivImagen.setTag(item);
@@ -102,8 +116,13 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         private final BlurLayout blur;
         private final IconTextView tvCargando;
 
+        private Actividades item;
+
         public ActividadesViewHolder(View itemView) {
             super(itemView);
+
+            SharedPreferences preferences = mContext.getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
+            boolean esAdmin = preferences.getBoolean(Common.ES_ADMIN, false);
 
             View hover = View.inflate(mContext, R.layout.hover_item_actividades, null);
             //LayoutInflater.from(mContext).inflate(R.layout.hover_item_actividades, null);// (ViewGroup) itemView.getRootView());
@@ -113,6 +132,86 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
             ivImagen = (ImageView) itemView.findViewById(R.id.iv_item_actividad);
             tvCargando = (IconTextView) itemView.findViewById(R.id.tv_cargando_actividad);
             blur = (BlurLayout) itemView.findViewById(R.id.blur_actividad);
+
+            IconTextView itvEditar = (IconTextView) hover.findViewById(R.id.editar_actividad);
+            IconTextView itvBorrar = (IconTextView) hover.findViewById(R.id.borrar_actividad);
+            if (esAdmin) {
+                itvEditar.setVisibility(View.VISIBLE);
+                itvEditar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle args = new Bundle();
+                        args.putBoolean(AdminActivity.ESTALLER, mEsTaller);
+                        args.putBoolean(AdminActivity.NOTICIAS, false);
+                        args.putBoolean(AdminActivity.BOLSON, false);
+
+                        args.putString(AdminActivity.TITULO, item.nombre);
+                        args.putString(AdminActivity.DESCRIPCION, item.descripcion);
+                        args.putString(AdminActivity.IMAGEN_URL, Common.imagenURL + (mEsTaller ? "taller-" : "actividad-") + item.idActividad + ".jpg");
+                        args.putString(AdminActivity.CUANDO, item.cuando);
+                        args.putInt(AdminActivity.REPITE, item.repeticion);
+                        args.putInt(AdminActivity.ID, item.idActividad);
+
+                        Intent adIntent = new Intent(mContext, AdminActivity.class);
+                        adIntent.putExtras(args);
+                        mContext.startActivity(adIntent);
+                    }
+                });
+                blur.addChildAppearAnimator(hover, R.id.editar_actividad, Techniques.BounceInUp, 1200);
+                blur.addChildDisappearAnimator(hover, R.id.editar_actividad, Techniques.SlideOutRight, 1200);
+
+                itvBorrar.setVisibility(View.VISIBLE);
+                itvBorrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new AlertDialog.Builder(mContext)
+                                .setCancelable(true)
+                                .setIcon(new IconDrawable(mContext, FontAwesomeIcons.fa_trash).colorRes(R.color.partido))
+                                .setTitle(R.string.eliminar_titulo)
+                                .setMessage(mContext.getResources().getString(R.string.eliminar, item.nombre))
+                                .setNegativeButton("No!", null)
+                                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        RequestParams params = new RequestParams();
+                                        params.put("notifica", "false");
+                                        params.put("idActividad", item.idActividad);
+
+                                        AsyncHttpClient client = ((PantallaPrincipal) mContext).GetAsynk();
+                                        client.post(Common.BORRAR_ACTIVIDAD, params, new JsonHttpResponseHandler() {
+                                            @Override
+                                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                                super.onSuccess(statusCode, headers, response);
+
+                                                try {
+                                                    final boolean error = response.getBoolean("error");
+                                                    String title = error ? "Error" : "Nuevo Encuentro";
+                                                    String msg = response.getString("mensaje");
+                                                    Drawable icono = new IconDrawable(mContext, error ? FontAwesomeIcons.fa_warning : FontAwesomeIcons.fa_hand_peace_o);
+
+                                                    new AlertDialog.Builder(mContext)
+                                                            .setTitle(title)
+                                                            .setMessage(msg)
+                                                            .setIcon(icono)
+                                                            .setPositiveButton("Ok", null)
+                                                            .show();
+
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                }).show();
+                    }
+                });
+                blur.addChildAppearAnimator(hover, R.id.borrar_actividad, Techniques.BounceInUp, 1200);
+                blur.addChildDisappearAnimator(hover, R.id.borrar_actividad, Techniques.SlideOutRight, 1200);
+
+            }
 
             blur.setHoverView(hover);
             blur.enableZoomBackground(true);

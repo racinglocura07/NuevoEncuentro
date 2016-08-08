@@ -74,4 +74,6 @@
     <item name="btn_compartir" type="id" />
     <item name="btn_leer" type="id" />
     <item name="tv_fecha_noticia_comun" type="id" />
+    <item name="editar_actividad" type="id" />
+    <item name="borrar_actividad" type="id" />
 </resources>

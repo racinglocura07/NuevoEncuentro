@@ -93,4 +93,8 @@
         <item>@string/tres</item>
         <item>@string/cuatro</item>
     </string-array>
+
+
+    <string name="eliminar">¿Está seguro que desea eliminar %1$s?</string>
+    <string name="eliminar_titulo">Eliminar</string>
 </resources>
