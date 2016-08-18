@@ -13,4 +13,11 @@
         android:title="@string/action_admin"
         android:visible="false"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@id/action_notif"
+        android:orderInCategory="120"
+        android:title="@string/action_notif"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
 </menu>

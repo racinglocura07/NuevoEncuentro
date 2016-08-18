@@ -15,10 +15,9 @@
     <string name="contacto">Contacto</string>
     <string name="comunicacion">Comunicación</string>
     <string name="compartir">Compartir</string>
-    <string name="salir">Salir</string>
+    <string name="salir">Cerrar Sesión</string>
 
     <string name="facebook_app_id" translatable="false">1770519086495157</string>
-
 
     <string name="iniciar_sesion">Se debe iniciar sesión para utilizar el sistema</string>
     <string name="bienvenida">Hola %1$s!</string>
@@ -97,4 +96,8 @@
 
     <string name="eliminar">¿Está seguro que desea eliminar %1$s?</string>
     <string name="eliminar_titulo">Eliminar</string>
+    <string name="twitter">Twitter</string>
+    <string name="action_notif">Notificación</string>
+    <string name="mensaje">Mensaje</string>
+    <string name="error_internet">Hubo un error al acceder al portal</string>
 </resources>

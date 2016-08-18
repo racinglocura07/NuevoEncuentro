@@ -2,6 +2,7 @@ package coop.nuevoencuentro.nofuemagia.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,7 +33,8 @@ import cz.msebera.android.httpclient.HttpHeaders;
  */
 public class NoticiasSinImagenFragment extends Fragment {
 
-    public static final String ESPAGINA = "ESPAGINA";
+    // public static final String ESPAGINA = "ESPAGINA";
+    public static final String QUE_NOTICIA = "QUE_NOTICIA";
     private AsyncHttpClient client;
     private SwipeRefreshLayout swipe;
     private RecyclerView recList;
@@ -53,13 +55,23 @@ public class NoticiasSinImagenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_nuestras_noticias, container, false);
 
-        if (getArguments().getBoolean(ESPAGINA)) {
-            url = Common.PAGINA_12;
-            handler = handlerPagina;
-            handler.setCharset("ISO-8859-1");
-        } else {
-            url = Common.NUESTAS_VOCES;
-            handler = handlerVoces;
+        Bundle args = getArguments();
+        url = args.getString(QUE_NOTICIA);
+
+        String que = args.getString(QUE_NOTICIA);
+        assert que != null;
+
+        switch (que) {
+            case Common.PAGINA_12:
+                handler = handlerPagina;
+                handler.setCharset("ISO-8859-1");
+                break;
+            case Common.NUESTAS_VOCES:
+                handler = handlerVoces;
+                break;
+            case Common.COMUNIDAD_BSAS:
+                handler = handlerVoces;
+                break;
         }
 
 
@@ -101,11 +113,13 @@ public class NoticiasSinImagenFragment extends Fragment {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
             System.out.println(statusCode + " - " + responseString);
+            swipe.setRefreshing(false);
+            Common.ShowOkMessage(swipe, R.string.error_internet);
         }
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            //System.out.println(statusCode + " - " + responseString);
+            System.out.println(statusCode + " - " + responseString);
 
             try {
                 List<RSSItems> items = RSSItems.parse(responseString, false);
@@ -117,6 +131,8 @@ public class NoticiasSinImagenFragment extends Fragment {
 
             } catch (Exception ex) {
                 System.out.println("Error xml = " + ex.getMessage());
+                swipe.setRefreshing(false);
+                Common.ShowOkMessage(swipe, R.string.error_internet);
             }
         }
     };
@@ -142,12 +158,16 @@ public class NoticiasSinImagenFragment extends Fragment {
 
             } catch (Exception ex) {
                 System.out.println("Error xml = " + ex.getMessage());
+                swipe.setRefreshing(false);
+                Common.ShowOkMessage(swipe, R.string.error_internet);
             }
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             System.out.println(statusCode + " - " + error.getMessage());
+            swipe.setRefreshing(false);
+            Common.ShowOkMessage(swipe, R.string.error_internet);
         }
     };
 

@@ -51,6 +51,11 @@ public class Actividades extends Model {
         this.esTaller = esTaller;
     }
 
+    public Actividades(int i, String s) {
+        this.idActividad = i;
+        this.nombre = s;
+    }
+
     public static List<Actividades> GetAll(boolean esTaller) {
         return new Select()
                 .from(Actividades.class)
@@ -64,5 +69,10 @@ public class Actividades extends Model {
                 .from(Actividades.class)
                 .orderBy("idActividad DESC")
                 .execute();
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 }

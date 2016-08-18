@@ -76,4 +76,11 @@
     <item name="tv_fecha_noticia_comun" type="id" />
     <item name="editar_actividad" type="id" />
     <item name="borrar_actividad" type="id" />
+    <item name="nav_twitter" type="id" />
+    <item name="list_tweets" type="id" />
+    <item name="swipe_tweet" type="id" />
+    <item name="et_titulo_notif" type="id" />
+    <item name="et_desc_notif" type="id" />
+    <item name="action_notif" type="id" />
+    <item name="sp_actividades" type="id" />
 </resources>

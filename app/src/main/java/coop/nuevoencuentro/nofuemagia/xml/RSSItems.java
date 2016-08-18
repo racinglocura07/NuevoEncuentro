@@ -88,7 +88,8 @@ public class RSSItems {
             } else {
                 Document doca = Jsoup.parse(description);
                 Element eme = doca.select("p").last();
-                eme.remove();
+                if (eme != null)
+                    eme.remove();
                 description = doca.text();
             }
             String link = e.select(("link")).text();

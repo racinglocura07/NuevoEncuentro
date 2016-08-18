@@ -15,6 +15,11 @@
             android:id="@id/nav_compras_comunitarias"
             android:title="@string/compras_comunitarias" />
         <item
+            android:id="@id/nav_twitter"
+            android:title="@string/twitter" />
+
+
+        <item
             android:id="@id/nav_contacto"
             android:title="@string/contacto" />
         <item

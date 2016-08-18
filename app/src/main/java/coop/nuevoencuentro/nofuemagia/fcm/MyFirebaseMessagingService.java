@@ -28,7 +28,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // TODO(developer): Handle FCM messages here.
         System.out.println("Mensaje" + " From: " + remoteMessage.getFrom());
 
-
+        System.out.println(remoteMessage.getData());
         checkNotification(remoteMessage.getData());
     }
 
@@ -50,9 +50,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         Intent intent = new Intent(this, PantallaPrincipal.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        if (idActividad != -1) {
+        if (idActividad > -1) {
             String imagenUrl = Common.imagenURL + "actividad-" + idActividad + ".jpg";
 
             Bundle args = new Bundle();
@@ -60,6 +60,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             intent = new Intent(this, FullscreenActivity.class);
             intent.putExtras(args);
+        }
+        else if ( idActividad == -2 ){
+            intent.putExtra(Common.ABRIR_DONDE, Common.BOLSONES);
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -54,7 +54,7 @@ public class Common {
     public static final String PREFERENCES = "NOFUEMAGIA_NUEVOENCUENTRO";
     public static final String YA_REGISTRADO = "YA_REGISTRADO";
 
-    public static final String PLAY_URL = "https://play.google.com/store/apps/details?id=coop.nuevoencuentro&hl=es";
+    public static final String PLAY_URL = "https://play.google.com/store/apps/details?id=coop.nuevoencuentro.nofuemagia&hl=es";
     public static final String EMAIL = "EMAIL";
     public static final String NOMBRE = "NOMBRE";
     public static final String FBID = "FBID";
@@ -105,6 +105,9 @@ public class Common {
     public static final String EDITAR_NOTICIA = MAIN_URL + "backend/noticias/editarNoticia.php";
 
     public static final String AGREGARBOLSON = MAIN_URL + "backend/bolsones/crearBolson.php";
+    public static final String TWITTER = "TWITTER";
+    public static final String ENVIARNOTIFICACION = MAIN_URL + "backend/enviar.php";
+    public static final String COMUNIDAD_BSAS = "http://comunidadbsas.com.ar/?feed=rss2";
 
 
     public static void ShowOkMessage(View v, int mensaje) {

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasImagenFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasSinImagenFragment;
+import coop.nuevoencuentro.nofuemagia.helper.Common;
 
 /**
  * Created by Tano on 31/07/2016.
@@ -38,15 +39,17 @@ public class NoticiasPageAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return Fragment.instantiate(mContext, NoticiasImagenFragment.class.getName());
+                args.putString(NoticiasSinImagenFragment.QUE_NOTICIA, Common.COMUNIDAD_BSAS);
+                return Fragment.instantiate(mContext, NoticiasSinImagenFragment.class.getName(), args);
             case 1:
-                args.putBoolean(NoticiasSinImagenFragment.ESPAGINA, false);
+                args.putString(NoticiasSinImagenFragment.QUE_NOTICIA, Common.NUESTAS_VOCES);
                 return Fragment.instantiate(mContext, NoticiasSinImagenFragment.class.getName(), args);
             case 2:
-                args.putBoolean(NoticiasSinImagenFragment.ESPAGINA, true);
+                args.putString(NoticiasSinImagenFragment.QUE_NOTICIA, Common.PAGINA_12);
                 return Fragment.instantiate(mContext, NoticiasSinImagenFragment.class.getName(), args);
             default:
-                return Fragment.instantiate(mContext, NoticiasImagenFragment.class.getName());
+                args.putString(NoticiasSinImagenFragment.QUE_NOTICIA, Common.COMUNIDAD_BSAS);
+                return Fragment.instantiate(mContext, NoticiasImagenFragment.class.getName(), args);
         }
     }
 
@@ -55,7 +58,7 @@ public class NoticiasPageAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "Novedades";
+                return "Comunidad BS AS";
             case 1:
                 return "Nuestras Voces";
             case 2:

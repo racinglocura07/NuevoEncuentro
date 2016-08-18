@@ -4,11 +4,14 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -18,9 +21,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +44,8 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesAdminFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
@@ -43,10 +53,16 @@ import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ContactoFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
+import coop.nuevoencuentro.nofuemagia.fragments.TwitterFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.UbicacionFragment;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
+import coop.nuevoencuentro.nofuemagia.model.Actividades;
 import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpHeaders;
+import cz.msebera.android.httpclient.entity.ByteArrayEntity;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 
 public class PantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,6 +72,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private ActionBar abar;
 
     private ComprasComunitariasFragment comprasFragment;
+    private TwitterFragment twitterFragment;
     private NoticiasFragment noticiasFragment;
     private ActividadesFragment actividadesFragment;
     private TalleresFragment talleresFragment;
@@ -68,6 +85,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private boolean mEsAdmin;
     private boolean mTieneAdmin;
 
+
     public AsyncHttpClient GetAsynk() {
         return client;
     }
@@ -77,11 +95,13 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        setContentView(R.layout.activity_pantalla_principal);
+
 
         mEsAdmin = false;
         mTieneAdmin = false;
 
-        setContentView(R.layout.activity_pantalla_principal);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         abar = getSupportActionBar();
@@ -121,6 +141,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         menu.findItem(R.id.nav_actividades).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_book).colorRes(R.color.partido));
         menu.findItem(R.id.nav_talleres).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_users).colorRes(R.color.partido));
         menu.findItem(R.id.nav_compras_comunitarias).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_shopping_bag).colorRes(R.color.partido));
+        menu.findItem(R.id.nav_twitter).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_twitter).colorRes(R.color.partido));
         menu.findItem(R.id.nav_contacto).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_info).colorRes(R.color.partido));
         menu.findItem(R.id.nav_ubicacion).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_map_marker).colorRes(R.color.partido));
         menu.findItem(R.id.nav_compartir).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_hand_peace_o).colorRes(R.color.partido));
@@ -148,19 +169,14 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             actividadesFragment = new ActividadesFragment();
             talleresFragment = new TalleresFragment();
             comprasFragment = new ComprasComunitariasFragment();
+            twitterFragment = new TwitterFragment();
             contactoFragment = new ContactoFragment();
             ubicacionFragment = new UbicacionFragment();
 
             fragmentManager = getSupportFragmentManager();
 
-            String ultima = preferences.getString(Common.ULTIMA, Common.NOTICIAS);
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                String abrirDonde = extras.getString(Common.ABRIR_DONDE);
-                AbrirEnFragment(abrirDonde == null ? ultima : abrirDonde);
-            } else {
-                AbrirEnFragment(ultima);
-            }
+            if (savedInstanceState == null)
+                CheckBundle();
 
 
             CheckEsAdmin(id);
@@ -168,6 +184,25 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
         } else {
             Loguearse();
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    private void CheckBundle() {
+        String ultima = preferences.getString(Common.ULTIMA, Common.NOTICIAS);
+        Bundle extras = getIntent().getExtras();
+        System.out.println("exttas " + extras);
+        System.out.println("ultima " + ultima);
+        if (extras != null) {
+            String abrirDonde = extras.getString(Common.ABRIR_DONDE);
+            AbrirEnFragment(abrirDonde == null ? ultima : abrirDonde);
+        } else {
+            AbrirEnFragment(ultima);
         }
     }
 
@@ -236,11 +271,14 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     }
 
     private void CheckEsAdmin(String id) {
+        preferences.edit().putBoolean(Common.ES_ADMIN, false).apply();
+        String ct = "application/x-www-form-urlencoded";
 
         RequestParams params = new RequestParams();
-        params.put("facebookId", id);
-        client.post(Common.ESADMIN_URL, params, new JsonHttpResponseHandler() {
-
+        params.put("facebookid", id);
+        String url = Common.ESADMIN_URL;
+        client.addHeader(HttpHeaders.CONTENT_TYPE, ct);
+        client.post(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
@@ -250,14 +288,15 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
                         preferences.edit().putBoolean(Common.ES_ADMIN, mEsAdmin).apply();
                     }
                 } catch (JSONException e) {
+                    preferences.edit().putBoolean(Common.ES_ADMIN, false).apply();
                     e.printStackTrace();
                 }
-
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                throwable.printStackTrace();
             }
         });
     }
@@ -286,16 +325,21 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             case Common.BOLSONES:
                 fragmentManager.beginTransaction().replace(R.id.main_container, comprasFragment, Common.BOLSONES).commit();
                 navigationView.getMenu().getItem(3).setChecked(true);
+                mTieneAdmin = true;
+                break;
+            case Common.TWITTER:
+                fragmentManager.beginTransaction().replace(R.id.main_container, twitterFragment, Common.TWITTER).commit();
+                navigationView.getMenu().getItem(4).setChecked(true);
                 mTieneAdmin = false;
                 break;
             case Common.CONTACTO:
                 fragmentManager.beginTransaction().replace(R.id.main_container, contactoFragment, Common.CONTACTO).commit();
-                navigationView.getMenu().getItem(4).setChecked(true);
+                navigationView.getMenu().getItem(5).setChecked(true);
                 mTieneAdmin = false;
                 break;
             case Common.MICOMUNA:
                 fragmentManager.beginTransaction().replace(R.id.main_container, ubicacionFragment, Common.MICOMUNA).commit();
-                navigationView.getMenu().getItem(5).setChecked(true);
+                navigationView.getMenu().getItem(6).setChecked(true);
                 mTieneAdmin = false;
                 break;
 
@@ -307,19 +351,30 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         super.onResume();
         if (!preferences.getBoolean(Common.FB_REG, false)) {
             Loguearse();
+        } else {
+            //CheckBundle();
         }
     }
 
     @Override
     protected void onDestroy() {
+        GrabarUltimo();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        GrabarUltimo();
+        super.onPause();
+    }
+
+    private void GrabarUltimo() {
         try {
             String tag = getSupportFragmentManager().findFragmentById(R.id.main_container).getTag();
-            preferences.edit().putString(Common.ULTIMA, tag).putBoolean(Common.ES_ADMIN, false).apply();
+            preferences.edit().putString(Common.ULTIMA, tag).apply();
         } catch (Exception ex) {
             //System.err.println(ex.getMessage());
         }
-
-        super.onDestroy();
     }
 
     private void sendRegistrationToServer(String token, String fid, String nombre, String email) {
@@ -362,6 +417,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+            CheckEsAdmin(preferences.getString(Common.FBID, null));
         } else {
             //super.onBackPressed();
             moveTaskToBack(true);
@@ -371,10 +427,14 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pantalla_principal, menu);
-        MenuItem miAdmin = menu.findItem(R.id.action_admin);
 
+        MenuItem miAdmin = menu.findItem(R.id.action_admin);
+        miAdmin.setIcon(new IconDrawable(this, FontAwesomeIcons.fa_plus).colorRes(R.color.blanco).actionBarSize());
         miAdmin.setVisible(mEsAdmin && mTieneAdmin);
 
+        MenuItem miNotif = menu.findItem(R.id.action_notif);
+        miNotif.setIcon(new IconDrawable(this, FontAwesomeIcons.fa_paper_plane).colorRes(R.color.blanco).actionBarSize());
+        miNotif.setVisible(mEsAdmin);
 
         return true;
     }
@@ -415,9 +475,79 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             admin.putExtras(args);
             startActivity(admin);
             return true;
+        } else if (id == R.id.action_notif) {
+            EnviarNotificacion();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void EnviarNotificacion() {
+
+        List<Actividades> lista = Actividades.GetAll();
+        lista.add(0, new Actividades(-1, "--Ninguna--"));
+        lista.add(1, new Actividades(-2, "--FORMULARIO--"));
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, lista);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
+        View dialogView = View.inflate(this, R.layout.dialog_notificacion, null);// LayoutInflater.from(this).inflate(R.layout.dialog_nombre, null, false);
+        final TextInputEditText etTitulo = (TextInputEditText) dialogView.findViewById(R.id.et_titulo_notif);
+        final TextInputEditText etMensaje = (TextInputEditText) dialogView.findViewById(R.id.et_desc_notif);
+        final Spinner spActividades = (Spinner) dialogView.findViewById(R.id.sp_actividades);
+        spActividades.setAdapter(spinnerArrayAdapter);
+
+
+        new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle(R.string.app_name)
+                .setCancelable(true)
+                .setIcon(new IconDrawable(this, FontAwesomeIcons.fa_paper_plane).actionBarSize().color(R.color.colorAccent))
+                .setView(dialogView)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        RequestParams params = new RequestParams();
+                        params.put("titulo", etTitulo.getText().toString().trim());
+                        params.put("cuerpo", etMensaje.getText().toString().trim());
+                        params.put("idActividad", ((Actividades) spActividades.getSelectedItem()).idActividad);
+
+                        client.post(Common.ENVIARNOTIFICACION, params, new JsonHttpResponseHandler() {
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                //super.onFailure(statusCode, headers, responseString, throwable);
+                                throwable.printStackTrace();
+                                System.out.println(responseString);
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+
+                                try {
+                                    final boolean error = response.getBoolean("error");
+                                    String title = error ? "Error" : "Nuevo Encuentro";
+                                    String msg = response.getString("mensaje");
+                                    Drawable icono = new IconDrawable(PantallaPrincipal.this, error ? FontAwesomeIcons.fa_warning : FontAwesomeIcons.fa_hand_peace_o);
+
+                                    new AlertDialog.Builder(PantallaPrincipal.this)
+                                            .setTitle(title)
+                                            .setMessage(msg)
+                                            .setIcon(icono)
+                                            .setPositiveButton("Ok", null)
+                                            .show();
+
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                })
+                .show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -447,6 +577,10 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
             fragment = comprasFragment;
             tag = Common.BOLSONES;
             mTieneAdmin = true;
+        } else if (id == R.id.nav_twitter) {
+            fragment = twitterFragment;
+            tag = Common.TWITTER;
+            mTieneAdmin = false;
         } else if (id == R.id.nav_contacto) {
             fragment = contactoFragment;
             tag = Common.CONTACTO;

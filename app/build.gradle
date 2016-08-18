@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 
-
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
@@ -10,8 +9,8 @@ android {
         applicationId "coop.nuevoencuentro.nofuemagia"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 38
-        versionName "0.4.9"
+        versionCode 41
+        versionName "0.5.2"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
     }
@@ -25,7 +24,7 @@ android {
 
 ext {
     supportLibVersion = '24.1.1'
-    playLibVersion = '9.2.1'
+    playLibVersion = '9.4.0'
 }
 
 dependencies {
@@ -66,6 +65,10 @@ dependencies {
     compile 'com.github.ViksaaSkool:AwesomeSplash:v1.0.0'
 
     compile 'org.jsoup:jsoup:1.8.3'
+
+    compile('com.twitter.sdk.android:twitter:2.0.0@aar') {
+        transitive = true;
+    }
 
 
 }
