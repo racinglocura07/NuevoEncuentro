@@ -276,11 +276,12 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
     private void CheckEsAdmin(String id) {
         preferences.edit().putBoolean(Common.ES_ADMIN, false).apply();
-        String ct = "application/x-www-form-urlencoded";
+
 
         RequestParams params = new RequestParams();
         params.put("facebookid", id);
         String url = Common.ESADMIN_URL;
+        String ct = "application/x-www-form-urlencoded";
         client.addHeader(HttpHeaders.CONTENT_TYPE, ct);
         client.post(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -398,6 +399,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         params.put("nombreApellido", nombre);
         params.put("email", email);
 
+        String ct = "application/x-www-form-urlencoded";
+        client.addHeader(HttpHeaders.CONTENT_TYPE, ct);
         client.post(Common.REGISTRAR_URL, params, new JsonHttpResponseHandler() {
 
             @Override
