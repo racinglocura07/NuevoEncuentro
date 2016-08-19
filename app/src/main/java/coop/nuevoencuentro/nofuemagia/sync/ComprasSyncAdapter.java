@@ -23,8 +23,6 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        System.out.println("Sincronizando, Con errores? " + syncResult.hasError());
-
         SyncHttpClient client = new SyncHttpClient();
 
         String que = extras.getString("QUE");
@@ -35,9 +33,6 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
         } else if (que != null && que.equals(Common.NOTICIAS)) {
             Common.SincronizarNoticias(getContext(), client, syncResult);
         }
-
-        System.out.println("Stast:");
-        System.out.println(syncResult.stats);
     }
 
 

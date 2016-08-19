@@ -26,9 +26,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // TODO(developer): Handle FCM messages here.
-        System.out.println("Mensaje" + " From: " + remoteMessage.getFrom());
-
-        System.out.println(remoteMessage.getData());
         checkNotification(remoteMessage.getData());
     }
 

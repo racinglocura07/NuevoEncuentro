@@ -185,7 +185,6 @@ public class Common {
             e.printStackTrace();
             if (result != null)
                 result.stats.numIoExceptions++;
-            System.out.println(e.getMessage());
         } finally {
             System.out.println("Bien bolson");
             ActiveAndroid.endTransaction();
@@ -346,7 +345,6 @@ public class Common {
             e.printStackTrace();
             if (result != null)
                 result.stats.numIoExceptions++;
-            System.out.println(e.getMessage());
         } finally {
             System.out.println("Bien Noticias");
             ActiveAndroid.endTransaction();

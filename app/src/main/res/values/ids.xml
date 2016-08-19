@@ -83,4 +83,6 @@
     <item name="et_desc_notif" type="id" />
     <item name="action_notif" type="id" />
     <item name="sp_actividades" type="id" />
+    <item name="col_toolbar" type="id" />
+    <item name="app_bar" type="id" />
 </resources>

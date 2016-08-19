@@ -116,9 +116,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
         preferences.edit().clear().apply();
 
-        if (preferences.getBoolean(Common.VER_TOUR_LOGIN, true)) {
-            System.out.println("Mostrar tour");
-        }
+//        if (preferences.getBoolean(Common.VER_TOUR_LOGIN, true)) {
+//            System.out.println("Mostrar tour");
+//        }
 
         if (Build.VERSION.SDK_INT < 16) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -182,7 +182,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                             SavePreferences(email, name, id, primerNombre, true);
                         } catch (JSONException e) {
-                            System.out.println(e.getMessage());
                             e.printStackTrace();
                         }
                     }

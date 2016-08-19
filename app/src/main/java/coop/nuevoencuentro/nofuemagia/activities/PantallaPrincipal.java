@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -69,7 +71,6 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
     private FragmentManager fragmentManager;
     private SharedPreferences preferences;
-    private ActionBar abar;
 
     private ComprasComunitariasFragment comprasFragment;
     private TwitterFragment twitterFragment;
@@ -84,6 +85,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
     private boolean mEsAdmin;
     private boolean mTieneAdmin;
+    private CollapsingToolbarLayout col;
+    private AppBarLayout appBar;
 
 
     public AsyncHttpClient GetAsynk() {
@@ -104,7 +107,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        abar = getSupportActionBar();
+        col = (CollapsingToolbarLayout) findViewById(R.id.col_toolbar);
+        appBar = (AppBarLayout) findViewById(R.id.app_bar);
 
         preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
 
@@ -117,7 +121,7 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        assert abar != null;
+        assert col != null;
         assert fab != null;
         assert drawer != null;
         assert navigationView != null;
@@ -559,37 +563,45 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         int id = item.getItemId();
         String tag = null;
 
-        abar.setTitle(item.getTitle());
+        col.setTitle(item.getTitle());
 
         if (id == R.id.nav_noticias) {
             fragment = noticiasFragment;
             tag = Common.NOTICIAS;
             mTieneAdmin = true;
+            appBar.setExpanded(true);
         } else if (id == R.id.nav_actividades) {
             fragment = actividadesFragment;
             tag = Common.ACTIVIDADES;
+            appBar.setExpanded(true);
             mTieneAdmin = true;
         } else if (id == R.id.nav_talleres) {
             fragment = talleresFragment;
+            appBar.setExpanded(true);
             tag = Common.TALLERES;
             mTieneAdmin = true;
         } else if (id == R.id.nav_compras_comunitarias) {
             fragment = comprasFragment;
             tag = Common.BOLSONES;
+            appBar.setExpanded(false);
             mTieneAdmin = true;
         } else if (id == R.id.nav_twitter) {
             fragment = twitterFragment;
             tag = Common.TWITTER;
+            appBar.setExpanded(false);
             mTieneAdmin = false;
         } else if (id == R.id.nav_contacto) {
             fragment = contactoFragment;
             tag = Common.CONTACTO;
+            appBar.setExpanded(false);
             mTieneAdmin = false;
         } else if (id == R.id.nav_ubicacion) {
             fragment = ubicacionFragment;
+            appBar.setExpanded(false);
             tag = Common.MICOMUNA;
             mTieneAdmin = false;
         } else if (id == R.id.nav_compartir) {
+            appBar.setExpanded(false);
             CompartirApp();
         } else if (id == R.id.nav_salir) {
             LoginManager.getInstance().logOut();

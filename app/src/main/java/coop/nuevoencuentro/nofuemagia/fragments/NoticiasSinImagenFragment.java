@@ -112,15 +112,13 @@ public class NoticiasSinImagenFragment extends Fragment {
     private TextHttpResponseHandler handlerVoces = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            System.out.println(statusCode + " - " + responseString);
+            throwable.printStackTrace();
             swipe.setRefreshing(false);
             Common.ShowOkMessage(swipe, R.string.error_internet);
         }
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            System.out.println(statusCode + " - " + responseString);
-
             try {
                 List<RSSItems> items = RSSItems.parse(responseString, false);
                 adapter.setItems(items);
@@ -164,8 +162,8 @@ public class NoticiasSinImagenFragment extends Fragment {
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-            System.out.println(statusCode + " - " + error.getMessage());
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable throwable) {
+            throwable.printStackTrace();
             swipe.setRefreshing(false);
             Common.ShowOkMessage(swipe, R.string.error_internet);
         }

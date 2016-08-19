@@ -305,7 +305,7 @@ public class ActividadesAdminFragment extends Fragment {
                         super.onFailure(statusCode, headers, responseString, throwable);
                         Toast.makeText(getContext(), responseString, Toast.LENGTH_LONG).show();
                         HabilitarVistas(true);
-                        System.out.println(responseString);
+                        throwable.printStackTrace();
                     }
 
                     @Override
