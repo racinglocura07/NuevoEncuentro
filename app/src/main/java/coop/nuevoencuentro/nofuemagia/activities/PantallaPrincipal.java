@@ -315,36 +315,43 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
                 fragmentManager.beginTransaction().replace(R.id.main_container, noticiasFragment, Common.NOTICIAS).commit();
                 navigationView.getMenu().getItem(0).setChecked(true);
                 mTieneAdmin = true;
+                appBar.setExpanded(true);
                 break;
             case Common.ACTIVIDADES:
                 fragmentManager.beginTransaction().replace(R.id.main_container, actividadesFragment, Common.ACTIVIDADES).commit();
                 navigationView.getMenu().getItem(1).setChecked(true);
                 mTieneAdmin = true;
+                appBar.setExpanded(true);
                 break;
             case Common.TALLERES:
                 fragmentManager.beginTransaction().replace(R.id.main_container, talleresFragment, Common.TALLERES).commit();
                 navigationView.getMenu().getItem(2).setChecked(true);
                 mTieneAdmin = true;
+                appBar.setExpanded(true);
                 break;
             case Common.BOLSONES:
                 fragmentManager.beginTransaction().replace(R.id.main_container, comprasFragment, Common.BOLSONES).commit();
                 navigationView.getMenu().getItem(3).setChecked(true);
                 mTieneAdmin = true;
+                appBar.setExpanded(false);
                 break;
             case Common.TWITTER:
                 fragmentManager.beginTransaction().replace(R.id.main_container, twitterFragment, Common.TWITTER).commit();
                 navigationView.getMenu().getItem(4).setChecked(true);
                 mTieneAdmin = false;
+                appBar.setExpanded(false);
                 break;
             case Common.CONTACTO:
                 fragmentManager.beginTransaction().replace(R.id.main_container, contactoFragment, Common.CONTACTO).commit();
                 navigationView.getMenu().getItem(5).setChecked(true);
                 mTieneAdmin = false;
+                appBar.setExpanded(false);
                 break;
             case Common.MICOMUNA:
                 fragmentManager.beginTransaction().replace(R.id.main_container, ubicacionFragment, Common.MICOMUNA).commit();
                 navigationView.getMenu().getItem(6).setChecked(true);
                 mTieneAdmin = false;
+                appBar.setExpanded(false);
                 break;
 
         }
@@ -421,7 +428,6 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-            CheckEsAdmin(preferences.getString(Common.FBID, null));
         } else {
             //super.onBackPressed();
             moveTaskToBack(true);
@@ -557,6 +563,8 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        CheckEsAdmin(preferences.getString(Common.FBID, null));
 
         Fragment fragment = null;
 

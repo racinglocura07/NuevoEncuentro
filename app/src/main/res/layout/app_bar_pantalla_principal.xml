@@ -8,19 +8,30 @@
     tools:context=".activities.PantallaPrincipal">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="192dp"
         android:fitsSystemWindows="true"
-        android:id="@id/app_bar"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@id/col_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@id/col_toolbar"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleTextAppearance="@style/CollapsingToolbarLayoutExpandedTextStyle"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/app_name"
+                android:fitsSystemWindows="true"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/rectangulo"
+                app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
