@@ -29,10 +29,13 @@ import android.widget.Toast;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.widget.IconTextView;
+//import com.loopj.android.http.AsyncHttpClient;
+//import com.loopj.android.http.JsonHttpResponseHandler;
+//import com.loopj.android.http.RequestParams;
+//import com.squareup.picasso.LruCache;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -45,6 +48,7 @@ import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.AdminActivity;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import cz.msebera.android.httpclient.Header;
+//import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by jlionti on 29/07/2016. No Fue Magia
@@ -252,6 +256,7 @@ public class ActividadesAdminFragment extends Fragment {
         if (!cancel) {
             try {
                 HabilitarVistas(false);
+
                 AsyncHttpClient client = new AsyncHttpClient();
                 client.setConnectTimeout(25000 * 10);
                 client.setTimeout(25000 * 10);

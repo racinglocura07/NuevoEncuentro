@@ -4,10 +4,11 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -16,40 +17,44 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import coop.nuevoencuentro.nofuemagia.R;
-import coop.nuevoencuentro.nofuemagia.fragments.ActividadesAdminFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ContactoFragment;
@@ -58,13 +63,16 @@ import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TwitterFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.UbicacionFragment;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
+import coop.nuevoencuentro.nofuemagia.helper.CustomRequest;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
 import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpHeaders;
-import cz.msebera.android.httpclient.entity.ByteArrayEntity;
-import cz.msebera.android.httpclient.message.BasicHeader;
-import cz.msebera.android.httpclient.protocol.HTTP;
+
+//import com.loopj.android.http.AsyncHttpClient;
+//import com.loopj.android.http.JsonHttpResponseHandler;
+//import com.loopj.android.http.RequestParams;
+
+//import cz.msebera.android.httpclient.Header;
+//import cz.msebera.android.httpclient.HttpHeaders;
 
 
 public class PantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -81,16 +89,17 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private UbicacionFragment ubicacionFragment;
     private NavigationView navigationView;
 
-    private AsyncHttpClient client;
+    //private AsyncHttpClient client;
 
     private boolean mEsAdmin;
     private boolean mTieneAdmin;
-    private CollapsingToolbarLayout col;
+
+    private RequestQueue mRequestQueue;
     private AppBarLayout appBar;
+    private CollapsingToolbarLayout col;
 
-
-    public AsyncHttpClient GetAsynk() {
-        return client;
+    public RequestQueue GetRequest() {
+        return mRequestQueue;
     }
 
 
@@ -107,24 +116,29 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        col = (CollapsingToolbarLayout) findViewById(R.id.col_toolbar);
-        appBar = (AppBarLayout) findViewById(R.id.app_bar);
 
         preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
 
-        client = new AsyncHttpClient();
+        /*client = new AsyncHttpClient();
         client.setConnectTimeout(25000 * 10);
-        client.setTimeout(25000 * 10);
+        client.setTimeout(25000 * 10);*/
+
+        Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
+        Network network = new BasicNetwork(new HurlStack());
+        mRequestQueue = new RequestQueue(cache, network);
+        mRequestQueue.start();
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        appBar = (AppBarLayout) findViewById(R.id.app_bar);
+        col = (CollapsingToolbarLayout) findViewById(R.id.col_toolbar);
 
-        assert col != null;
         assert fab != null;
         assert drawer != null;
         assert navigationView != null;
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +146,6 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
-
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -277,15 +290,13 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
     private void CheckEsAdmin(String id) {
         preferences.edit().putBoolean(Common.ES_ADMIN, false).apply();
 
-
-        RequestParams params = new RequestParams();
+        final Map<String, String> params = new HashMap<>();
         params.put("facebookid", id);
+
         String url = Common.ESADMIN_URL;
-        String ct = "application/x-www-form-urlencoded";
-        client.addHeader(HttpHeaders.CONTENT_TYPE, ct);
-        client.post(url, params, new JsonHttpResponseHandler() {
+        CustomRequest checkAdmin = new CustomRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onResponse(JSONObject response) {
                 try {
                     if (!response.getBoolean("error")) {
                         mEsAdmin = response.getBoolean("esAdmin");
@@ -297,13 +308,14 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
                     e.printStackTrace();
                 }
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                throwable.printStackTrace();
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
         });
+
+        mRequestQueue.add(checkAdmin);
     }
 
 
@@ -363,8 +375,6 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         super.onResume();
         if (!preferences.getBoolean(Common.FB_REG, false)) {
             Loguearse();
-        } else {
-            //CheckBundle();
         }
     }
 
@@ -393,36 +403,36 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
         if (token == null || token.equals("") || fid == null || fid.equals("") || nombre == null || nombre.equals(""))
             return;
 
-        RequestParams params = new RequestParams();
+        final Map<String, String> params = new HashMap<>();
         params.put("registrationId", token);
         params.put("facebookId", fid);
         params.put("nombreApellido", nombre);
         params.put("email", email);
 
-        String ct = "application/x-www-form-urlencoded";
-        client.addHeader(HttpHeaders.CONTENT_TYPE, ct);
-        client.post(Common.REGISTRAR_URL, params, new JsonHttpResponseHandler() {
-
+        String url = Common.REGISTRAR_URL;
+        CustomRequest registrar = new CustomRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onResponse(JSONObject response) {
                 try {
                     if (!response.getBoolean("error")) {
-                        SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putBoolean(Common.YA_REGISTRADO, true);
-                        editor.apply();
+                        System.out.println("REGISTRADO!");
+                        preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
+                        preferences.edit().putBoolean(Common.YA_REGISTRADO, true).apply();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    preferences.edit().putBoolean(Common.YA_REGISTRADO, false).apply();
                 }
-
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                preferences.edit().putBoolean(Common.YA_REGISTRADO, false).apply();
             }
         });
+
+        mRequestQueue.add(registrar);
     }
 
     @Override
@@ -521,24 +531,15 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        RequestParams params = new RequestParams();
+                        Map<String, String> params = new HashMap<>();
                         params.put("titulo", etTitulo.getText().toString().trim());
                         params.put("cuerpo", etMensaje.getText().toString().trim());
-                        params.put("idActividad", ((Actividades) spActividades.getSelectedItem()).idActividad);
+                        params.put("idActividad", ((Actividades) spActividades.getSelectedItem()).idActividad + "");
 
-                        client.post(Common.ENVIARNOTIFICACION, params, new JsonHttpResponseHandler() {
-
+                        String url = Common.ENVIARNOTIFICACION;
+                        CustomRequest registrar = new CustomRequest(Request.Method.POST, url, params, new Response.Listener<JSONObject>() {
                             @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                //super.onFailure(statusCode, headers, responseString, throwable);
-                                throwable.printStackTrace();
-                                System.out.println(responseString);
-                            }
-
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                super.onSuccess(statusCode, headers, response);
-
+                            public void onResponse(JSONObject response) {
                                 try {
                                     final boolean error = response.getBoolean("error");
                                     String title = error ? "Error" : "Nuevo Encuentro";
@@ -557,7 +558,15 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
                                     e.printStackTrace();
                                 }
                             }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.printStackTrace();
+                                preferences.edit().putBoolean(Common.YA_REGISTRADO, false).apply();
+                            }
                         });
+
+                        mRequestQueue.add(registrar);
                     }
                 })
                 .show();
@@ -565,60 +574,61 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        CheckEsAdmin(preferences.getString(Common.FBID, null));
+        //CheckEsAdmin(preferences.getString(Common.FBID, null));
 
         Fragment fragment = null;
 
+        setTitle(item.getTitle());
+
         int id = item.getItemId();
         String tag = null;
-
-        col.setTitle(item.getTitle());
 
         if (id == R.id.nav_noticias) {
             fragment = noticiasFragment;
             tag = Common.NOTICIAS;
             mTieneAdmin = true;
-            appBar.setExpanded(true);
+            appBar.setExpanded(true, true);
         } else if (id == R.id.nav_actividades) {
             fragment = actividadesFragment;
             tag = Common.ACTIVIDADES;
-            appBar.setExpanded(true);
+            appBar.setExpanded(true, true);
             mTieneAdmin = true;
         } else if (id == R.id.nav_talleres) {
             fragment = talleresFragment;
-            appBar.setExpanded(true);
+            appBar.setExpanded(true, true);
             tag = Common.TALLERES;
             mTieneAdmin = true;
         } else if (id == R.id.nav_compras_comunitarias) {
             fragment = comprasFragment;
             tag = Common.BOLSONES;
-            appBar.setExpanded(false);
+            appBar.setExpanded(false, true);
             mTieneAdmin = true;
         } else if (id == R.id.nav_twitter) {
             fragment = twitterFragment;
             tag = Common.TWITTER;
-            appBar.setExpanded(false);
+            appBar.setExpanded(false, true);
             mTieneAdmin = false;
         } else if (id == R.id.nav_contacto) {
             fragment = contactoFragment;
             tag = Common.CONTACTO;
-            appBar.setExpanded(false);
+            appBar.setExpanded(false, true);
             mTieneAdmin = false;
         } else if (id == R.id.nav_ubicacion) {
             fragment = ubicacionFragment;
-            appBar.setExpanded(false);
+            appBar.setExpanded(false, true);
             tag = Common.MICOMUNA;
             mTieneAdmin = false;
         } else if (id == R.id.nav_compartir) {
-            appBar.setExpanded(false);
+            appBar.setExpanded(false, true);
             CompartirApp();
         } else if (id == R.id.nav_salir) {
             LoginManager.getInstance().logOut();
             Loguearse();
             return true;
         }
+
 
         if (fragment != null)
             fragmentManager.beginTransaction().replace(R.id.main_container, fragment, tag).commit();

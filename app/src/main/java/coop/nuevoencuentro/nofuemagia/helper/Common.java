@@ -19,11 +19,17 @@ import android.view.View;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.SyncHttpClient;
+//import com.loopj.android.http.AsyncHttpClient;
+//import com.loopj.android.http.JsonHttpResponseHandler;
+//import com.loopj.android.http.SyncHttpClient;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,7 +48,8 @@ import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
 import coop.nuevoencuentro.nofuemagia.model.Bolsones;
 import coop.nuevoencuentro.nofuemagia.model.Noticias;
-import cz.msebera.android.httpclient.Header;
+import coop.nuevoencuentro.nofuemagia.xml.RSSItems;
+//import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by Tano on 16/06/2016.
@@ -82,8 +89,6 @@ public class Common {
     public static final String MAIN_URL = "http://nofuemagia.ueuo.com/Nuevo/";
 
     public static final String ESADMIN_URL = MAIN_URL + "backend/usuarios/esAdmin.php";
-
-
     public static final String REGISTRAR_URL = MAIN_URL + "backend/usuarios/crearUsuario.php";
 
     public static final String imagenURL = MAIN_URL + "imagenes/";
@@ -105,9 +110,12 @@ public class Common {
     public static final String EDITAR_NOTICIA = MAIN_URL + "backend/noticias/editarNoticia.php";
 
     public static final String AGREGARBOLSON = MAIN_URL + "backend/bolsones/crearBolson.php";
-    public static final String TWITTER = "TWITTER";
+
     public static final String ENVIARNOTIFICACION = MAIN_URL + "backend/enviar.php";
+
+    public static final String TWITTER = "TWITTER";
     public static final String COMUNIDAD_BSAS = "http://comunidadbsas.com.ar/?feed=rss2";
+    public static final String CONTENT_TYPE = "application/x-www-form-urlencoded; charset=UTF-8";
 
 
     public static void ShowOkMessage(View v, int mensaje) {
@@ -126,11 +134,10 @@ public class Common {
         snackBar.show();
     }
 
-    public static void SincronizarBolsones(final Context mContext, SyncHttpClient client, final SyncResult result) {
-        client.get(urlBolsones, new JsonHttpResponseHandler() {
-
+    public static void SincronizarBolsones(final Context mContext, RequestQueue req, final SyncResult result) {
+        CustomRequest ultimas = new CustomRequest(Request.Method.POST, urlBolsones, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onResponse(JSONObject response) {
                 guadarBolsones(response, result);
 
                 Intent intent = new Intent(mContext, PantallaPrincipal.class);
@@ -143,29 +150,32 @@ public class Common {
                 if (preferences.getBoolean(Common.RECIBIR_BOLSON, true))
                     Common.sendNotification(mContext, mContext.getString(R.string.titulo_notif_bolson), mContext.getString(R.string.desc_notif_bolson), pendingIntent);
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
         });
+
+        req.add(ultimas);
     }
 
     public static void SincronizarBolsones(final ComprasComunitariasFragment frag) {
-        AsyncHttpClient client = ((PantallaPrincipal) frag.getActivity()).GetAsynk();
-        client.get(urlBolsones, new JsonHttpResponseHandler() {
-
+        RequestQueue mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        CustomRequest ultimas = new CustomRequest(Request.Method.POST, urlBolsones, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            public void onResponse(JSONObject response) {
                 guadarBolsones(response, null);
                 frag.recargar();
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
         });
+
+        mRequestQueue.add(ultimas);
     }
 
     private static void guadarBolsones(JSONObject response, SyncResult result) {
@@ -191,11 +201,10 @@ public class Common {
         }
     }
 
-    public static void SincronizarActividades(final Context mContext, SyncHttpClient client, final SyncResult result) {
-        client.get(urlActividades, new JsonHttpResponseHandler() {
-
+    public static void SincronizarActividades(final Context mContext, RequestQueue req, final SyncResult result) {
+        JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlActividades, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onResponse(JSONArray response) {
                 guardarActividades(response, result);
 
                 Intent intent = new Intent(mContext, PantallaPrincipal.class);
@@ -208,30 +217,35 @@ public class Common {
                 if (preferences.getBoolean(Common.RECIBIR_ACTIVIDAD, false))
                     Common.sendNotification(mContext, mContext.getString(R.string.titulo_notif_actividades), mContext.getString(R.string.desc_notif_actividades), pendingIntent);
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
         });
+
+        req.add(ultimas);
     }
 
     public static void SincronizarActividades(final Fragment frag) {
-        AsyncHttpClient client = ((PantallaPrincipal) frag.getActivity()).GetAsynk();
-        client.get(urlActividades, new JsonHttpResponseHandler() {
-
+        RequestQueue mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlActividades, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onResponse(JSONArray response) {
                 guardarActividades(response, null);
                 if (frag instanceof ActividadesFragment)
                     ((ActividadesFragment) frag).recargar();
                 else if (frag instanceof TalleresFragment)
                     ((TalleresFragment) frag).recargar();
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
         });
+
+        mRequestQueue.add(ultimas);
     }
 
     private static void guardarActividades(JSONArray response, SyncResult result) {
@@ -270,11 +284,10 @@ public class Common {
         }
     }
 
-    public static void SincronizarNoticias(final Context mContext, SyncHttpClient client, final SyncResult result) {
-        client.get(urlNoticias, new JsonHttpResponseHandler() {
-
+    public static void SincronizarNoticias(final Context mContext, RequestQueue req, final SyncResult result) {
+        JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlNoticias, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onResponse(JSONArray response) {
                 guardarNoticias(response, result);
 
                 Intent intent = new Intent(mContext, PantallaPrincipal.class);
@@ -287,32 +300,32 @@ public class Common {
                 if (preferences.getBoolean(Common.RECIBIR_NOTICIA, false))
                     Common.sendNotification(mContext, mContext.getString(R.string.titulo_notif_noticias), mContext.getString(R.string.desc_notif_noticias), pendingIntent);
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
         });
+
+        req.add(ultimas);
     }
 
     public static void SincronizarNoticias(final NoticiasImagenFragment frag) {
-        AsyncHttpClient client = ((PantallaPrincipal) frag.getActivity()).GetAsynk();
-        client.get(urlNoticias, new JsonHttpResponseHandler() {
-
+        RequestQueue mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlActividades, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onResponse(JSONArray response) {
                 guardarNoticias(response, null);
                 frag.recargar();
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
-
         });
+
+        mRequestQueue.add(ultimas);
     }
 
     private static void guardarNoticias(JSONArray response, SyncResult result) {

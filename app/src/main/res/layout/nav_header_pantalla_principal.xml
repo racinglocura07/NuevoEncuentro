@@ -19,7 +19,7 @@
         android:contentDescription="@string/app_name"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ne" />
+        android:src="@mipmap/ne512" />
 
     <TextView
         android:id="@id/tv_nav_nombre"

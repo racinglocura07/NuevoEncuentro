@@ -25,9 +25,12 @@ import com.facebook.share.widget.ShareDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.widget.IconTextView;
-import com.loopj.android.http.AsyncHttpClient;
+
+import coop.nuevoencuentro.nofuemagia.model.Actividades;
+
+/*import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.RequestParams;*/
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -46,7 +49,7 @@ import coop.nuevoencuentro.nofuemagia.fragments.ActividadesAdminFragment;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
 import coop.nuevoencuentro.nofuemagia.xml.RSSItems;
-import cz.msebera.android.httpclient.Header;
+//import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia
@@ -174,7 +177,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                                        RequestParams params = new RequestParams();
+                                        /*RequestParams params = new RequestParams();
                                         params.put("notifica", "false");
                                         params.put("idActividad", item.idActividad);
 
@@ -202,7 +205,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                                                     e.printStackTrace();
                                                 }
                                             }
-                                        });
+                                        });*/
 
                                     }
                                 }).show();
