@@ -76,7 +76,6 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
     private boolean mEsAdmin;
 
     private SharedPreferences preferences;
-    private NavigationView navigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,9 +106,9 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
         adapter.addFragment(new UbicacionFragment(), "Ubicacion");
         viewPager.setAdapter(adapter);
         viewPager.setPagingEnabled(false);
-        viewPager.setOffscreenPageLimit(10);
+        viewPager.setOffscreenPageLimit(1);
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         Menu menu = navigationView.getMenu();
@@ -145,8 +144,8 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
             TextView tvNombre = (TextView) headerView.findViewById(R.id.tv_nav_nombre);
             tvNombre.setText(getString(R.string.bienvenida, primer));
 
-            if (savedInstanceState == null)
-                CheckBundle();
+//            if (savedInstanceState == null)
+//                CheckBundle();
 
             CheckEsAdmin(id);
             RateApp();
@@ -374,25 +373,25 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
                 .show();
     }
 
-    private void CheckBundle() {
-        Map<String, ?> all = preferences.getAll();
-        if (all.get(Common.ULTIMA) instanceof String) {
-            preferences.edit().remove(Common.ULTIMA).apply();
-        }
-
-        int ultima = preferences.getInt(Common.ULTIMA, 0);
-        Bundle extras = getIntent().getExtras();
-        System.out.println("exttas " + extras);
-        System.out.println("ultima " + ultima);
-        if (extras != null) {
-            int abrirDonde = extras.getInt(Common.ABRIR_DONDE, -1);
-            viewPager.setCurrentItem(abrirDonde == -1 ? ultima : abrirDonde);
-            navigationView.getMenu().getItem(abrirDonde == -1 ? ultima : abrirDonde).setChecked(true);
-        } else {
-            viewPager.setCurrentItem(ultima);
-            navigationView.getMenu().getItem(ultima).setChecked(true);
-        }
-    }
+//    private void CheckBundle() {
+//        Map<String, ?> all = preferences.getAll();
+//        if (all.get(Common.ULTIMA) instanceof String) {
+//            preferences.edit().remove(Common.ULTIMA).apply();
+//        }
+//
+//        int ultima = preferences.getInt(Common.ULTIMA, 0);
+//        Bundle extras = getIntent().getExtras();
+//        System.out.println("exttas " + extras);
+//        System.out.println("ultima " + ultima);
+//        if (extras != null) {
+//            int abrirDonde = extras.getInt(Common.ABRIR_DONDE, -1);
+//            viewPager.setCurrentItem(abrirDonde == -1 ? ultima : abrirDonde);
+//            navigationView.getMenu().getItem(abrirDonde == -1 ? ultima : abrirDonde).setChecked(true);
+//        } else {
+//            viewPager.setCurrentItem(ultima);
+//            navigationView.getMenu().getItem(ultima).setChecked(true);
+//        }
+//    }
 
     @Override
     protected void onResume() {
@@ -404,23 +403,23 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
 
     @Override
     protected void onDestroy() {
-        GrabarUltimo();
+//        GrabarUltimo();
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        GrabarUltimo();
+//        GrabarUltimo();
         super.onPause();
     }
 
-    private void GrabarUltimo() {
-        try {
-            preferences.edit().putInt(Common.ULTIMA, viewPager.getCurrentItem()).apply();
-        } catch (Exception ex) {
-            //System.err.println(ex.getMessage());
-        }
-    }
+//    private void GrabarUltimo() {
+//        try {
+//            preferences.edit().putInt(Common.ULTIMA, viewPager.getCurrentItem()).apply();
+//        } catch (Exception ex) {
+//            //System.err.println(ex.getMessage());
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

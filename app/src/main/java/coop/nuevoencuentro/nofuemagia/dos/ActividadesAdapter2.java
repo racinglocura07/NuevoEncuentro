@@ -13,19 +13,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
-import com.joanzapata.iconify.widget.IconButton;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -41,8 +37,6 @@ import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.AdminActivity;
-import coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity;
-import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
@@ -107,12 +101,11 @@ public class ActividadesAdapter2 extends RecyclerView.Adapter<ActividadesAdapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private Actividades item;
-
         private final ImageViewTouch ivImagen;
         private final TextView tvTitulo;
         private final TextView tvDescripcion;
         private final IconTextView tvCargando;
+        private Actividades item;
 
         public ViewHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.item_actividades2, parent, false));

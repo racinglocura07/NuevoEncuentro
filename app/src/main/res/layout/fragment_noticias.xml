@@ -20,6 +20,6 @@
         android:id="@id/viewpager_noticias"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/White" />
+        android:background="@android:color/white" />
 
 </LinearLayout>

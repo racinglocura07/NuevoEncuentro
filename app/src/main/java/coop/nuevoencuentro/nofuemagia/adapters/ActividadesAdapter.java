@@ -16,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidviewhover.BlurLayout;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
@@ -25,19 +23,9 @@ import com.facebook.share.widget.ShareDialog;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.widget.IconTextView;
-
-import coop.nuevoencuentro.nofuemagia.model.Actividades;
-
-/*import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;*/
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -45,10 +33,8 @@ import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.AdminActivity;
 import coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
-import coop.nuevoencuentro.nofuemagia.fragments.ActividadesAdminFragment;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
-import coop.nuevoencuentro.nofuemagia.xml.RSSItems;
 //import cz.msebera.android.httpclient.Header;
 
 /**
@@ -116,7 +102,6 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
         private final TextView tvTitulo;
         private final TextView tvDescripcion;
         private final ImageView ivImagen;
-        private final BlurLayout blur;
         private final IconTextView tvCargando;
 
         private Actividades item;
@@ -134,7 +119,6 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
             tvDescripcion = (TextView) itemView.findViewById(R.id.tv_descripcion_item_actividades);
             ivImagen = (ImageView) itemView.findViewById(R.id.iv_item_actividad);
             tvCargando = (IconTextView) itemView.findViewById(R.id.tv_cargando_actividad);
-            blur = (BlurLayout) itemView.findViewById(R.id.blur_actividad);
 
             IconTextView itvEditar = (IconTextView) hover.findViewById(R.id.editar_actividad);
             IconTextView itvBorrar = (IconTextView) hover.findViewById(R.id.borrar_actividad);
@@ -160,8 +144,8 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                         mContext.startActivity(adIntent);
                     }
                 });
-                blur.addChildAppearAnimator(hover, R.id.editar_actividad, Techniques.BounceInUp, 1200);
-                blur.addChildDisappearAnimator(hover, R.id.editar_actividad, Techniques.SlideOutRight, 1200);
+//                blur.addChildAppearAnimator(hover, R.id.editar_actividad, Techniques.BounceInUp, 1200);
+//                blur.addChildDisappearAnimator(hover, R.id.editar_actividad, Techniques.SlideOutRight, 1200);
 
                 itvBorrar.setVisibility(View.VISIBLE);
                 itvBorrar.setOnClickListener(new View.OnClickListener() {
@@ -211,20 +195,19 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                                 }).show();
                     }
                 });
-                blur.addChildAppearAnimator(hover, R.id.borrar_actividad, Techniques.BounceInUp, 1200);
-                blur.addChildDisappearAnimator(hover, R.id.borrar_actividad, Techniques.SlideOutRight, 1200);
-
+//                blur.addChildAppearAnimator(hover, R.id.borrar_actividad, Techniques.BounceInUp, 1200);
+//                blur.addChildDisappearAnimator(hover, R.id.borrar_actividad, Techniques.SlideOutRight, 1200);
             }
 
-            blur.setHoverView(hover);
-            blur.enableZoomBackground(true);
-            blur.setBlurDuration(1000);
-
-            blur.addChildAppearAnimator(hover, R.id.ver_actividad, Techniques.BounceInDown, 1200);
-            blur.addChildDisappearAnimator(hover, R.id.ver_actividad, Techniques.SlideOutLeft, 1200);
-
-            blur.addChildAppearAnimator(hover, R.id.fb_actividad, Techniques.BounceInUp, 1200);
-            blur.addChildDisappearAnimator(hover, R.id.fb_actividad, Techniques.SlideOutRight, 1200);
+//            blur.setHoverView(hover);
+//            blur.enableZoomBackground(true);
+//            blur.setBlurDuration(1000);
+//
+//            blur.addChildAppearAnimator(hover, R.id.ver_actividad, Techniques.BounceInDown, 1200);
+//            blur.addChildDisappearAnimator(hover, R.id.ver_actividad, Techniques.SlideOutLeft, 1200);
+//
+//            blur.addChildAppearAnimator(hover, R.id.fb_actividad, Techniques.BounceInUp, 1200);
+//            blur.addChildDisappearAnimator(hover, R.id.fb_actividad, Techniques.SlideOutRight, 1200);
 
             IconTextView verActividad = (IconTextView) hover.findViewById(R.id.ver_actividad);
             verActividad.setOnClickListener(new View.OnClickListener() {
