@@ -41,6 +41,7 @@ import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
+import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasImagenFragment;
@@ -142,7 +143,7 @@ public class Common {
 
                 Intent intent = new Intent(mContext, PantallaPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(Common.ABRIR_DONDE, BOLSONES);
+                intent.putExtra(Common.ABRIR_DONDE, 3);
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -161,7 +162,12 @@ public class Common {
     }
 
     public static void SincronizarBolsones(final ComprasComunitariasFragment frag) {
-        RequestQueue mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        RequestQueue mRequestQueue = null; //((PantallaPrincipal) frag.getActivity()).GetRequest();
+        if (frag.getActivity() instanceof PantallaPrincipal)
+            mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        else
+            mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+
         CustomRequest ultimas = new CustomRequest(Request.Method.POST, urlBolsones, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -209,7 +215,7 @@ public class Common {
 
                 Intent intent = new Intent(mContext, PantallaPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(Common.ABRIR_DONDE, ACTIVIDADES);
+                intent.putExtra(Common.ABRIR_DONDE, 1);
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -228,7 +234,12 @@ public class Common {
     }
 
     public static void SincronizarActividades(final Fragment frag) {
-        RequestQueue mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        RequestQueue mRequestQueue = null; //((PantallaPrincipal) frag.getActivity()).GetRequest();
+        if (frag.getActivity() instanceof PantallaPrincipal)
+            mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        else
+            mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+
         JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlActividades, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -292,7 +303,7 @@ public class Common {
 
                 Intent intent = new Intent(mContext, PantallaPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(Common.ABRIR_DONDE, NOTICIAS);
+                intent.putExtra(Common.ABRIR_DONDE, 0);
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -311,7 +322,12 @@ public class Common {
     }
 
     public static void SincronizarNoticias(final NoticiasImagenFragment frag) {
-        RequestQueue mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        RequestQueue mRequestQueue = null; //((PantallaPrincipal) frag.getActivity()).GetRequest();
+        if (frag.getActivity() instanceof PantallaPrincipal)
+            mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        else
+            mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+
         JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlActividades, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

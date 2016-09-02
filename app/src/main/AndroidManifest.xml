@@ -28,6 +28,19 @@
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".activities.PantallaPrincipal2"
+            android:label="@string/app_name"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme2" />
+
+        <activity
+            android:name=".dos.DetalleActivity2"
+            android:label="@string/app_name"
+            android:launchMode="singleInstance"
+            android:parentActivityName=".activities.PantallaPrincipal2"
+            android:theme="@style/AppTheme2" />
+
 
         <service android:name=".sync.ComprasAuthService">
             <intent-filter>
@@ -65,13 +78,13 @@
         <activity
             android:name=".activities.ConfiguracionActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".activities.PantallaPrincipal"
+            android:parentActivityName=".activities.PantallaPrincipal2"
             android:theme="@style/AppTheme" />
 
         <activity
             android:name=".activities.AdminActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".activities.PantallaPrincipal"
+            android:parentActivityName=".activities.PantallaPrincipal2"
             android:theme="@style/AppTheme" />
 
         <activity
@@ -126,7 +139,9 @@
             android:authorities="com.facebook.app.FacebookContentProvider1770519086495157"
             android:exported="true" />
 
-        <meta-data android:name="io.fabric.ApiKey" android:value="sPA7QHo4q8to6CZ9ucnlNM3Ql"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="sPA7QHo4q8to6CZ9ucnlNM3Ql" />
 
     </application>
 

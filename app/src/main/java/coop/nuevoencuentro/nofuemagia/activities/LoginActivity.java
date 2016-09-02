@@ -257,7 +257,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         loginButton.setEnabled(true);
         progress.setVisibility(View.GONE);
 
-        Intent principal = new Intent(LoginActivity.this, PantallaPrincipal.class);
+        Intent principal = new Intent(LoginActivity.this, PantallaPrincipal2.class);
         startActivity(principal);
         finish();
     }

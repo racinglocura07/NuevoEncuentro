@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.adapters.ActividadesAdapter;
+import coop.nuevoencuentro.nofuemagia.dos.ActividadesAdapter2;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 
 /**
@@ -24,7 +25,7 @@ import coop.nuevoencuentro.nofuemagia.helper.Common;
  */
 public class TalleresFragment extends Fragment {
 
-    private ActividadesAdapter adapter;
+    private ActividadesAdapter2 adapter;
     private RecyclerView recList;
     private SwipeRefreshLayout swipe;
 
@@ -51,7 +52,7 @@ public class TalleresFragment extends Fragment {
         recList.setLayoutManager(llm);
 
 
-        adapter = new ActividadesAdapter(getContext(), true);
+        adapter = new ActividadesAdapter2(getContext(), true);
         if (adapter.haveUpdate()) {
             swipe.post(new Runnable() {
                 @Override
@@ -68,7 +69,7 @@ public class TalleresFragment extends Fragment {
 
     public void recargar() {
         swipe.setRefreshing(false);
-        adapter = new ActividadesAdapter(getContext(), true);
+        adapter = new ActividadesAdapter2(getContext(), true);
         recList.setAdapter(adapter);
     }
 }

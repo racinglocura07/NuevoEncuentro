@@ -59,7 +59,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtras(args);
         }
         else if ( idActividad == -2 ){
-            intent.putExtra(Common.ABRIR_DONDE, Common.BOLSONES);
+            intent.putExtra(Common.ABRIR_DONDE, 3);
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

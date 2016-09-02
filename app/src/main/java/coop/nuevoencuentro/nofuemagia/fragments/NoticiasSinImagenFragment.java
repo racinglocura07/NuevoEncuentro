@@ -31,6 +31,7 @@ import java.util.Map;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
+import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.adapters.NoticiasComunAdapter;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.helper.CustomRequest;
@@ -59,7 +60,10 @@ public class NoticiasSinImagenFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRequestQueue = ((PantallaPrincipal) getActivity()).GetRequest();
+        if (getActivity() instanceof PantallaPrincipal)
+            mRequestQueue = ((PantallaPrincipal) getActivity()).GetRequest();
+        else if (getActivity() instanceof PantallaPrincipal2)
+            mRequestQueue = ((PantallaPrincipal2) getActivity()).GetRequest();
     }
 
     @Nullable

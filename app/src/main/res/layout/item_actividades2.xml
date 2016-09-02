@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="@dimen/md_keylines"
+    android:layout_marginLeft="@dimen/md_keylines"
+    android:layout_marginRight="@dimen/md_keylines"
+    android:foreground="?attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/card_image_height"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <it.sephiroth.android.library.imagezoom.ImageViewTouch
+                android:id="@+id/card_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/card_image_height"
+                android:contentDescription="@string/app_name" />
+
+            <com.joanzapata.iconify.widget.IconTextView
+                android:id="@id/tv_cargando_actividad"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:text="@string/cargando_actividades" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/frameLayout"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="@dimen/md_keylines"
+            android:layout_marginStart="@dimen/md_keylines"
+            android:layout_marginTop="5dp"
+            android:text="Small Text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <TextView
+            android:id="@+id/card_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/card_title"
+            android:layout_marginLeft="@dimen/md_keylines"
+            android:layout_marginStart="@dimen/md_keylines"
+            android:text="Small Text"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <Button
+            android:id="@+id/button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/card_text"
+            android:text="New Button"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/favorite_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/cards_button_width"
+            android:layout_height="@dimen/cards_button_height"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/card_text"
+            android:tint="@color/partido_medio" />
+
+        <ImageButton
+            android:id="@+id/share_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/cards_button_width"
+            android:layout_height="@dimen/cards_button_height"
+            android:layout_below="@+id/card_text"
+            android:layout_toLeftOf="@+id/favorite_button"
+            android:layout_toStartOf="@+id/favorite_button"
+            android:tint="@color/partido_medio" />
+
+        <ImageButton
+            android:id="@+id/editar_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/cards_button_width"
+            android:layout_height="@dimen/cards_button_height"
+            android:layout_below="@+id/card_text"
+            android:layout_toLeftOf="@+id/share_button"
+            android:layout_toStartOf="@+id/share_button"
+            android:tint="@color/partido_medio"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/borrar_button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="@dimen/cards_button_width"
+            android:layout_height="@dimen/cards_button_height"
+            android:layout_below="@+id/card_text"
+            android:layout_toLeftOf="@+id/editar_button"
+            android:layout_toStartOf="@+id/editar_button"
+            android:tint="@color/partido_medio"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<FrameLayout-->
+    <!--android:id="@+id/frame_imagen"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/card_image_height"-->
+    <!--android:animateLayoutChanges="true">-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/card_image"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/card_image_height"-->
+    <!--android:contentDescription="@string/app_name" />-->
+
+    <!--<com.joanzapata.iconify.widget.IconTextView-->
+    <!--android:id="@id/tv_cargando_actividad"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:text="@string/cargando_actividades" />-->
+
+
+    <!--</FrameLayout>-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/card_title"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignBottom="@+id/frame_imagen"-->
+    <!--android:layout_marginLeft="@dimen/md_keylines"-->
+    <!--android:layout_marginStart="@dimen/md_keylines"-->
+    <!--android:layout_below="@id/frame_imagen"-->
+    <!--android:textAppearance="@style/TextAppearance.AppCompat.Title"-->
+    <!--android:textColor="@android:color/white" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/card_text"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/card_title"-->
+    <!--android:layout_marginBottom="@dimen/md_keylines"-->
+    <!--android:layout_marginLeft="@dimen/md_keylines"-->
+    <!--android:layout_marginRight="@dimen/md_keylines"-->
+    <!--android:ellipsize="end"-->
+    <!--android:maxLines="3"-->
+    <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+    <!--android:textColor="@color/dark_grey" />-->
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/share_button"-->
+    <!--style="?android:attr/borderlessButtonStyle"-->
+    <!--android:layout_width="@dimen/cards_button_width"-->
+    <!--android:layout_height="@dimen/cards_button_height"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_below="@+id/card_text"-->
+    <!--android:layout_marginEnd="@dimen/md_keylines"-->
+    <!--android:layout_marginRight="@dimen/md_keylines"-->
+    <!--android:contentDescription="@string/app_name"-->
+    <!--android:tint="@color/button_grey" />-->
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/favorite_button"-->
+    <!--style="?android:attr/borderlessButtonStyle"-->
+    <!--android:layout_width="@dimen/cards_button_width"-->
+    <!--android:layout_height="@dimen/cards_button_height"-->
+    <!--android:layout_below="@+id/card_text"-->
+    <!--android:layout_marginEnd="@dimen/md_keylines"-->
+    <!--android:layout_marginRight="@dimen/md_keylines"-->
+    <!--android:layout_toLeftOf="@id/share_button"-->
+    <!--android:layout_toStartOf="@id/share_button"-->
+    <!--android:contentDescription="@string/app_name"-->
+    <!--android:tint="@color/button_grey" />-->
+    <!--</RelativeLayout>-->
+</android.support.v7.widget.CardView>

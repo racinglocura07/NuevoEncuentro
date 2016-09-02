@@ -23,4 +23,6 @@
 
     <color name="verde">#00796B</color>
 
+    <color name="dark_grey">#424242</color>
+    <color name="button_grey">#757575</color>
 </resources>

@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 //import com.loopj.android.http.AsyncHttpClient;
 
 import coop.nuevoencuentro.nofuemagia.R;
+import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Bolsones;
 
@@ -64,8 +65,8 @@ public class ComprasComunitariasFragment extends Fragment {
             public void onProgressChanged(WebView view, int progress) {
                 pbNavegador.setProgress(progress);
 
-                Activity act = getActivity();
-                if (act != null) {
+                PantallaPrincipal2 act = (PantallaPrincipal2) getActivity();
+                if (act != null && act.fragmentActual() == 3) {
                     act.setTitle("Cargando...");
                     if (progress == 100)
                         act.setTitle(R.string.compras_comunitarias);

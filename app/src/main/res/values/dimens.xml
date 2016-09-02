@@ -17,4 +17,15 @@
     <dimen name="alto_celular">200dp</dimen>
     <dimen name="noticia_horizontal">20dp</dimen>
     <dimen name="noticia_vertical">10dp</dimen>
+    <dimen name="md_keylines">16dp</dimen>
+    <dimen name="card_image_height">300dp</dimen>
+    <dimen name="card_title_height">160dp</dimen>
+    <dimen name="article_subheading">16sp</dimen>
+    <dimen name="cards_button_width">48dp</dimen>
+    <dimen name="cards_button_height">48dp</dimen>
+
+    <dimen name="card_height">454dp</dimen>
+    <dimen name="app_bar_height">356dp</dimen>
+    <dimen name="article_keylines">72dp</dimen>
+    <dimen name="article_titles">20sp</dimen>
 </resources>

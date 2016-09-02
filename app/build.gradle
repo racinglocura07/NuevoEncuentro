@@ -9,8 +9,8 @@ android {
         applicationId "coop.nuevoencuentro.nofuemagia"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 44
-        versionName "0.5.5"
+        versionCode 45
+        versionName "0.5.6"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
     }
