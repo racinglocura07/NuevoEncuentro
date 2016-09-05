@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.AdminActivity;
+import coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
@@ -99,6 +101,16 @@ public class ActividadesAdapter2 extends RecyclerView.Adapter<ActividadesAdapter
         return mDataset.size();
     }
 
+    private void mandarMail(Actividades item) {
+        String asunto = "Consulta sobre " + item.nombre;
+        String cuerpo = "";
+
+        Intent testIntent = new Intent(Intent.ACTION_VIEW);
+        Uri data = Uri.parse("mailto:?subject=" + asunto + "&body=" + cuerpo + "&to=" + "\"comuna10@encuentrocapital.com.ar");
+        testIntent.setData(data);
+        mContext.startActivity(testIntent);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageViewTouch ivImagen;
@@ -114,6 +126,19 @@ public class ActividadesAdapter2 extends RecyclerView.Adapter<ActividadesAdapter
             boolean esAdmin = preferences.getBoolean(Common.ES_ADMIN, false);
 
             ivImagen = (ImageViewTouch) itemView.findViewById(R.id.card_image);
+            ivImagen.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    String imagenUrl = Common.imagenURL + "actividad-" + item.idActividad + ".jpg";
+
+                    Bundle args = new Bundle();
+                    args.putString(FullscreenActivity.IMAGEN_FULL, imagenUrl);
+
+                    Intent intent = new Intent(mContext, FullscreenActivity.class);
+                    intent.putExtras(args);
+                    return false;
+                }
+            });
             ivImagen.setDisplayType(ImageViewTouchBase.DisplayType.FIT_IF_BIGGER);
             tvTitulo = (TextView) itemView.findViewById(R.id.card_title);
             tvDescripcion = (TextView) itemView.findViewById(R.id.card_text);
@@ -275,6 +300,16 @@ public class ActividadesAdapter2 extends RecyclerView.Adapter<ActividadesAdapter
                     mContext.startActivity(full);
                 }
             });
+
+            ImageButton consultaButton = (ImageButton) itemView.findViewById(R.id.consulta_button);
+            consultaButton.setImageDrawable(new IconDrawable(mContext, FontAwesomeIcons.fa_envelope).colorRes(R.color.partido_medio));
+            consultaButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mandarMail(item);
+                }
+            });
         }
     }
+
 }

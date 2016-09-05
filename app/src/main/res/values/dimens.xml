@@ -28,4 +28,8 @@
     <dimen name="app_bar_height">356dp</dimen>
     <dimen name="article_keylines">72dp</dimen>
     <dimen name="article_titles">20sp</dimen>
+    <dimen name="tile_padding">8dp</dimen>
+    <dimen name="tile_height">160dp</dimen>
+    <dimen name="cards_button_width2">66dp</dimen>
+    <dimen name="cards_button_height2">66dp</dimen>
 </resources>

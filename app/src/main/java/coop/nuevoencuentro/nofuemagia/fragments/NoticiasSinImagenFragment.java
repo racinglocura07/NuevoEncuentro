@@ -2,7 +2,6 @@ package coop.nuevoencuentro.nofuemagia.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,31 +10,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-//import com.loopj.android.http.AsyncHttpClient;
-//import com.loopj.android.http.AsyncHttpResponseHandler;
-//import com.loopj.android.http.TextHttpResponseHandler;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.adapters.NoticiasComunAdapter;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
-import coop.nuevoencuentro.nofuemagia.helper.CustomRequest;
 import coop.nuevoencuentro.nofuemagia.xml.RSSItems;
+
+//import com.loopj.android.http.AsyncHttpClient;
+//import com.loopj.android.http.AsyncHttpResponseHandler;
+//import com.loopj.android.http.TextHttpResponseHandler;
 //import cz.msebera.android.httpclient.Header;
 //import cz.msebera.android.httpclient.HttpHeaders;
 
@@ -55,7 +48,7 @@ public class NoticiasSinImagenFragment extends Fragment {
 
     private String url = null;
     private RequestQueue mRequestQueue;
-
+    private List<RSSItems> itemsImpresa = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,64 +57,6 @@ public class NoticiasSinImagenFragment extends Fragment {
             mRequestQueue = ((PantallaPrincipal) getActivity()).GetRequest();
         else if (getActivity() instanceof PantallaPrincipal2)
             mRequestQueue = ((PantallaPrincipal2) getActivity()).GetRequest();
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_nuestras_noticias, container, false);
-
-        Bundle args = getArguments();
-        url = args.getString(QUE_NOTICIA);
-
-        String que = args.getString(QUE_NOTICIA);
-        assert que != null;
-
-        /*switch (que) {
-            case Common.PAGINA_12:
-                handler = handlerPagina;
-                handler.setCharset("ISO-8859-1");
-                break;
-            case Common.NUESTAS_VOCES:
-                handler = handlerVoces;
-                break;
-            case Common.COMUNIDAD_BSAS:
-                handler = handlerVoces;
-                break;
-        }*/
-
-
-        swipe = (SwipeRefreshLayout) v.findViewById(R.id.srl_noticias);
-        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                recList.setAdapter(null);
-                swipe.setRefreshing(true);
-                BuscarNoticias(url);
-            }
-        });
-
-        recList = (RecyclerView) v.findViewById(R.id.list_noticias);
-        recList.setHasFixedSize(true);
-
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
-
-        adapter = new NoticiasComunAdapter(getContext());
-        if (adapter.haveUpdate()) {
-            recList.setAdapter(null);
-            itemsImpresa = null;
-            swipe.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipe.setRefreshing(true);
-                }
-            });
-            BuscarNoticias(url);
-        }
-
-        return v;
     }
 
     //NUESTRAS VOCES
@@ -185,7 +120,63 @@ public class NoticiasSinImagenFragment extends Fragment {
         }
     };*/
 
-    private List<RSSItems> itemsImpresa = null;
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_nuestras_noticias, container, false);
+
+        Bundle args = getArguments();
+        url = args.getString(QUE_NOTICIA);
+
+        String que = args.getString(QUE_NOTICIA);
+        assert que != null;
+
+        /*switch (que) {
+            case Common.PAGINA_12:
+                handler = handlerPagina;
+                handler.setCharset("ISO-8859-1");
+                break;
+            case Common.NUESTAS_VOCES:
+                handler = handlerVoces;
+                break;
+            case Common.COMUNIDAD_BSAS:
+                handler = handlerVoces;
+                break;
+        }*/
+
+
+        swipe = (SwipeRefreshLayout) v.findViewById(R.id.srl_noticias);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                recList.setAdapter(null);
+                swipe.setRefreshing(true);
+                BuscarNoticias(url);
+            }
+        });
+
+        recList = (RecyclerView) v.findViewById(R.id.list_noticias);
+        recList.setHasFixedSize(true);
+
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+
+        adapter = new NoticiasComunAdapter(getContext());
+        if (adapter.haveUpdate()) {
+            recList.setAdapter(null);
+            itemsImpresa = null;
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                }
+            });
+            BuscarNoticias(url);
+        }
+
+        return v;
+    }
     //PAGINA 12
     /*private AsyncHttpResponseHandler handlerPagina = new AsyncHttpResponseHandler() {
         @Override
@@ -226,7 +217,25 @@ public class NoticiasSinImagenFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                String que;
+                if (url.equals(Common.PAGINA_12))
+                    que = "Pagina 12";
+                else if (url.equals(Common.NUESTAS_VOCES))
+                    que = "Nuestras Voces";
+                else
+                    que = "Comunidad Bs As";
+
                 error.printStackTrace();
+                swipe.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipe.setRefreshing(false);
+                    }
+                });
+                recList.setAdapter(new NoticiasComunAdapter(getContext()));
+                mRequestQueue.getCache().clear();
+                Common.ShowMessage(swipe, getContext().getString(R.string.error_internet) + " " + que);
             }
         });
 

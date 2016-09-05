@@ -100,4 +100,9 @@
     <string name="action_notif">Notificación</string>
     <string name="mensaje">Mensaje</string>
     <string name="error_internet">Hubo un error al acceder al portal</string>
+    <string name="feriantes">Feriantes</string>
+    <string name="detalle">Detalle</string>
+    <string name="error_llamando">Error con el número</string>
+    <string name="titulo_notif_feriantes">Nuevo Feriante</string>
+    <string name="desc_notif_feriante">No te pierdas nuestro modulo de feriantes artesansales!</string>
 </resources>

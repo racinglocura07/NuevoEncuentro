@@ -52,6 +52,7 @@ import coop.nuevoencuentro.nofuemagia.dos.PrincipalAdapter2;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ContactoFragment;
+import coop.nuevoencuentro.nofuemagia.fragments.FeriantesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TwitterFragment;
@@ -101,6 +102,7 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
         adapter.addFragment(new ActividadesFragment(), "Actividades");
         adapter.addFragment(new TalleresFragment(), "Talleres");
         adapter.addFragment(new ComprasComunitariasFragment(), "Bolsones");
+        adapter.addFragment(new FeriantesFragment(), "Feriantes");
         adapter.addFragment(new TwitterFragment(), "Twitter");
         adapter.addFragment(new ContactoFragment(), "Contacto");
         adapter.addFragment(new UbicacionFragment(), "Ubicacion");
@@ -116,6 +118,7 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
         menu.findItem(R.id.nav_actividades).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_book).colorRes(R.color.partido));
         menu.findItem(R.id.nav_talleres).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_users).colorRes(R.color.partido));
         menu.findItem(R.id.nav_compras_comunitarias).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_shopping_bag).colorRes(R.color.partido));
+        menu.findItem(R.id.nav_feriantes).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_gift).colorRes(R.color.partido));
         menu.findItem(R.id.nav_twitter).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_twitter).colorRes(R.color.partido));
         menu.findItem(R.id.nav_contacto).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_info).colorRes(R.color.partido));
         menu.findItem(R.id.nav_ubicacion).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_map_marker).colorRes(R.color.partido));
@@ -515,14 +518,17 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
         } else if (id == R.id.nav_compras_comunitarias) {
             viewPager.setCurrentItem(3);
             mTieneAdmin = true;
-        } else if (id == R.id.nav_twitter) {
+        } else if (id == R.id.nav_feriantes) {
             viewPager.setCurrentItem(4);
             mTieneAdmin = false;
-        } else if (id == R.id.nav_contacto) {
+        } else if (id == R.id.nav_twitter) {
             viewPager.setCurrentItem(5);
             mTieneAdmin = false;
-        } else if (id == R.id.nav_ubicacion) {
+        } else if (id == R.id.nav_contacto) {
             viewPager.setCurrentItem(6);
+            mTieneAdmin = false;
+        } else if (id == R.id.nav_ubicacion) {
+            viewPager.setCurrentItem(7);
             mTieneAdmin = false;
         } else if (id == R.id.nav_compartir) {
             CompartirApp();

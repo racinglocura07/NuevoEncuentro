@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -62,14 +61,68 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/md_keylines"
-                android:text="Detalle"
+                android:text="@string/detalle"
                 android:textColor="?attr/colorAccent"
                 android:textSize="@dimen/article_titles" />
 
             <TextView
                 android:id="@+id/place_detail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/md_keylines" />
+
+            <TextView
+                android:id="@+id/location_titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/md_keylines"
+                android:textColor="?attr/colorAccent"
+                android:textSize="@dimen/article_titles" />
+
+            <TextView
+                android:id="@+id/place_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/md_keylines" />
+
+            <TextView
+                android:id="@+id/contacto_titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/md_keylines"
+                android:text="@string/contacto"
+                android:textColor="?attr/colorAccent"
+                android:textSize="@dimen/article_titles" />
+
+            <LinearLayout
+                android:id="@+id/ll_feriantes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/mail_button_detalle"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="@dimen/cards_button_width2"
+                    android:layout_height="@dimen/cards_button_height2"
+                    android:tint="@color/partido_medio" />
+
+                <ImageButton
+                    android:id="@+id/facebook_button_detalle"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="@dimen/cards_button_width2"
+                    android:layout_height="@dimen/cards_button_height2"
+                    android:tint="@color/partido_medio" />
+
+                <ImageButton
+                    android:id="@+id/llamar_button_detalle"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="@dimen/cards_button_width2"
+                    android:layout_height="@dimen/cards_button_height2"
+                    android:tint="@color/partido_medio" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

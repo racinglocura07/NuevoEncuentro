@@ -24,12 +24,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-//import com.loopj.android.http.AsyncHttpClient;
-//import com.loopj.android.http.JsonHttpResponseHandler;
-//import com.loopj.android.http.SyncHttpClient;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,12 +40,17 @@ import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
+import coop.nuevoencuentro.nofuemagia.fragments.FeriantesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasImagenFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
 import coop.nuevoencuentro.nofuemagia.model.Bolsones;
+import coop.nuevoencuentro.nofuemagia.model.Feriantes;
 import coop.nuevoencuentro.nofuemagia.model.Noticias;
-import coop.nuevoencuentro.nofuemagia.xml.RSSItems;
+
+//import com.loopj.android.http.AsyncHttpClient;
+//import com.loopj.android.http.JsonHttpResponseHandler;
+//import com.loopj.android.http.SyncHttpClient;
 //import cz.msebera.android.httpclient.Header;
 
 /**
@@ -75,49 +76,39 @@ public class Common {
     public static final String RECIBIR_BOLSON = "RECIBIR_BOLSON";
     public static final String RECIBIR_MENSAJES = "RECIBIR_MENSAJES";
     public static final String ES_ADMIN = "ES_ADMIN";
-
     public static final String ABRIR_DONDE = "ABRIR_DONDE";
     public static final String NOTICIAS = "Noticias";
     public static final String ACTIVIDADES = "Actividades";
     public static final String TALLERES = "Talleres";
     public static final String BOLSONES = "Bolson";
+    public static final String FERIANTES = "Feriantes";
     public static final String CONTACTO = "Contacto";
     public static final String ULTIMA = "ULTIMA";
     public static final String MICOMUNA = "MiComuna";
-
-    private static final int ID_NOTIF = 0x2207;
-
     public static final String MAIN_URL = "http://nofuemagia.ueuo.com/Nuevo/";
-
     public static final String ESADMIN_URL = MAIN_URL + "backend/usuarios/esAdmin.php";
     public static final String REGISTRAR_URL = MAIN_URL + "backend/usuarios/crearUsuario.php";
-
     public static final String imagenURL = MAIN_URL + "imagenes/";
-
+    public static final String urlFeriantes = MAIN_URL + "backend/feriantes/listFeriantes.php?fid=-2";
     public static final String urlActividades = MAIN_URL + "backend/actividades/listActividades.php?fid=-2";
     public static final String urlBolsones = MAIN_URL + "backend/bolsones/listBolsones.php?fid=-2";
-    private static final String urlNoticias = MAIN_URL + "backend/noticias/listNoticias.php?fid=-1";
-
     public static final String NUESTAS_VOCES = "http://www.nuestrasvoces.com.ar/feed/";
     public static final String PAGINA_12 = "http://www.pagina12.com.ar/diario/rss/principal.xml";
     public static final String PAGINA_12_ULTIMAS = "http://www.pagina12.com.ar/diario/rss/ultimas_noticias.xml";
-
-
     public static final String AGREGAR_ACTIVIDAD = MAIN_URL + "backend/actividades/crearActividad.php";
     public static final String EDITAR_ACTIVIDAD = MAIN_URL + "backend/actividades/editarActividad.php";
     public static final String BORRAR_ACTIVIDAD = MAIN_URL + "backend/actividades/borrarActividad.php";
-
     public static final String AGREGAR_NOTICIA = MAIN_URL + "backend/noticias/crearNoticia.php";
     public static final String EDITAR_NOTICIA = MAIN_URL + "backend/noticias/editarNoticia.php";
-
     public static final String AGREGARBOLSON = MAIN_URL + "backend/bolsones/crearBolson.php";
-
     public static final String ENVIARNOTIFICACION = MAIN_URL + "backend/enviar.php";
-
     public static final String TWITTER = "TWITTER";
     public static final String COMUNIDAD_BSAS = "http://comunidadbsas.com.ar/?feed=rss2";
     public static final String CONTENT_TYPE = "application/x-www-form-urlencoded; charset=UTF-8";
-
+    private static final String RECIBIR_FERIANTE = "RECIBIR_FERIANTE";
+    private static final int ID_NOTIF = 0x2207;
+    private static final String urlNoticias = MAIN_URL + "backend/noticias/listNoticias.php?fid=-1";
+    public static ArrayList<String> mensajes = new ArrayList<>();
 
     public static void ShowOkMessage(View v, int mensaje) {
         final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_INDEFINITE);
@@ -131,6 +122,11 @@ public class Common {
     }
 
     public static void ShowMessage(View v, int mensaje) {
+        final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_SHORT);
+        snackBar.show();
+    }
+
+    public static void ShowMessage(View v, String mensaje) {
         final Snackbar snackBar = Snackbar.make(v, mensaje, Snackbar.LENGTH_SHORT);
         snackBar.show();
     }
@@ -380,8 +376,6 @@ public class Common {
         }
     }
 
-    public static ArrayList<String> mensajes = new ArrayList<>();
-
     public static void sendNotification(Context context, String titulo, String msg, PendingIntent pendingIntent) {
 
         if (context == null && titulo == null && msg == null && pendingIntent == null) {
@@ -424,4 +418,91 @@ public class Common {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(ID_NOTIF, notificationBuilder.build());
     }
+
+    public static void SincronizarFeriantes(final Context mContext, RequestQueue req, final SyncResult result) {
+        JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlFeriantes, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                guardarFeriantes(response, result);
+
+                Intent intent = new Intent(mContext, PantallaPrincipal2.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(Common.ABRIR_DONDE, 4);
+
+                PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                SharedPreferences preferences = mContext.getSharedPreferences(Common.PREFERENCES, Context.MODE_PRIVATE);
+                if (preferences.getBoolean(Common.RECIBIR_FERIANTE, false))
+                    Common.sendNotification(mContext, mContext.getString(R.string.titulo_notif_feriantes), mContext.getString(R.string.desc_notif_feriante), pendingIntent);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        req.add(ultimas);
+    }
+
+    public static void SincronizarFeriantes(final FeriantesFragment frag) {
+        RequestQueue mRequestQueue = null; //((PantallaPrincipal) frag.getActivity()).GetRequest();
+        if (frag.getActivity() instanceof PantallaPrincipal)
+            mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
+        else
+            mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+
+        JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlFeriantes, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                guardarFeriantes(response, null);
+                frag.recargar();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        mRequestQueue.add(ultimas);
+    }
+
+    private static void guardarFeriantes(JSONArray response, SyncResult result) {
+        ActiveAndroid.beginTransaction();
+        try {
+            GsonBuilder builder = new GsonBuilder();
+            builder.excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC);
+            builder.excludeFieldsWithoutExposeAnnotation();
+
+            Type listType = new TypeToken<List<Feriantes>>() {
+            }.getType();
+
+            for (Feriantes local : Feriantes.GetAll()) {
+                if (result != null)
+                    result.stats.numDeletes++;
+                new Delete().from(Feriantes.class).where("idFeriante = ?", local.getId()).execute();
+            }
+
+            List<Feriantes> remoto = builder.create().fromJson(response.toString(), listType);
+            for (Feriantes carRemoto : remoto) {
+                if (result != null)
+                    result.stats.numInserts++;
+                Feriantes nueva = new Feriantes(carRemoto.idFeriante, carRemoto.nombre, carRemoto.descripcion, carRemoto.mail, carRemoto.facebook, carRemoto.telefono, carRemoto.comuna, carRemoto.rubro);
+                nueva.save();
+            }
+
+            ActiveAndroid.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (result != null)
+                result.stats.numIoExceptions++;
+        } finally {
+            sendNotification(null, null, null, null);
+            System.out.println("Bien Feriante");
+            ActiveAndroid.endTransaction();
+        }
+    }
+
+
 }

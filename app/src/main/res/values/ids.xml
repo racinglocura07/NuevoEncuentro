@@ -86,4 +86,7 @@
     <item name="col_toolbar" type="id" />
     <item name="app_bar" type="id" />
     <item name="action_settings" type="id" />
+    <item name="nav_feriantes" type="id" />
+    <item name="srl_feriantes" type="id" />
+    <item name="list_feriantes" type="id" />
 </resources>

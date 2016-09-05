@@ -14,7 +14,7 @@ import java.util.Map;
 
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity;
-import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
+import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
 
@@ -46,7 +46,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             return;
         }
 
-        Intent intent = new Intent(this, PantallaPrincipal.class);
+        Intent intent = new Intent(this, PantallaPrincipal2.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         if (idActividad > -1) {

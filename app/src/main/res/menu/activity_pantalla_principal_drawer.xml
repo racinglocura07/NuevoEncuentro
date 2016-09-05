@@ -14,6 +14,10 @@
         <item
             android:id="@id/nav_compras_comunitarias"
             android:title="@string/compras_comunitarias" />
+
+        <item
+            android:id="@id/nav_feriantes"
+            android:title="@string/feriantes" />
         <item
             android:id="@id/nav_twitter"
             android:title="@string/twitter" />

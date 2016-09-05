@@ -75,7 +75,7 @@ public class NoticiasComunAdapter extends RecyclerView.Adapter<NoticiasComunAdap
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return mDataset == null ? 0 : mDataset.size();
     }
 
     public void setItems(List<RSSItems> items) {

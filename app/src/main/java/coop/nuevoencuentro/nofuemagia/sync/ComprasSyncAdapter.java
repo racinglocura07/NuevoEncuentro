@@ -7,9 +7,6 @@ import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 
-//import com.loopj.android.http.SyncHttpClient;
-
-
 import com.android.volley.Cache;
 import com.android.volley.Network;
 import com.android.volley.RequestQueue;
@@ -18,6 +15,8 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 
 import coop.nuevoencuentro.nofuemagia.helper.Common;
+
+//import com.loopj.android.http.SyncHttpClient;
 
 /**
  * Created by jlionti on 06/06/2016. No Fue Magia
@@ -42,6 +41,8 @@ public class ComprasSyncAdapter extends AbstractThreadedSyncAdapter {
             Common.SincronizarBolsones(getContext(), mRequestQueue, syncResult);
         } else if (que != null && que.equals(Common.NOTICIAS)) {
             Common.SincronizarNoticias(getContext(), mRequestQueue, syncResult);
+        } else if (que != null && que.equals(Common.FERIANTES)) {
+            Common.SincronizarFeriantes(getContext(), mRequestQueue, syncResult);
         }
     }
 
