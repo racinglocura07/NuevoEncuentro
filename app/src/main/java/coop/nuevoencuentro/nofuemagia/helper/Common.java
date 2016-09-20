@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
-import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
@@ -137,7 +136,7 @@ public class Common {
             public void onResponse(JSONObject response) {
                 guadarBolsones(response, result);
 
-                Intent intent = new Intent(mContext, PantallaPrincipal.class);
+                Intent intent = new Intent(mContext, PantallaPrincipal2.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(Common.ABRIR_DONDE, 3);
 
@@ -158,11 +157,8 @@ public class Common {
     }
 
     public static void SincronizarBolsones(final ComprasComunitariasFragment frag) {
-        RequestQueue mRequestQueue = null; //((PantallaPrincipal) frag.getActivity()).GetRequest();
-        if (frag.getActivity() instanceof PantallaPrincipal)
-            mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
-        else
-            mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+        RequestQueue mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+
 
         CustomRequest ultimas = new CustomRequest(Request.Method.POST, urlBolsones, null, new Response.Listener<JSONObject>() {
             @Override
@@ -209,7 +205,7 @@ public class Common {
             public void onResponse(JSONArray response) {
                 guardarActividades(response, result);
 
-                Intent intent = new Intent(mContext, PantallaPrincipal.class);
+                Intent intent = new Intent(mContext, PantallaPrincipal2.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(Common.ABRIR_DONDE, 1);
 
@@ -230,11 +226,8 @@ public class Common {
     }
 
     public static void SincronizarActividades(final Fragment frag) {
-        RequestQueue mRequestQueue = null; //((PantallaPrincipal) frag.getActivity()).GetRequest();
-        if (frag.getActivity() instanceof PantallaPrincipal)
-            mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
-        else
-            mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+        RequestQueue mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+
 
         JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlActividades, null, new Response.Listener<JSONArray>() {
             @Override
@@ -297,7 +290,7 @@ public class Common {
             public void onResponse(JSONArray response) {
                 guardarNoticias(response, result);
 
-                Intent intent = new Intent(mContext, PantallaPrincipal.class);
+                Intent intent = new Intent(mContext, PantallaPrincipal2.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(Common.ABRIR_DONDE, 0);
 
@@ -318,11 +311,8 @@ public class Common {
     }
 
     public static void SincronizarNoticias(final NoticiasImagenFragment frag) {
-        RequestQueue mRequestQueue = null; //((PantallaPrincipal) frag.getActivity()).GetRequest();
-        if (frag.getActivity() instanceof PantallaPrincipal)
-            mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
-        else
-            mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+        RequestQueue mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+
 
         JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlActividades, null, new Response.Listener<JSONArray>() {
             @Override
@@ -446,11 +436,8 @@ public class Common {
     }
 
     public static void SincronizarFeriantes(final FeriantesFragment frag) {
-        RequestQueue mRequestQueue = null; //((PantallaPrincipal) frag.getActivity()).GetRequest();
-        if (frag.getActivity() instanceof PantallaPrincipal)
-            mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
-        else
-            mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+        RequestQueue  mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+
 
         JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlFeriantes, null, new Response.Listener<JSONArray>() {
             @Override

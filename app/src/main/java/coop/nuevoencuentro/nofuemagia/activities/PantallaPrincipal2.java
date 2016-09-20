@@ -435,19 +435,19 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
         } else if (id == R.id.action_admin) {
 
             Bundle args = new Bundle();
-            if (getSupportFragmentManager().findFragmentByTag(Common.ACTIVIDADES) != null) {
+            if (viewPager.getCurrentItem() == 1) {
                 args.putBoolean(AdminActivity.ESTALLER, false);
                 args.putBoolean(AdminActivity.NOTICIAS, false);
                 args.putBoolean(AdminActivity.BOLSON, false);
-            } else if (getSupportFragmentManager().findFragmentByTag(Common.TALLERES) != null) {
+            } else if (viewPager.getCurrentItem() == 2) {
                 args.putBoolean(AdminActivity.ESTALLER, true);
                 args.putBoolean(AdminActivity.NOTICIAS, false);
                 args.putBoolean(AdminActivity.BOLSON, false);
-            } else if (getSupportFragmentManager().findFragmentByTag(Common.NOTICIAS) != null) {
-                args.putBoolean(AdminActivity.ESTALLER, false);
-                args.putBoolean(AdminActivity.NOTICIAS, true);
-                args.putBoolean(AdminActivity.BOLSON, false);
-            } else if (getSupportFragmentManager().findFragmentByTag(Common.BOLSONES) != null) {
+//            } else if (getSupportFragmentManager().findFragmentByTag(Common.NOTICIAS) != null) {
+//                args.putBoolean(AdminActivity.ESTALLER, false);
+//                args.putBoolean(AdminActivity.NOTICIAS, true);
+//                args.putBoolean(AdminActivity.BOLSON, false);
+            } else if (viewPager.getCurrentItem() == 31) {
                 args.putBoolean(AdminActivity.ESTALLER, false);
                 args.putBoolean(AdminActivity.NOTICIAS, false);
                 args.putBoolean(AdminActivity.BOLSON, true);
@@ -455,6 +455,8 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
                 Toast.makeText(this, "Opcion no valida en esta seccion", Toast.LENGTH_LONG).show();
                 return true;
             }
+
+
 
             Intent admin = new Intent(this, AdminActivity.class);
             admin.putExtras(args);

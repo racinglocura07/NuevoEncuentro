@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -75,7 +73,7 @@ import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
 //import cz.msebera.android.httpclient.HttpHeaders;
 
 
-public class PantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class aPantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentManager fragmentManager;
     private SharedPreferences preferences;
@@ -544,9 +542,9 @@ public class PantallaPrincipal extends AppCompatActivity implements NavigationVi
                                     final boolean error = response.getBoolean("error");
                                     String title = error ? "Error" : "Nuevo Encuentro";
                                     String msg = response.getString("mensaje");
-                                    Drawable icono = new IconDrawable(PantallaPrincipal.this, error ? FontAwesomeIcons.fa_warning : FontAwesomeIcons.fa_hand_peace_o);
+                                    Drawable icono = new IconDrawable(aPantallaPrincipal.this, error ? FontAwesomeIcons.fa_warning : FontAwesomeIcons.fa_hand_peace_o);
 
-                                    new AlertDialog.Builder(PantallaPrincipal.this)
+                                    new AlertDialog.Builder(aPantallaPrincipal.this)
                                             .setTitle(title)
                                             .setMessage(msg)
                                             .setIcon(icono)

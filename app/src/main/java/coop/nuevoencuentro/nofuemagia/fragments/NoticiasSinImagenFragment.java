@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
-import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.adapters.NoticiasComunAdapter;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
@@ -53,10 +52,7 @@ public class NoticiasSinImagenFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getActivity() instanceof PantallaPrincipal)
-            mRequestQueue = ((PantallaPrincipal) getActivity()).GetRequest();
-        else if (getActivity() instanceof PantallaPrincipal2)
-            mRequestQueue = ((PantallaPrincipal2) getActivity()).GetRequest();
+        mRequestQueue = ((PantallaPrincipal2) getActivity()).GetRequest();
     }
 
     //NUESTRAS VOCES

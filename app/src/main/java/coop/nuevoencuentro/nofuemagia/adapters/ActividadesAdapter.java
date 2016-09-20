@@ -32,7 +32,7 @@ import java.util.List;
 import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.activities.AdminActivity;
 import coop.nuevoencuentro.nofuemagia.activities.FullscreenActivity;
-import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
+import coop.nuevoencuentro.nofuemagia.activities.aPantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
 //import cz.msebera.android.httpclient.Header;
@@ -263,7 +263,7 @@ public class ActividadesAdapter extends RecyclerView.Adapter<ActividadesAdapter.
                                                 .build();
 
 
-                                        ShareDialog shareDialog = new ShareDialog((PantallaPrincipal) mContext);
+                                        ShareDialog shareDialog = new ShareDialog((aPantallaPrincipal) mContext);
                                         shareDialog.show(content);
                                         publicar.setEnabled(true);
 
