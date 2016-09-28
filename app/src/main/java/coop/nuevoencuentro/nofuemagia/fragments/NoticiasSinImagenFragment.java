@@ -15,12 +15,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
-import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
 import coop.nuevoencuentro.nofuemagia.adapters.NoticiasComunAdapter;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.xml.RSSItems;
@@ -46,13 +46,11 @@ public class NoticiasSinImagenFragment extends Fragment {
     private NoticiasComunAdapter adapter;
 
     private String url = null;
-    private RequestQueue mRequestQueue;
     private List<RSSItems> itemsImpresa = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRequestQueue = ((PantallaPrincipal2) getActivity()).GetRequest();
     }
 
     //NUESTRAS VOCES
@@ -195,6 +193,7 @@ public class NoticiasSinImagenFragment extends Fragment {
 //        client.addHeader(HttpHeaders.CONTENT_TYPE, "application/xml");
 //        client.get(getContext(), url, handler);
 
+        final RequestQueue queue = Volley.newRequestQueue(getContext());
         StringRequest checkAdmin = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -230,12 +229,11 @@ public class NoticiasSinImagenFragment extends Fragment {
                     }
                 });
                 recList.setAdapter(new NoticiasComunAdapter(getContext()));
-                mRequestQueue.getCache().clear();
+                queue.getCache().clear();
                 Common.ShowMessage(swipe, getContext().getString(R.string.error_internet) + " " + que);
             }
         });
-
-        mRequestQueue.add(checkAdmin);
+        queue.add(checkAdmin);
     }
 
     private void NuestrasHandler(String response) {
@@ -248,6 +246,7 @@ public class NoticiasSinImagenFragment extends Fragment {
     }
 
     private void PaginaHandler(String response) {
+        final RequestQueue queue = Volley.newRequestQueue(getContext());
         itemsImpresa = RSSItems.parse(response, true);
         StringRequest ultimas = new StringRequest(Request.Method.POST, Common.PAGINA_12_ULTIMAS, new Response.Listener<String>() {
             @Override
@@ -270,11 +269,11 @@ public class NoticiasSinImagenFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                queue.getCache().clear();
                 error.printStackTrace();
             }
         });
-
-        mRequestQueue.add(ultimas);
+        queue.add(ultimas);
     }
 
 }

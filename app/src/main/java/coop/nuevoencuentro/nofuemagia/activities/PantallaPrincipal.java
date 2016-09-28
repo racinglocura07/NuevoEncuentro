@@ -1,6 +1,7 @@
 package coop.nuevoencuentro.nofuemagia.activities;
 
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsServiceConnection;
+import android.support.customtabs.CustomTabsSession;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.view.GravityCompat;
@@ -38,6 +45,7 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.widget.IconButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +58,6 @@ import coop.nuevoencuentro.nofuemagia.R;
 import coop.nuevoencuentro.nofuemagia.dos.FijoViewPager;
 import coop.nuevoencuentro.nofuemagia.dos.PrincipalAdapter2;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
-import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.ContactoFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.FeriantesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasFragment;
@@ -60,6 +67,7 @@ import coop.nuevoencuentro.nofuemagia.fragments.UbicacionFragment;
 import coop.nuevoencuentro.nofuemagia.helper.Common;
 import coop.nuevoencuentro.nofuemagia.helper.CustomRequest;
 import coop.nuevoencuentro.nofuemagia.model.Actividades;
+import coop.nuevoencuentro.nofuemagia.model.Bolsones;
 import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
 
 /**
@@ -67,7 +75,13 @@ import coop.nuevoencuentro.nofuemagia.sync.SyncUtils;
  * Nuevo Encuentro
  * No Fue Magiaø
  */
-public class PantallaPrincipal2 extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class PantallaPrincipal extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
+    CustomTabsClient mCustomTabsClient;
+    CustomTabsSession mCustomTabsSession;
+    CustomTabsServiceConnection mCustomTabsServiceConnection;
+    CustomTabsIntent mCustomTabsIntent;
 
     private RequestQueue mRequestQueue;
     private FijoViewPager viewPager;
@@ -77,6 +91,8 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
     private boolean mEsAdmin;
 
     private SharedPreferences preferences;
+    private BottomSheetDialog bottomSheetDialog;
+    private BottomSheetBehavior<View> bottomSheetBehavior;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,17 +117,71 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
         adapter.addFragment(new NoticiasFragment(), "Noticias");
         adapter.addFragment(new ActividadesFragment(), "Actividades");
         adapter.addFragment(new TalleresFragment(), "Talleres");
-        adapter.addFragment(new ComprasComunitariasFragment(), "Bolsones");
         adapter.addFragment(new FeriantesFragment(), "Feriantes");
         adapter.addFragment(new TwitterFragment(), "Twitter");
         adapter.addFragment(new ContactoFragment(), "Contacto");
         adapter.addFragment(new UbicacionFragment(), "Ubicacion");
         viewPager.setAdapter(adapter);
         viewPager.setPagingEnabled(false);
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(0);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mCustomTabsServiceConnection = new CustomTabsServiceConnection() {
+            @Override
+            public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
+                mCustomTabsClient = customTabsClient;
+                mCustomTabsClient.warmup(0L);
+                mCustomTabsSession = mCustomTabsClient.newSession(null);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mCustomTabsClient = null;
+            }
+        };
+
+        CustomTabsClient.bindCustomTabsService(this, CUSTOM_TAB_PACKAGE_NAME, mCustomTabsServiceConnection);
+        mCustomTabsIntent = new CustomTabsIntent.Builder(mCustomTabsSession).setShowTitle(true).build();
+
+        View bottomSheetView = View.inflate(this, R.layout.opciones_bolsones, null);
+        bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+
+        IconButton btnVerdura = (IconButton) bottomSheetView.findViewById(R.id.op_verduras);
+        btnVerdura.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                bottomSheetDialog.hide();
+
+                Bolsones ultimo = Bolsones.getLast(false);
+                if (ultimo == null) {
+                    Common.SincronizarBolsones(PantallaPrincipal.this, false);
+                    return;
+                }
+
+                mCustomTabsIntent.launchUrl(PantallaPrincipal.this, Uri.parse(ultimo.getLink()));
+            }
+        });
+        IconButton btnSecos = (IconButton) bottomSheetView.findViewById(R.id.op_secos);
+        btnSecos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                bottomSheetDialog.hide();
+
+                Bolsones ultimo = Bolsones.getLast(true);
+                if (ultimo == null) {
+                    Common.SincronizarBolsones(PantallaPrincipal.this, true);
+                    return;
+                }
+
+                mCustomTabsIntent.launchUrl(PantallaPrincipal.this, Uri.parse(ultimo.getLink()));
+            }
+        });
 
         Menu menu = navigationView.getMenu();
         menu.findItem(R.id.nav_noticias).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_newspaper_o).colorRes(R.color.partido));
@@ -159,9 +229,9 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
 
     }
 
-    public RequestQueue GetRequest() {
+    /*public RequestQueue GetRequest() {
         return mRequestQueue;
-    }
+    }*/
 
     private void sendRegistrationToServer(String token, String fid, String nombre, String email) {
         if (token == null || token.equals("") || fid == null || fid.equals("") || nombre == null || nombre.equals(""))
@@ -348,9 +418,9 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
                                     final boolean error = response.getBoolean("error");
                                     String title = error ? "Error" : "Nuevo Encuentro";
                                     String msg = response.getString("mensaje");
-                                    Drawable icono = new IconDrawable(PantallaPrincipal2.this, error ? FontAwesomeIcons.fa_warning : FontAwesomeIcons.fa_hand_peace_o);
+                                    Drawable icono = new IconDrawable(PantallaPrincipal.this, error ? FontAwesomeIcons.fa_warning : FontAwesomeIcons.fa_hand_peace_o);
 
-                                    new AlertDialog.Builder(PantallaPrincipal2.this)
+                                    new AlertDialog.Builder(PantallaPrincipal.this)
                                             .setTitle(title)
                                             .setMessage(msg)
                                             .setIcon(icono)
@@ -457,7 +527,6 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
             }
 
 
-
             Intent admin = new Intent(this, AdminActivity.class);
             admin.putExtras(args);
             startActivity(admin);
@@ -504,39 +573,53 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        setTitle(item.getTitle());
-        item.setChecked(true);
+
+        //item.setChecked(true);
 
         int id = item.getItemId();
         if (id == R.id.nav_noticias) {
-            viewPager.setCurrentItem(0);
+            setTitle(item.getTitle());
+            viewPager.setCurrentItem(0, false);
             mTieneAdmin = true;
         } else if (id == R.id.nav_actividades) {
-            viewPager.setCurrentItem(1);
+            setTitle(item.getTitle());
+            viewPager.setCurrentItem(1, false);
             mTieneAdmin = true;
         } else if (id == R.id.nav_talleres) {
-            viewPager.setCurrentItem(2);
+            setTitle(item.getTitle());
+            viewPager.setCurrentItem(2, false);
             mTieneAdmin = true;
         } else if (id == R.id.nav_compras_comunitarias) {
-            viewPager.setCurrentItem(3);
-            mTieneAdmin = true;
+            //viewPager.setCurrentItem(3);
+            //mTieneAdmin = true;
+            item.setChecked(false);
+
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            bottomSheetDialog.show();
+
         } else if (id == R.id.nav_feriantes) {
-            viewPager.setCurrentItem(4);
+            setTitle(item.getTitle());
+            viewPager.setCurrentItem(3, false);
             mTieneAdmin = false;
         } else if (id == R.id.nav_twitter) {
-            viewPager.setCurrentItem(5);
+            setTitle(item.getTitle());
+            viewPager.setCurrentItem(4, false);
             mTieneAdmin = false;
         } else if (id == R.id.nav_contacto) {
-            viewPager.setCurrentItem(6);
+            setTitle(item.getTitle());
+            viewPager.setCurrentItem(5, false);
             mTieneAdmin = false;
         } else if (id == R.id.nav_ubicacion) {
-            viewPager.setCurrentItem(7);
+            setTitle(item.getTitle());
+            viewPager.setCurrentItem(6, false);
             mTieneAdmin = false;
         } else if (id == R.id.nav_compartir) {
             CompartirApp();
+            item.setChecked(false);
         } else if (id == R.id.nav_salir) {
             LoginManager.getInstance().logOut();
             Loguearse();
+            item.setChecked(false);
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -547,5 +630,10 @@ public class PantallaPrincipal2 extends AppCompatActivity implements NavigationV
 
     public int fragmentActual() {
         return viewPager.getCurrentItem();
+    }
+
+    public void abrirLink(boolean seco) {
+        Bolsones ultimo = Bolsones.getLast(seco);
+        mCustomTabsIntent.launchUrl(PantallaPrincipal.this, Uri.parse(ultimo.getLink()));
     }
 }

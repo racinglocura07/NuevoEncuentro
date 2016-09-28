@@ -1,7 +1,6 @@
 package coop.nuevoencuentro.nofuemagia.fragments;
 
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,12 +17,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-//import com.loopj.android.http.AsyncHttpClient;
-
 import coop.nuevoencuentro.nofuemagia.R;
-import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
-import coop.nuevoencuentro.nofuemagia.helper.Common;
-import coop.nuevoencuentro.nofuemagia.model.Bolsones;
+import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
+
+//import com.loopj.android.http.AsyncHttpClient;
 
 /**
  * Created by jlionti on 10/06/2016. No Fue Magia
@@ -54,18 +51,18 @@ public class ComprasComunitariasFragment extends Fragment {
         pbCompras.setVisibility(View.VISIBLE);
         pbNavegador.setVisibility(View.GONE);
 
-        Bolsones ultimo = Bolsones.getLast();
+        /*Bolsones ultimo = Bolsones.getLast();
         if (ultimo == null) {
-            Common.SincronizarBolsones(this);
+            //Common.SincronizarBolsones(this);
             return v;
-        }
+        }*/
 
 
         wvCompras.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
                 pbNavegador.setProgress(progress);
 
-                PantallaPrincipal2 act = (PantallaPrincipal2) getActivity();
+                PantallaPrincipal act = (PantallaPrincipal) getActivity();
                 if (act != null && act.fragmentActual() == 3) {
                     act.setTitle("Cargando...");
                     if (progress == 100)
@@ -76,7 +73,7 @@ public class ComprasComunitariasFragment extends Fragment {
             }
         });
 
-        wvCompras.loadUrl(ultimo.getLink());
+        // wvCompras.loadUrl(ultimo.getLink());
         return v;
     }
 
@@ -88,11 +85,11 @@ public class ComprasComunitariasFragment extends Fragment {
     }
 
     public void recargar() {
-        pbCompras.setVisibility(View.GONE);
+        /*pbCompras.setVisibility(View.GONE);
         pbNavegador.setProgress(0);
         pbNavegador.setVisibility(View.VISIBLE);
         Bolsones ultimo = Bolsones.getLast();
-        wvCompras.loadUrl(ultimo.getLink());
+        wvCompras.loadUrl(ultimo.getLink());*/
     }
 
     private class MyWebViewClient extends WebViewClient {

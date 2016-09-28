@@ -13,6 +13,7 @@
             android:title="@string/talleres" />
         <item
             android:id="@id/nav_compras_comunitarias"
+            android:checkable="false"
             android:title="@string/compras_comunitarias" />
 
         <item

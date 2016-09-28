@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/seleccione_una_opcion" />
+
+    <com.joanzapata.iconify.widget.IconButton
+        android:id="@+id/op_verduras"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="{fa-leaf 25sp @color/colorAccent}   Verduras frutas o tierra" />
+
+    <com.joanzapata.iconify.widget.IconButton
+        android:id="@+id/op_secos"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="{fa-shopping-basket 25sp @color/colorAccent}  Bolsones secos" />
+</LinearLayout>
+
+    <!---->

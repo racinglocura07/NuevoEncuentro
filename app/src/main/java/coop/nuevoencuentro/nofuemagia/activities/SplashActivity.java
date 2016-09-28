@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void Arrancar() {
-        Intent siguiente = new Intent(this, PantallaPrincipal2.class);
+        Intent siguiente = new Intent(this, PantallaPrincipal.class);
 
         SharedPreferences preferences = getSharedPreferences(Common.PREFERENCES, MODE_PRIVATE);
         if (!preferences.getBoolean(Common.FB_REG, false))

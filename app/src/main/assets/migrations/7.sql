@@ -1,0 +1,1 @@
+ALTER TABLE Bolsones ADD COLUMN esSeco INTEGER;

@@ -24,11 +24,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
@@ -36,9 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import coop.nuevoencuentro.nofuemagia.R;
-import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal2;
+import coop.nuevoencuentro.nofuemagia.activities.PantallaPrincipal;
 import coop.nuevoencuentro.nofuemagia.fragments.ActividadesFragment;
-import coop.nuevoencuentro.nofuemagia.fragments.ComprasComunitariasFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.FeriantesFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.NoticiasImagenFragment;
 import coop.nuevoencuentro.nofuemagia.fragments.TalleresFragment;
@@ -131,12 +130,12 @@ public class Common {
     }
 
     public static void SincronizarBolsones(final Context mContext, RequestQueue req, final SyncResult result) {
-        CustomRequest ultimas = new CustomRequest(Request.Method.POST, urlBolsones, null, new Response.Listener<JSONObject>() {
+        JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlBolsones, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 guadarBolsones(response, result);
 
-                Intent intent = new Intent(mContext, PantallaPrincipal2.class);
+                Intent intent = new Intent(mContext, PantallaPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(Common.ABRIR_DONDE, 3);
 
@@ -156,15 +155,15 @@ public class Common {
         req.add(ultimas);
     }
 
-    public static void SincronizarBolsones(final ComprasComunitariasFragment frag) {
-        RequestQueue mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+    public static void SincronizarBolsones(final PantallaPrincipal frag, final boolean b) {
+        //RequestQueue mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
 
-
-        CustomRequest ultimas = new CustomRequest(Request.Method.POST, urlBolsones, null, new Response.Listener<JSONObject>() {
+        RequestQueue mRequestQueue = Volley.newRequestQueue(frag);
+        JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlBolsones, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 guadarBolsones(response, null);
-                frag.recargar();
+                frag.abrirLink(b);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -176,17 +175,34 @@ public class Common {
         mRequestQueue.add(ultimas);
     }
 
-    private static void guadarBolsones(JSONObject response, SyncResult result) {
+    private static void guadarBolsones(JSONArray response, SyncResult result) {
         ActiveAndroid.beginTransaction();
         try {
-            Bolsones bolson = new Bolsones();
-            bolson.setIdBolson(response.getInt("idBolson"));
-            bolson.setLink(response.getString("link"));
-            bolson.setCreadoEl(response.getString("creadoEl"));
-            bolson.save();
 
-            if (result != null)
-                result.stats.numInserts++;
+            GsonBuilder builder = new GsonBuilder();
+            builder.excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC);
+            builder.excludeFieldsWithoutExposeAnnotation();
+
+            Type listType = new TypeToken<List<Bolsones>>() {
+            }.getType();
+
+            new Delete().from(Bolsones.class).execute();
+
+            List<Bolsones> remoto = builder.create().fromJson(response.toString(), listType);
+            for (Bolsones carRemoto : remoto) {
+                if (result != null)
+                    result.stats.numInserts++;
+
+                Bolsones bolson = new Bolsones();
+                bolson.setIdBolson(carRemoto.idBolson);
+                bolson.setLink(carRemoto.link);
+                bolson.setEsSeco(carRemoto.esSeco);
+                bolson.setCreadoEl(carRemoto.creadoEl);
+                bolson.save();
+
+                bolson.save();
+            }
+
 
             ActiveAndroid.setTransactionSuccessful();
         } catch (Exception e) {
@@ -205,7 +221,7 @@ public class Common {
             public void onResponse(JSONArray response) {
                 guardarActividades(response, result);
 
-                Intent intent = new Intent(mContext, PantallaPrincipal2.class);
+                Intent intent = new Intent(mContext, PantallaPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(Common.ABRIR_DONDE, 1);
 
@@ -226,9 +242,9 @@ public class Common {
     }
 
     public static void SincronizarActividades(final Fragment frag) {
-        RequestQueue mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+        //RequestQueue mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
 
-
+        RequestQueue mRequestQueue = Volley.newRequestQueue(frag.getContext());
         JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlActividades, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -290,7 +306,7 @@ public class Common {
             public void onResponse(JSONArray response) {
                 guardarNoticias(response, result);
 
-                Intent intent = new Intent(mContext, PantallaPrincipal2.class);
+                Intent intent = new Intent(mContext, PantallaPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(Common.ABRIR_DONDE, 0);
 
@@ -311,9 +327,9 @@ public class Common {
     }
 
     public static void SincronizarNoticias(final NoticiasImagenFragment frag) {
-        RequestQueue mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+        //RequestQueue mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
 
-
+        RequestQueue mRequestQueue = Volley.newRequestQueue(frag.getContext());
         JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlActividades, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -415,7 +431,7 @@ public class Common {
             public void onResponse(JSONArray response) {
                 guardarFeriantes(response, result);
 
-                Intent intent = new Intent(mContext, PantallaPrincipal2.class);
+                Intent intent = new Intent(mContext, PantallaPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra(Common.ABRIR_DONDE, 4);
 
@@ -436,9 +452,9 @@ public class Common {
     }
 
     public static void SincronizarFeriantes(final FeriantesFragment frag) {
-        RequestQueue  mRequestQueue = ((PantallaPrincipal2) frag.getActivity()).GetRequest();
+        //RequestQueue  mRequestQueue = ((PantallaPrincipal) frag.getActivity()).GetRequest();
 
-
+        RequestQueue mRequestQueue = Volley.newRequestQueue(frag.getContext());
         JsonArrayRequest ultimas = new JsonArrayRequest(Request.Method.POST, urlFeriantes, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {

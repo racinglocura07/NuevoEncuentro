@@ -9,8 +9,8 @@ android {
         applicationId "coop.nuevoencuentro.nofuemagia"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 51
-        versionName "0.6.2"
+        versionCode 52
+        versionName "0.6.3"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
     }
@@ -23,7 +23,7 @@ android {
 }
 
 ext {
-    supportLibVersion = '24.2.0'
+    supportLibVersion = '24.2.1'
     playLibVersion = '9.4.0'
 }
 
@@ -36,6 +36,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${supportLibVersion}"
     compile "com.android.support:cardview-v7:${supportLibVersion}"
     compile "com.android.support:support-v4:${supportLibVersion}"
+    compile "com.android.support:customtabs:${supportLibVersion}"
 
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.google.code.gson:gson:2.4'
@@ -45,6 +46,7 @@ dependencies {
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
 
     compile "com.google.firebase:firebase-core:${playLibVersion}"
+
     compile "com.google.firebase:firebase-messaging:${playLibVersion}"
 
     compile "com.google.android.gms:play-services-auth:${playLibVersion}"

@@ -105,4 +105,5 @@
     <string name="error_llamando">Error con el número</string>
     <string name="titulo_notif_feriantes">Nuevo Feriante</string>
     <string name="desc_notif_feriante">No te pierdas nuestro modulo de feriantes artesansales!</string>
+    <string name="seleccione_una_opcion">Seleccione un tipo de bolsón</string>
 </resources>

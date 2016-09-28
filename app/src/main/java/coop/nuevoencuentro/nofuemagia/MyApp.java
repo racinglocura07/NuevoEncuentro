@@ -7,10 +7,8 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
-import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.core.internal.network.GuestAuthenticator;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
 import io.fabric.sdk.android.Fabric;
@@ -27,6 +25,7 @@ public class MyApp extends Application {
 
         //Configuration dbConfiguration = new Configuration.Builder(this).setDatabaseName("Compras.db").create();
         ActiveAndroid.initialize(this);
+        ActiveAndroid.clearCache();
         AppEventsLogger.activateApp(this);
         if (!Fabric.isInitialized()) {
             TwitterAuthConfig authConfig =  new TwitterAuthConfig("sPA7QHo4q8to6CZ9ucnlNM3Ql", "FkHjcDIxgIkmu41e2GNeGio0ibPWROuq9MfOORIK6Z8sCgRH10");
